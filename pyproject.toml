@@ -1,0 +1,25 @@
+[project]
+name = "weekly-ai-briefing"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "Steven Davis", email = "StevenDavisMA@gmail.com" }
+]
+requires-python = ">=3.14"
+dependencies = [
+    "anthropic>=1.11.0",
+]
+
+[project.scripts]
+weekly-ai-briefing = "weekly_ai_briefing.main:main"
+
+[build-system]
+requires = ["uv_build>=0.12.13,<0.13.0"]
+build-backend = "uv_build"
+
+[tool.isort]
+multi_line_output = 5
+include_trailing_comma = true
+force_grid_wrap = 0
+line_length = 120
