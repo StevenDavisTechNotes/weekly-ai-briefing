@@ -1,21 +1,25 @@
+#! python3
+# usage: pythom -m src.weekly_ai_briefing.main
+
 import datetime
 from pathlib import Path
 
 from anthropic import Anthropic
-from anthropic.types import MessageParam, ToolUnionParam
+from anthropic.types import MessageParam, ThinkingConfigAdaptiveParam, ToolUnionParam
 
 HISTORY_FOLDER = Path("history")
 PROMPT_FOLDER = Path(__file__).resolve().parent / "prompts"
-# MODEL = "claude-opus-5-5"
-MODEL = "claude-haiku-4-5-20251001"
-MAX_TOKENS: int = 6500
+MODEL = "claude-opus-5-5"
+EFFORT = "medium"
+MAX_TOKENS: int = 128000
 HISTORY_LOOKBACK: int = 2
 SECTION_COUNT: int = 6
 MAX_CONTINUATIONS: int = 10  # per request: pause_turn resumes + max_tokens continues
 
 # The briefing is about the preceding week, so the model must be able to search.
 TOOLS: list[ToolUnionParam] = [
-    {"type": "web_search_20260318", "name": "web_search"}]
+    {"type": "web_search_20260318", "name": "web_search"},
+]
 
 
 def load_recent_reports(
@@ -52,10 +56,15 @@ def send(
 
     for _ in range(MAX_CONTINUATIONS + 1):
         with client.messages.stream(
-            model=MODEL,
             max_tokens=MAX_TOKENS,
-            system=system_prompt,
             messages=messages,
+            model=MODEL,
+            output_config={"effort": EFFORT},
+            system=system_prompt,
+            thinking=ThinkingConfigAdaptiveParam(
+                type="adaptive",
+                display="omitted",
+            ),
             tools=tools if tools else [],
         ) as stream:
             response = stream.get_final_message()
