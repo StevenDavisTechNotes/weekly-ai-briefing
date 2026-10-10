@@ -4,15 +4,20 @@
 #   python -m src.weekly_ai_briefing.email_briefing
 #
 # Environment:
-#   GMAIL_APP_PASSWORD  required; a Google app password for the sending account
+#   GMAIL_APP_PASSWORD  required;
+#        a Google app password for the sending account
+#        see https://myaccount.google.com/apppasswords
 #   GMAIL_USER          optional; sending account (default: the recipient address)
 
 import asyncio
+import imaplib
 import os
 import re
 import smtplib
 import subprocess
+import time
 from email.message import EmailMessage
+from email.utils import make_msgid
 from pathlib import Path
 from typing import NamedTuple
 
@@ -22,10 +27,14 @@ import imageio_ffmpeg
 HISTORY_FOLDER = Path("history")
 BRIEFING_PATTERN = re.compile(r"briefing-(\d{4}-\d{2}-\d{2})\.md")
 # Each "## " heading starts a section that is voiced and emailed on its own.
-SECTION_HEADING = re.compile(r"^(##[ 	].*)$", re.MULTILINE)
+SECTION_HEADING = re.compile(r"^(##[ \t].*)$", re.MULTILINE)
 RECIPIENT = "stevendavisma@gmail.com"
 SMTP_HOST = "smtp.gmail.com"
 SMTP_PORT = 465
+IMAP_HOST = "imap.gmail.com"
+# Gmail files the sent copy a moment after SMTP accepts the message.
+SENT_COPY_ATTEMPTS = 10
+SENT_COPY_DELAY_SECONDS = 2
 
 VOICE = "en-US-JennyNeural"
 TTS_CHUNK_CHARS = 3000
@@ -198,6 +207,54 @@ def split_sections(markdown: str) -> list[Section]:
     return sections
 
 
+def find_special_folder(imap: imaplib.IMAP4_SSL, attribute: str) -> str:
+    r"""Returns the quoted name of the mailbox flagged with attribute, e.g. \Sent.
+
+    Gmail's folder names are localized ("[Gmail]/Sent Mail", "[Google Mail]/...")
+    but the special-use attributes are not.
+    """
+    _, lines = imap.list()
+    for line in lines:
+        if not isinstance(line, bytes):
+            continue
+        flags = line.split(b")", 1)[0].split()
+        if attribute.encode() in flags:
+            name = line.decode().rsplit(' "/" ', 1)[1]
+            return name if name.startswith('"') else f'"{name}"'
+    raise RuntimeError(f"No {attribute} mailbox found")
+
+
+def delete_sent_copy(sender: str, password: str, message_id: str) -> None:
+    """Permanently deletes the copy Gmail saved in the sender's Sent folder."""
+    with imaplib.IMAP4_SSL(IMAP_HOST) as imap:
+        imap.login(sender, password)
+        sent_folder = find_special_folder(imap, r"\Sent")
+        trash_folder = find_special_folder(imap, r"\Trash")
+
+        imap.select(sent_folder)
+        for _ in range(SENT_COPY_ATTEMPTS):
+            _, data = imap.uid("SEARCH", "HEADER", "Message-ID", message_id)
+            uids = data[0]
+            if isinstance(uids, bytes) and uids:
+                break
+            time.sleep(SENT_COPY_DELAY_SECONDS)
+            imap.noop()
+        else:
+            print(f"  Sent copy of {message_id} not found; leaving it")
+            return
+        # In Gmail, expunging from Sent only removes the label; the message must
+        # go through Trash to actually be deleted.
+        imap.uid("MOVE", uids.decode().replace(" ", ","), trash_folder)
+
+        imap.select(trash_folder)
+        _, data = imap.uid("SEARCH", "HEADER", "Message-ID", message_id)
+        uids = data[0]
+        if isinstance(uids, bytes) and uids:
+            imap.uid("STORE", uids.decode().replace(" ", ","), "+FLAGS", r"(\Deleted)")
+            imap.expunge()
+    print("  Deleted the sent copy")
+
+
 def send_email(subject: str, body: str, mp3_path: Path) -> None:
     password = os.environ.get("GMAIL_APP_PASSWORD")
     if not password:
@@ -208,6 +265,7 @@ def send_email(subject: str, body: str, mp3_path: Path) -> None:
     message["Subject"] = subject
     message["From"] = sender
     message["To"] = RECIPIENT
+    message["Message-ID"] = message_id = make_msgid(domain=sender.split("@")[-1])
     message.set_content(body)
     message.add_attachment(
         mp3_path.read_bytes(),
@@ -220,6 +278,11 @@ def send_email(subject: str, body: str, mp3_path: Path) -> None:
         smtp.login(sender, password)
         smtp.send_message(message)
     print(f"Emailed {mp3_path.name} to {RECIPIENT}")
+
+    # Mailing yourself stores one message labelled both Inbox and Sent, so
+    # there is no second copy to delete (deleting it would empty the Inbox too).
+    if sender.lower() != RECIPIENT.lower():
+        delete_sent_copy(sender, password, message_id)
 
 
 def main() -> None:
