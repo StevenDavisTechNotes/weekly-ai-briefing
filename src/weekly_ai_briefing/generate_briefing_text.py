@@ -1,11 +1,13 @@
 #! python3
-# usage: pythom -m src.weekly_ai_briefing.main
+# usage: uv run python -m src.weekly_ai_briefing.generate_briefing_text
 
 import datetime
+import time
 from pathlib import Path
 
-from anthropic import Anthropic
-from anthropic.types import MessageParam, ThinkingConfigAdaptiveParam, ToolUnionParam
+import httpx2
+from anthropic import Anthropic, APIConnectionError, APIStatusError
+from anthropic.types import Message, MessageParam, ThinkingConfigAdaptiveParam, ToolUnionParam
 
 HISTORY_FOLDER = Path("history")
 PROMPT_FOLDER = Path(__file__).resolve().parent / "prompts"
@@ -13,8 +15,11 @@ MODEL = "claude-opus-5-5"
 EFFORT = "medium"
 MAX_TOKENS: int = 128000
 HISTORY_LOOKBACK: int = 2
-SECTION_COUNT: int = 6
 MAX_CONTINUATIONS: int = 10  # per request: pause_turn resumes + max_tokens continues
+# The whole briefing is one long streamed call, so a dropped connection or an
+# overloaded API would otherwise discard all the research done so far.
+STREAM_RETRIES: int = 4
+STREAM_RETRY_BASE_SECONDS: int = 30
 
 # The briefing is about the preceding week, so the model must be able to search.
 TOOLS: list[ToolUnionParam] = [
@@ -24,13 +29,21 @@ TOOLS: list[ToolUnionParam] = [
 
 def load_recent_reports(
         reports_dir: Path,
-        limit: int
+        limit: int,
+        exclude_name: str,
 ) -> list[str]:
-    """Loads the N most recent weekly reports from disk."""
+    """Loads the N most recent weekly reports from disk, skipping exclude_name.
+
+    exclude_name is the file about to be written, so a same-day rerun does
+    not treat its own earlier draft as a previous week's report.
+    """
     if not reports_dir.is_dir():
         return []
 
-    files = sorted(reports_dir.glob("*.md"), reverse=True)  # Newest first
+    files = sorted(  # Newest first
+        (f for f in reports_dir.glob("*.md") if f.name != exclude_name),
+        reverse=True,
+    )
 
     return [
         f"--- START OF {f.name} ---\n"
@@ -38,6 +51,55 @@ def load_recent_reports(
         + "--- END ---"
         for f in files[:limit]
     ]
+
+
+TRANSIENT_ERROR_TYPES = {"overloaded_error", "api_error", "rate_limit_error"}
+
+
+def is_transient(error: Exception) -> bool:
+    if isinstance(error, (APIConnectionError, httpx2.TransportError)):
+        return True
+    if not isinstance(error, APIStatusError):
+        return False
+    if error.status_code == 429 or error.status_code >= 500:
+        return True
+    # An error event mid-stream arrives on an HTTP 200 response, so only
+    # the error type in the body says whether it is worth retrying.
+    body = error.body
+    if isinstance(body, dict) and isinstance(body.get("error"), dict):
+        return body["error"].get("type") in TRANSIENT_ERROR_TYPES
+    return False
+
+
+def stream_message(
+        client: Anthropic,
+        system_prompt: str,
+        messages: list[MessageParam],
+        tools: list[ToolUnionParam] | None,
+) -> Message:
+    """Streams one request, retrying transient failures with backoff."""
+    for attempt in range(STREAM_RETRIES + 1):
+        try:
+            with client.messages.stream(
+                max_tokens=MAX_TOKENS,
+                messages=messages,
+                model=MODEL,
+                output_config={"effort": EFFORT},
+                system=system_prompt,
+                thinking=ThinkingConfigAdaptiveParam(
+                    type="adaptive",
+                    display="omitted",
+                ),
+                tools=tools if tools else [],
+            ) as stream:
+                return stream.get_final_message()
+        except (APIConnectionError, APIStatusError, httpx2.TransportError) as error:
+            if not is_transient(error) or attempt == STREAM_RETRIES:
+                raise
+            delay = STREAM_RETRY_BASE_SECONDS * 2 ** attempt
+            print(f"Transient API error ({error}); retrying in {delay}s...")
+            time.sleep(delay)
+    raise AssertionError("unreachable")
 
 
 def send(
@@ -55,19 +117,7 @@ def send(
     text_parts: list[str] = []
 
     for _ in range(MAX_CONTINUATIONS + 1):
-        with client.messages.stream(
-            max_tokens=MAX_TOKENS,
-            messages=messages,
-            model=MODEL,
-            output_config={"effort": EFFORT},
-            system=system_prompt,
-            thinking=ThinkingConfigAdaptiveParam(
-                type="adaptive",
-                display="omitted",
-            ),
-            tools=tools if tools else [],
-        ) as stream:
-            response = stream.get_final_message()
+        response = stream_message(client, system_prompt, messages, tools)
 
         text = "".join(
             b.text
@@ -105,9 +155,10 @@ def send(
 def generate_weekly_report() -> None:
     client = Anthropic()
     today = datetime.date.today().isoformat()
+    output_path = HISTORY_FOLDER / f"briefing-{today}.md"
 
     system_prompt = (
-        PROMPT_FOLDER / "prompt_system.md").read_text(encoding="utf-8")
+        PROMPT_FOLDER / "prompt_one_big.md").read_text(encoding="utf-8")
     context_prompt = (
         (PROMPT_FOLDER / "prompt_context.md")
         .read_text(encoding="utf-8")
@@ -117,13 +168,14 @@ def generate_weekly_report() -> None:
                 load_recent_reports(
                     reports_dir=HISTORY_FOLDER,
                     limit=HISTORY_LOOKBACK,
+                    exclude_name=output_path.name,
                 )
             )
         )
     )
 
-    # One conversation: the system prompt promises sections arrive as separate
-    # messages, and later sections build on earlier ones.
+    # Single pass: the whole briefing is written in one response, so the
+    # 15,000-word target applies to the briefing as a whole.
     messages: list[MessageParam] = [
         {
             "role": "user",
@@ -131,36 +183,12 @@ def generate_weekly_report() -> None:
         }
     ]
 
-    ack = send(client, system_prompt, messages)
-    if ack.strip().strip('."').lower() != "ready":
-        raise RuntimeError(
-            f"Expected 'Ready.' acknowledgement, got: {ack[:200]!r}"
-        )
-    messages.append({"role": "assistant", "content": ack})
+    print("Generating briefing...")
+    briefing = send(client, system_prompt, messages, tools=TOOLS)
 
-    sections: list[str] = []
-    for section_no in range(1, SECTION_COUNT + 1):
-        print(f"Generating section {section_no}/{SECTION_COUNT}...")
-        message_prompt = (
-            (PROMPT_FOLDER / f"prompt_{section_no}.md")
-            .read_text(encoding="utf-8")
-        )
-        messages.append({"role": "user", "content": message_prompt})
-        section_text = send(client, system_prompt, messages, tools=TOOLS)
-        # Keep only the text (not search results) in history for later sections.
-        messages.append({"role": "assistant", "content": section_text})
-        sections.append(section_text)
-
-    report = (
-        f"Coverage week ending on {today}\n"
-        + "\n".join(
-            f"\nSection {i_section}:\n{section_text}"
-            for i_section, section_text in enumerate(sections, start=1)
-        )
-    )
+    report = f"Coverage week ending on {today}\n\n{briefing}"
 
     HISTORY_FOLDER.mkdir(exist_ok=True)
-    output_path = HISTORY_FOLDER / f"briefing-{today}.md"
     output_path.write_text(report, encoding="utf-8")
 
     print(f"Report successfully generated and saved to {output_path}")
