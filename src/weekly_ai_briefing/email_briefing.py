@@ -74,7 +74,7 @@ def markdown_to_speech_text(markdown: str) -> str:
     return re.sub(r"\n{3,}", "\n\n", text).strip()
 
 
-def split_chunks(text: str, max_chars: int) -> list[str]:
+def split_chunks(text: str, max_chars: int) -> list[str]:  # noqa: C901
     """Splits on paragraph (then sentence) boundaries into pieces <= max_chars."""
     pieces: list[str] = []
     for paragraph in re.split(r"\n\s*\n", text):
@@ -146,7 +146,10 @@ def shrink_to_fit(mp3_path: Path, source_bytes: int) -> None:
     if source_bytes <= MAX_MP3_BYTES:
         return
     seconds = source_bytes / TTS_SOURCE_BYTES_PER_SECOND
-    kbps = max(MIN_BITRATE_KBPS, int(MAX_MP3_BYTES * 8 / seconds / 1000))
+    kbps = max(
+        MIN_BITRATE_KBPS,
+        int(MAX_MP3_BYTES * 8 / seconds / 1000),
+    )
     print(f"MP3 is {source_bytes / 1e6:.1f} MB; re-encoding at {kbps} kbps to fit email limits...")
     smaller = mp3_path.with_suffix(".small.mp3")
     subprocess.run(
@@ -233,7 +236,7 @@ def main() -> None:
                 f"Hi Steve,\n\n"
                 f"This is section {number} of {len(sections)} of this "
                 f"week's AI briefing (dated {date}): {section.title}. "
-                f"The audio version is attached as an MP3.\n"
+                "The audio version is attached as an MP3.\n"
             ),
             mp3_path=mp3_path,
         )
