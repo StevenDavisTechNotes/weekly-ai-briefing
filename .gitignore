@@ -220,4 +220,4 @@ __marimo__/
 .streamlit/secrets.toml
 
 # Generated briefing audio
-history/*.mp3
+staged_audio/

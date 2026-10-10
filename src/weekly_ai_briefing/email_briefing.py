@@ -1,7 +1,5 @@
 #! python3
-# usage:
-#   $env:GMAIL_APP_PASSWORD="YourValue"
-#   python -m src.weekly_ai_briefing.email_briefing
+# usage: uv run python -m src.weekly_ai_briefing.email_briefing
 #
 # Environment:
 #   GMAIL_USER          optional; sending account (default: the recipient address)
@@ -25,9 +23,19 @@ import edge_tts
 import imageio_ffmpeg
 
 HISTORY_FOLDER = Path("history")
+STAGED_AUDIO_FOLDER = Path("staged_audio")
 BRIEFING_PATTERN = re.compile(r"briefing-(\d{4}-\d{2}-\d{2})\.md")
 # Each "## " heading starts a section that is voiced and emailed on its own.
 SECTION_HEADING = re.compile(r"^(##[ \t].*)$", re.MULTILINE)
+# Sections emailed as text only: a long list of outlets and dates is not worth hearing.
+TEXT_ONLY_SECTIONS = {"source notes"}
+# A pipe table: header row, delimiter row (|---|:--:|), then any rows with a pipe.
+MARKDOWN_TABLE = re.compile(
+    r"^.*\|.*\n"
+    r"(?=[-:| \t]*\|)[-:| \t]*-[-:| \t]*(?:\n|$)"
+    r"(?:.*\|.*(?:\n|$))*",
+    re.MULTILINE,
+)
 RECIPIENT = "stevendavisma@gmail.com"
 SMTP_HOST = "smtp.gmail.com"
 SMTP_PORT = 465
@@ -65,6 +73,7 @@ def find_latest_briefing(history_dir: Path) -> tuple[Path, str]:
 def markdown_to_speech_text(markdown: str) -> str:
     """Strips markdown syntax so the TTS engine doesn't read it aloud."""
     text = re.sub(r"`{3}.*?`{3}", "", markdown, flags=re.DOTALL)
+    text = MARKDOWN_TABLE.sub("", text)
     text = re.sub(r"!\[[^\]]*\]\([^)]*\)", "", text)  # images
     text = re.sub(r"\[([^\]]*)\]\([^)]*\)", r"\1", text)  # links -> label
     text = re.sub(r"https?://\S+", "", text)  # bare URLs
@@ -255,7 +264,7 @@ def delete_sent_copy(sender: str, password: str, message_id: str) -> None:
     print("  Deleted the sent copy")
 
 
-def send_email(subject: str, body: str, mp3_path: Path) -> None:
+def send_email(subject: str, body: str, mp3_path: Path | None) -> None:
     password = os.environ.get("GMAIL_APP_PASSWORD")
     if not password:
         raise RuntimeError("Set GMAIL_APP_PASSWORD to a Google app password")
@@ -267,17 +276,18 @@ def send_email(subject: str, body: str, mp3_path: Path) -> None:
     message["To"] = RECIPIENT
     message["Message-ID"] = message_id = make_msgid(domain=sender.split("@")[-1])
     message.set_content(body)
-    message.add_attachment(
-        mp3_path.read_bytes(),
-        maintype="audio",
-        subtype="mpeg",
-        filename=mp3_path.name,
-    )
+    if mp3_path is not None:
+        message.add_attachment(
+            mp3_path.read_bytes(),
+            maintype="audio",
+            subtype="mpeg",
+            filename=mp3_path.name,
+        )
 
     with smtplib.SMTP_SSL(SMTP_HOST, SMTP_PORT) as smtp:
         smtp.login(sender, password)
         smtp.send_message(message)
-    print(f"Emailed {mp3_path.name} to {RECIPIENT}")
+    print(f"Emailed {mp3_path.name if mp3_path else subject} to {RECIPIENT}")
 
     # Mailing yourself stores one message labelled both Inbox and Sent, so
     # there is no second copy to delete (deleting it would empty the Inbox too).
@@ -289,9 +299,23 @@ def main() -> None:
     briefing_path, date = find_latest_briefing(HISTORY_FOLDER)
     sections = split_sections(briefing_path.read_text(encoding="utf-8"))
     print(f"Using {briefing_path}: {len(sections)} sections")
+    STAGED_AUDIO_FOLDER.mkdir(exist_ok=True)
     for number, section in enumerate(sections, start=1):
         print(f"[{number}/{len(sections)}] {section.title}")
-        mp3_path = briefing_path.with_name(f"{briefing_path.stem}-{number:02d}.mp3")
+        if section.title.lower() in TEXT_ONLY_SECTIONS:
+            send_email(
+                subject=f"Weekly AI Briefing - {date} - {section.title}",
+                body=(
+                    f"Hi Steve,\n\n"
+                    f"This is section {number} of {len(sections)} of this "
+                    f"week's AI briefing (dated {date}): {section.title}. "
+                    "It has no audio version.\n\n"
+                    + section.markdown
+                ),
+                mp3_path=None,
+            )
+            continue
+        mp3_path = STAGED_AUDIO_FOLDER / f"{briefing_path.stem}-{number:02d}.mp3"
         generate_mp3(section.markdown, mp3_path)
         send_email(
             subject=f"Weekly AI Briefing - {date} - {section.title}",
