@@ -14,12 +14,15 @@ import smtplib
 import subprocess
 from email.message import EmailMessage
 from pathlib import Path
+from typing import NamedTuple
 
 import edge_tts
 import imageio_ffmpeg
 
 HISTORY_FOLDER = Path("history")
 BRIEFING_PATTERN = re.compile(r"briefing-(\d{4}-\d{2}-\d{2})\.md")
+# Each "## " heading starts a section that is voiced and emailed on its own.
+SECTION_HEADING = re.compile(r"^(##[ 	].*)$", re.MULTILINE)
 RECIPIENT = "stevendavisma@gmail.com"
 SMTP_HOST = "smtp.gmail.com"
 SMTP_PORT = 465
@@ -162,8 +165,8 @@ def shrink_to_fit(mp3_path: Path, source_bytes: int) -> None:
             f"MP3 is still {mp3_path.stat().st_size / 1e6:.1f} MB at {kbps} kbps; too large to email")
 
 
-def generate_mp3(briefing_path: Path, mp3_path: Path) -> None:
-    speech = markdown_to_speech_text(briefing_path.read_text(encoding="utf-8"))
+def generate_mp3(markdown: str, mp3_path: Path) -> None:
+    speech = markdown_to_speech_text(markdown)
     chunks = split_chunks(speech, TTS_CHUNK_CHARS)
     print(f"Generating audio: {len(speech):,} chars in {len(chunks)} chunks...")
     audio = asyncio.run(synthesize(chunks))
@@ -172,21 +175,37 @@ def generate_mp3(briefing_path: Path, mp3_path: Path) -> None:
     print(f"Saved {mp3_path} ({mp3_path.stat().st_size / 1e6:.1f} MB)")
 
 
-def send_email(date: str, mp3_path: Path) -> None:
+class Section(NamedTuple):
+    title: str
+    markdown: str
+
+
+def split_sections(markdown: str) -> list[Section]:
+    """Splits a briefing on its '##' headings; any preamble joins the first section."""
+    parts = SECTION_HEADING.split(markdown)
+    preamble, rest = parts[0], parts[1:]
+    if not rest:
+        raise ValueError("Briefing has no '##' section headings")
+    sections = [
+        Section(title=heading.lstrip("#").strip(), markdown=heading + body)
+        for heading, body in zip(rest[0::2], rest[1::2])
+    ]
+    first = sections[0]
+    sections[0] = first._replace(markdown=preamble + first.markdown)
+    return sections
+
+
+def send_email(subject: str, body: str, mp3_path: Path) -> None:
     password = os.environ.get("GMAIL_APP_PASSWORD")
     if not password:
         raise RuntimeError("Set GMAIL_APP_PASSWORD to a Google app password")
     sender = os.environ.get("GMAIL_USER", RECIPIENT)
 
     message = EmailMessage()
-    message["Subject"] = f"Weekly AI Briefing - {date}"
+    message["Subject"] = subject
     message["From"] = sender
     message["To"] = RECIPIENT
-    message.set_content(
-        f"Hi Steve,\n\n"
-        f"This is this week's AI briefing (dated {date}). "
-        f"The audio version is attached as an MP3.\n"
-    )
+    message.set_content(body)
     message.add_attachment(
         mp3_path.read_bytes(),
         maintype="audio",
@@ -202,10 +221,22 @@ def send_email(date: str, mp3_path: Path) -> None:
 
 def main() -> None:
     briefing_path, date = find_latest_briefing(HISTORY_FOLDER)
-    print(f"Using {briefing_path}")
-    mp3_path = briefing_path.with_suffix(".mp3")
-    generate_mp3(briefing_path, mp3_path)
-    send_email(date, mp3_path)
+    sections = split_sections(briefing_path.read_text(encoding="utf-8"))
+    print(f"Using {briefing_path}: {len(sections)} sections")
+    for number, section in enumerate(sections, start=1):
+        print(f"[{number}/{len(sections)}] {section.title}")
+        mp3_path = briefing_path.with_name(f"{briefing_path.stem}-{number:02d}.mp3")
+        generate_mp3(section.markdown, mp3_path)
+        send_email(
+            subject=f"Weekly AI Briefing - {date} - {section.title}",
+            body=(
+                f"Hi Steve,\n\n"
+                f"This is section {number} of {len(sections)} of this "
+                f"week's AI briefing (dated {date}): {section.title}. "
+                f"The audio version is attached as an MP3.\n"
+            ),
+            mp3_path=mp3_path,
+        )
 
 
 if __name__ == "__main__":
