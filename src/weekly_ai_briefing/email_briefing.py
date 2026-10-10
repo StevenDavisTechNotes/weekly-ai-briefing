@@ -4,10 +4,10 @@
 #   python -m src.weekly_ai_briefing.email_briefing
 #
 # Environment:
+#   GMAIL_USER          optional; sending account (default: the recipient address)
 #   GMAIL_APP_PASSWORD  required;
 #        a Google app password for the sending account
 #        see https://myaccount.google.com/apppasswords
-#   GMAIL_USER          optional; sending account (default: the recipient address)
 
 import asyncio
 import imaplib
