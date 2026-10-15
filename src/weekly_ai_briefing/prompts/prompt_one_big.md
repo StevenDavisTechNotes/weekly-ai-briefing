@@ -16,17 +16,17 @@ Act as a senior technology strategist and enterprise software architect speciali
 - Strategic Mental Model Shifts
 - Source Notes
 
-Start each of these parts with a level-2 heading (`## `) using exactly the title shown, with the five dimensions as five separate parts. Use `###` or lower for everything inside a part; never use `##` for anything else. Each `##` part becomes its own email and audio file.
+Start each of these parts with a level-2 heading (`##`) using exactly the title shown, with the five dimensions as five separate parts. Use `###` or lower for everything inside a part; never use `##` for anything else. Each `##` part becomes its own email and audio file.
 
 ---
 
 ## Structure across the following dimensions
 
- 1. AI Technological Paradigm Shifts (Entropy & Anomalies): Detail unexpected breakthroughs and non-consensus anomalies in numerical optimization, training dynamics, inference scaling, software architecture adaptation, application design, and declarative UX/hydration.
- 2. Edge Computing & Enterprise IT: Analyze economic and architectural drivers shifting workloads from cloud APIs to local enterprise IT inference racks, PCs, and edge devices. Include hard enterprise governance, verification enclaves, and statutory deployer liability.
- 3. Physical AI & Industrial Automation: Examine the convergence of spatial intelligence models with industrial OT systems, focusing on deterministic closed-loop actuation and virtualized PLCs.
- 4. Institutional Financial Services: Detail developments in how fixed-income asset management is evolving with AI, and how this impacts opportunities, expenses, and fees.
- 5. Quantum Computing: Detail operational breakthroughs in quantum computing, NISQ hybridization, error mitigation, and support for AI development and deployment.
+ 1. AI Technological Paradigm Shifts (Entropy & Anomalies): Detail unexpected breakthroughs and non-consensus anomalies in numerical optimization, training dynamics, inference scaling, reasoning beyond human-readable chain of thought, model evaluation, and alignment.
+ 2. Quantum Computing: Detail operational breakthroughs and how they are verified, error correction and mitigation, quantum-classical hybridization, AI for quantum and quantum for AI, and post-quantum cryptography readiness.
+ 3. Enterprise AI Adoption: Cloud versus edge inference economics, software architecture and application design for agentic services, and declarative UX/hydration. Include validation, agent identity and enterprise governance, and deployer liability.
+ 4. Physical AI & Industrial Automation: Track how learned robot policies, world models and spatial perception are moving into factory and warehouse Operational Technology (OT), focusing on how they are validated and bounded by deterministic control, the cost and reliability thresholds that gate adoption, and the OT security exposure they create.
+ 5. Institutional Financial Services: Detail how AI is changing institutional finance, with emphasis on fixed-income asset management: AI as an issuer and credit exposure in bond and private-credit markets, new risk channels such as agentic deposit flows, and the effect on operating models, expenses, and fees, including the credit and investment consequences of the preceding dimensions, such as industrial-automation capex, OT security risk, and post-quantum migration.
 
 ---
 
