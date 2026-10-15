@@ -75,7 +75,6 @@ def stream_message(
         client: Anthropic,
         system_prompt: str,
         messages: list[MessageParam],
-        tools: list[ToolUnionParam] | None,
 ) -> Message:
     """Streams one request, retrying transient failures with backoff."""
     for attempt in range(STREAM_RETRIES + 1):
@@ -90,7 +89,7 @@ def stream_message(
                     type="adaptive",
                     display="omitted",
                 ),
-                tools=tools if tools else [],
+                tools=TOOLS,
             ) as stream:
                 return stream.get_final_message()
         except (APIConnectionError, APIStatusError, httpx2.TransportError) as error:
@@ -106,7 +105,6 @@ def send(
         client: Anthropic,
         system_prompt: str,
         messages: list[MessageParam],
-        tools: list[ToolUnionParam] | None = None,
 ) -> str:
     """Sends the conversation and returns the assistant's complete text reply.
 
@@ -117,7 +115,7 @@ def send(
     text_parts: list[str] = []
 
     for _ in range(MAX_CONTINUATIONS + 1):
-        response = stream_message(client, system_prompt, messages, tools)
+        response = stream_message(client, system_prompt, messages)
 
         text = "".join(
             b.text
@@ -184,7 +182,7 @@ def generate_weekly_report() -> None:
     ]
 
     print("Generating briefing...")
-    briefing = send(client, system_prompt, messages, tools=TOOLS)
+    briefing = send(client, system_prompt, messages)
 
     report = f"Coverage week ending on {today}\n\n{briefing}"
 
