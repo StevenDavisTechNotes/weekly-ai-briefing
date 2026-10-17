@@ -19,6 +19,6 @@ Each issue is researched and drafted by an AI model working from a fixed prompt 
 - **Physical AI & Industrial Automation:** learned robot policies and world models entering factory and warehouse OT, how deterministic control bounds them, the cost and reliability thresholds for adoption, and the security exposure they create.
 - **Institutional Financial Services:** AI as an issuer and credit exposure, new risk channels such as agentic deposit flows, effects on operating models and fees, and the credit consequences of the sections above.
 - **Strategic Mental Model Shifts:** how the overall picture has changed since the last issue.
-- **Source Notes:** sources, dates, and the limits of each week's research.
+- **Source Notes and Attribution:** sources, dates, limits, and attribution of each week's research.
 
 *This brief is for information only and is not investment advice.*
