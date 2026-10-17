@@ -153,7 +153,7 @@ def send(
 def generate_weekly_report() -> None:
     client = Anthropic()
     today = datetime.date.today().isoformat()
-    output_path = HISTORY_FOLDER / f"briefing-{today}.md"
+    output_path = HISTORY_FOLDER / f"{today}-ai-outlook-briefing.md"
 
     system_prompt = (
         PROMPT_FOLDER / "prompt_one_big.md").read_text(encoding="utf-8")

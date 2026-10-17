@@ -1,4 +1,4 @@
-# Executive Briefing: The State of Artificial Intelligence and the Four-Year Outlook
+# AI Off-Consensus: The Entropy Brief
 
 Coverage window: September 28 through October 3, 2026, with a small number of items from September 15 through 27 included only where they were not covered in last week's edition and are needed to explain this week's developments. Stories carried over from last week are covered only for what changed. Where a figure is vendor-reported, the briefing says so. Where a conclusion is the author's analysis rather than a reported fact, the briefing says so as well. Where a claim could not be verified from sources dated inside the window, that is stated. Disclosure: this briefing was researched and written with an Anthropic model, and several items concern Anthropic; those items are reported from third-party coverage or Anthropic's own publications, labeled as such, and are not given favorable treatment.
 
@@ -144,6 +144,7 @@ The connection to decision models, as analysis: a typed decision output, a choic
 - Apple turned the operating system permission model into an agent-governance boundary.
 
 ---
+
 ## Section 2: Edge Computing and Enterprise IT
 
 ### 2.1 The memory price shock is now visible in the sticker price of local inference
@@ -319,6 +320,7 @@ Revisions to last week's practical outlook, as analysis:
 - Humanoids remain a financing story, not an operations story, over the four-year horizon. The cost analysis, the modest revenue disclosures, and the equity market's treatment of humanoid makers all point the same way.
 
 ---
+
 ## Section 4: Institutional Financial Services — Fixed-Income Asset Management
 
 Last week's briefing established AI as simultaneously an operating tool, an expense line, and the fastest-growing concentration in the investment-grade benchmark, with AI-related issuers reported around 115 basis points over benchmarks against 78 for the broader market. No new spread data inside this week's window was found in the sources reviewed, so that figure should be treated as the latest available rather than as current. What changed this week is the quality of information about the financing structure underneath the issuers, and a new channel of AI risk into bank credit.
@@ -485,6 +487,7 @@ Analysis for the four-year horizon:
 - For institutional finance specifically, the near-term actionable item is post-quantum cryptography, not quantum portfolio optimization. Long-dated confidential data, including client records and deal documents, is exposed to harvest-now, decrypt-later collection today.
 
 ---
+
 ## Section 6: Economic and Structural Projections, Four-Year Horizon (Late 2026 to Late 2030)
 
 Everything in this section is analysis. Each projection is tied to the evidence above and stated so that it can be checked.
@@ -625,7 +628,7 @@ The counter-intuitive lesson of the week is that the most important AI products 
 
 ---
 
-## Source Notes
+## Source Notes and Attribution
 
 Principal sources consulted, dated September 28 through October 3, 2026 unless stated:
 
@@ -639,7 +642,7 @@ Principal sources consulted, dated September 28 through October 3, 2026 unless s
 - Fixed income: Universal Asset Owners daily brief of October 2 summarizing BIS Bulletin 137 and the RBA October Financial Stability Review; Implicator.ai on the Anthropic prospectus as reported by Reuters, September 29; Daily Hodl and 24/7 Wall St. on Apollo's agentic bank run warning, September 27 and 29; LLRX finance roundup, September 30; InvestmentNews on KPMG's June survey, for background; nai500 for background spread and issuance data from September.
 - Quantum: PostQuantum on Infleqtion, September 27; PostQuantum's survey of the real-time decoder supply chain, late September; eWeek on the DOE roadmap, released September 17; EdenCode's September research archive and Bob Sutor's daily quantum updates for September 29 and 30; ScienceDaily on the Surrey superfluid-helium qubit, September 30; KuCoin summary of the IonQ and Nvidia agreement, September 23.
 
-Discrepancies and limits noted during research:
+### Discrepancies and limits noted during research
 
 - The 2-billion-parameter "Decider" was attributed by one tracker to Amazon's Strands Labs and by a model card to a developer named Mapika. The briefing does not rely on the attribution.
 - OpenAI's DevDay was dated September 29 by most outlets and October 2 by one recap; this briefing uses September 29.
@@ -648,3 +651,7 @@ Discrepancies and limits noted during research:
 - The DeepSeek Ascend kernel efficiency figure and several decision-model throughput figures come from single digest sources.
 - arXiv pages were rate-limited during research, so arXiv papers were reviewed through alphaXiv, Papers with Code, or secondary summaries. The full ABI Research ranking release of September 29 could not be retrieved. The Bloomberg report on Meta Muse's market impact and the CNBC report on Muse could not be retrieved; their content is cited only as summarized by other outlets.
 - No in-window AI credit spread data was found; the 115-basis-point figure from last week is the latest available in the sources reviewed.
+
+### Attribution
+
+This briefing was generated by Claude Opus 5.5 with medium effort.

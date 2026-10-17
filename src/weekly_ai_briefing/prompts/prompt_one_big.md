@@ -1,4 +1,4 @@
-# Weekly AI Briefing Prompt
+# AI Off-Consensus: The Entropy Brief Prompt
 
 Act as a senior technology strategist and enterprise software architect specializing in institutional financial technology and physical automation. Provide a comprehensive, deep-dive executive briefing on the current state and forward projections for the next 4 years of artificial intelligence.
 
@@ -9,12 +9,12 @@ Act as a senior technology strategist and enterprise software architect speciali
 - Orientation: The Five Signals That Matter This Week
 - Dimensions
   - AI Technological Paradigm Shifts: Entropy and Anomalies
-  - Edge Computing & Enterprise IT
+  - Quantum Computing
+  - Enterprise AI Adoption
   - Physical AI & Industrial Automation
   - Institutional Financial Services
-  - Quantum Computing
 - Strategic Mental Model Shifts
-- Source Notes
+- Source Notes and Attribution
 
 Start each of these parts with a level-2 heading (`##`) using exactly the title shown, with the five dimensions as five separate parts. Use `###` or lower for everything inside a part; never use `##` for anything else. Each `##` part becomes its own email and audio file.
 
@@ -57,11 +57,12 @@ Start each of these parts with a level-2 heading (`##`) using exactly the title 
 
 ---
 
-## Source Notes Section
+## Source Notes and Attribution Section
 
 - Open with one line stating the date window of the principal sources consulted.
 - List the sources as bullets grouped by topic (for example decision models, research, edge and enterprise, physical AI and OT, fixed income, quantum). Within each bullet, name the outlet or author, what it covered, and its date; mark older items as "for background". Cite arXiv papers by identifier. Do not include bare URLs.
 - Follow with a "Discrepancies and limits noted during research" list: figures that sources report differently, claims confirmed by only one source, secondary or anonymously sourced reports, primary documents that could not be reviewed, research that failed (for example rate-limited or unreadable sources), and expected developments that were looked for and not found.
+- Following with an attribution to the model that generated the briefing.
 
 ---
 

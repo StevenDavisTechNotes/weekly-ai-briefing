@@ -24,7 +24,7 @@ import imageio_ffmpeg
 
 HISTORY_FOLDER = Path("history")
 STAGED_AUDIO_FOLDER = Path("staged_audio")
-BRIEFING_PATTERN = re.compile(r"briefing-(\d{4}-\d{2}-\d{2})\.md")
+BRIEFING_PATTERN = re.compile(r"(\d{4}-\d{2}-\d{2})-ai-outlook-briefing\.md")
 # Each "## " heading starts a section that is voiced and emailed on its own.
 SECTION_HEADING = re.compile(r"^(##[ \t].*)$", re.MULTILINE)
 # Sections emailed as text only: a long list of outlets and dates is not worth hearing.
@@ -58,14 +58,14 @@ MIN_BITRATE_KBPS = 8
 
 
 def find_latest_briefing(history_dir: Path) -> tuple[Path, str]:
-    """Returns (path, date string) of the newest briefing-YYYY-MM-DD.md."""
+    """Returns (path, date string) of the newest YYYY-MM-DD-ai-outlook-briefing.md."""
     candidates = [
         (match.group(1), path)
         for path in history_dir.iterdir()
         if (match := BRIEFING_PATTERN.fullmatch(path.name))
     ]
     if not candidates:
-        raise FileNotFoundError(f"No briefing-YYYY-MM-DD.md files in {history_dir}")
+        raise FileNotFoundError(f"No YYYY-MM-DD-ai-outlook-briefing.md files in {history_dir}")
     date, path = max(candidates)  # ISO dates sort lexicographically
     return path, date
 
