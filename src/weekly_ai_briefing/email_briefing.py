@@ -1,5 +1,5 @@
 #! python3
-# usage: uv run python -m src.weekly_ai_briefing.email_briefing
+# usage: uv run python -m src.weekly_ai_briefing.email_briefing [--section N [N ...]] [--no-send-email]
 #
 # Environment:
 #   GMAIL_USER          optional; sending account (default: the recipient address)
@@ -7,7 +7,8 @@
 #        a Google app password for the sending account
 #        see https://myaccount.google.com/apppasswords
 
-import asyncio
+import argparse
+import functools
 import imaplib
 import os
 import re
@@ -19,16 +20,18 @@ from email.utils import make_msgid
 from pathlib import Path
 from typing import NamedTuple
 
-import edge_tts
 import imageio_ffmpeg
+import numpy as np
+import onnxruntime
+from kokoro_onnx import Kokoro
 
 HISTORY_FOLDER = Path("history")
 STAGED_AUDIO_FOLDER = Path("staged_audio")
 BRIEFING_PATTERN = re.compile(r"(\d{4}-\d{2}-\d{2})-ai-outlook-briefing\.md")
 # Each "## " heading starts a section that is voiced and emailed on its own.
 SECTION_HEADING = re.compile(r"^(##[ \t].*)$", re.MULTILINE)
-# Sections emailed as text only: a long list of outlets and dates is not worth hearing.
-TEXT_ONLY_SECTIONS = {"source notes"}
+# Sections emailed as text only: for reference not worth hearing.
+TEXT_ONLY_SECTIONS = {"Source Notes and Attribution"}
 # A pipe table: header row, delimiter row (|---|:--:|), then any rows with a pipe.
 MARKDOWN_TABLE = re.compile(
     r"^.*\|.*\n"
@@ -44,16 +47,17 @@ IMAP_HOST = "imap.gmail.com"
 SENT_COPY_ATTEMPTS = 10
 SENT_COPY_DELAY_SECONDS = 2
 
-VOICE = "en-US-JennyNeural"
+# Kokoro model files are not in git; README.md says how to download them.
+MODEL_PATH = Path("models/kokoro-v1.0.fp16.onnx")
+VOICES_PATH = Path("models/voices-v1.0.bin")
+VOICE = "af_heart"
 TTS_CHUNK_CHARS = 3000
-TTS_CONCURRENCY = 4
-TTS_RETRIES = 4
-# edge-tts default output format: audio-24khz-48kbitrate-mono-mp3 (CBR).
-TTS_SOURCE_BYTES_PER_SECOND = 48_000 // 8
+CHUNK_PAUSE_SECONDS = 0.4
 
 # Gmail rejects messages over 25 MB; base64 inflates attachments by ~4/3 (plus
 # line breaks), so the raw mp3 must stay comfortably below 18 MB.
 MAX_MP3_BYTES = 17 * 1024 * 1024
+MAX_BITRATE_KBPS = 48
 MIN_BITRATE_KBPS = 8
 
 
@@ -128,59 +132,44 @@ def split_chunks(text: str, max_chars: int) -> list[str]:  # noqa: C901
     return chunks
 
 
-async def synthesize_chunk(chunk: str, semaphore: asyncio.Semaphore) -> bytes:
-    async with semaphore:
-        for attempt in range(1, TTS_RETRIES + 1):
-            try:
-                audio = bytearray()
-                async for message in edge_tts.Communicate(chunk, VOICE).stream():
-                    if message["type"] == "audio":
-                        audio += message["data"]
-                if not audio:
-                    raise RuntimeError("TTS returned no audio")
-                return bytes(audio)
-            except Exception as exc:
-                if attempt == TTS_RETRIES:
-                    raise
-                print(f"  TTS retry {attempt}/{TTS_RETRIES - 1} after: {exc!r}")
-                await asyncio.sleep(2 * attempt)
-    raise AssertionError("unreachable")
+@functools.cache
+def load_kokoro() -> Kokoro:
+    for path in (MODEL_PATH, VOICES_PATH):
+        if not path.exists():
+            raise FileNotFoundError(f"{path} is missing; see 'Kokoro model files' in README.md")
+    onnxruntime.set_default_logger_severity(3)  # the fp16 model warns once per graph node
+    return Kokoro(str(MODEL_PATH), str(VOICES_PATH))
 
 
-async def synthesize(chunks: list[str]) -> bytes:
-    semaphore = asyncio.Semaphore(TTS_CONCURRENCY)
-    tasks = [asyncio.create_task(synthesize_chunk(c, semaphore)) for c in chunks]
-    try:
-        parts = await asyncio.gather(*tasks)
-    except BaseException:
-        for task in tasks:
-            task.cancel()
-        raise
-    return b"".join(parts)  # same-format CBR mp3 streams concatenate cleanly
+def synthesize(chunks: list[str]) -> tuple[np.ndarray, int]:
+    """Returns (mono float32 samples, sample rate) for all chunks, in order."""
+    kokoro = load_kokoro()
+    parts: list[np.ndarray] = []
+    rate = 0
+    for number, chunk in enumerate(chunks, start=1):
+        print(f"  chunk {number}/{len(chunks)}")
+        samples, rate = kokoro.create(chunk, voice=VOICE, lang="en-us")
+        parts += [samples, np.zeros(int(rate * CHUNK_PAUSE_SECONDS), dtype=np.float32)]
+    return np.concatenate(parts), rate
 
 
-def shrink_to_fit(mp3_path: Path, source_bytes: int) -> None:
-    """Re-encodes mp3_path at a lower bitrate if it would exceed MAX_MP3_BYTES."""
-    if source_bytes <= MAX_MP3_BYTES:
-        return
-    seconds = source_bytes / TTS_SOURCE_BYTES_PER_SECOND
-    kbps = max(
-        MIN_BITRATE_KBPS,
-        int(MAX_MP3_BYTES * 8 / seconds / 1000),
-    )
-    print(f"MP3 is {source_bytes / 1e6:.1f} MB; re-encoding at {kbps} kbps to fit email limits...")
-    smaller = mp3_path.with_suffix(".small.mp3")
+def encode_mp3(samples: np.ndarray, rate: int, mp3_path: Path) -> None:
+    """Encodes samples as a mono CBR mp3, lowering the bitrate if needed to fit MAX_MP3_BYTES."""
+    seconds = len(samples) / rate
+    kbps = min(MAX_BITRATE_KBPS, max(MIN_BITRATE_KBPS, int(MAX_MP3_BYTES * 8 / seconds / 1000)))
+    if kbps < MAX_BITRATE_KBPS:
+        print(f"  {seconds / 60:.0f} minutes of audio; encoding at {kbps} kbps to fit email limits")
+    pcm = (np.clip(samples, -1.0, 1.0) * 32767).astype("<i2").tobytes()
     subprocess.run(
         [
             imageio_ffmpeg.get_ffmpeg_exe(), "-y", "-loglevel", "error",
-            "-i", str(mp3_path),
-            "-ac", "1", "-ar", "16000",  # speech; 16 kHz is valid for MPEG-2 low bitrates
+            "-f", "s16le", "-ar", str(rate), "-ac", "1", "-i", "pipe:0",
             "-codec:a", "libmp3lame", "-b:a", f"{kbps}k",
-            str(smaller),
+            str(mp3_path),
         ],
+        input=pcm,
         check=True,
     )
-    smaller.replace(mp3_path)
     if mp3_path.stat().st_size > MAX_MP3_BYTES:
         raise RuntimeError(
             f"MP3 is still {mp3_path.stat().st_size / 1e6:.1f} MB at {kbps} kbps; too large to email")
@@ -190,9 +179,8 @@ def generate_mp3(markdown: str, mp3_path: Path) -> None:
     speech = markdown_to_speech_text(markdown)
     chunks = split_chunks(speech, TTS_CHUNK_CHARS)
     print(f"Generating audio: {len(speech):,} chars in {len(chunks)} chunks...")
-    audio = asyncio.run(synthesize(chunks))
-    mp3_path.write_bytes(audio)
-    shrink_to_fit(mp3_path, len(audio))
+    samples, rate = synthesize(chunks)
+    encode_mp3(samples, rate, mp3_path)
     print(f"Saved {mp3_path} ({mp3_path.stat().st_size / 1e6:.1f} MB)")
 
 
@@ -295,38 +283,66 @@ def send_email(subject: str, body: str, mp3_path: Path | None) -> None:
         delete_sent_copy(sender, password, message_id)
 
 
+def parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(description="Voice the latest weekly briefing and email it section by section.")
+    parser.add_argument(
+        "--section", type=int, nargs="+", metavar="N", default=None,
+        help="1-based section numbers to process (default: all sections)",
+    )
+    parser.add_argument(
+        "--send-email", action=argparse.BooleanOptionalAction, default=True,
+        help="email each section; --no-send-email only writes the mp3 files to staged_audio/",
+    )
+    return parser.parse_args()
+
+
 def main() -> None:
-    briefing_path, date = find_latest_briefing(HISTORY_FOLDER)
-    sections = split_sections(briefing_path.read_text(encoding="utf-8"))
-    print(f"Using {briefing_path}: {len(sections)} sections")
-    STAGED_AUDIO_FOLDER.mkdir(exist_ok=True)
-    for number, section in enumerate(sections, start=1):
-        print(f"[{number}/{len(sections)}] {section.title}")
-        if section.title.lower() in TEXT_ONLY_SECTIONS:
+    args = parse_args()
+    try:
+        briefing_path, date = find_latest_briefing(HISTORY_FOLDER)
+        sections = split_sections(briefing_path.read_text(encoding="utf-8"))
+        print(f"Using {briefing_path}: {len(sections)} sections")
+        selected = set(args.section) if args.section is not None else set(range(1, len(sections) + 1))
+        invalid = sorted(n for n in selected if not 1 <= n <= len(sections))
+        if invalid:
+            raise SystemExit(f"error: --section {invalid} out of range; the briefing has sections 1-{len(sections)}")
+        STAGED_AUDIO_FOLDER.mkdir(exist_ok=True)
+        for number, section in enumerate(sections, start=1):
+            if number not in selected:
+                continue
+            print(f"[{number}/{len(sections)}] {section.title}")
+            if section.title.lower() in TEXT_ONLY_SECTIONS:
+                if not args.send_email:
+                    print("  Text-only section; nothing to generate")
+                    continue
+                send_email(
+                    subject=f"Weekly AI Briefing - {date} - {section.title}",
+                    body=(
+                        f"Hi Steve,\n\n"
+                        f"This is section {number} of {len(sections)} of this "
+                        f"week's AI briefing (dated {date}): {section.title}. "
+                        "It has no audio version.\n\n"
+                        + section.markdown
+                    ),
+                    mp3_path=None,
+                )
+                continue
+            mp3_path = STAGED_AUDIO_FOLDER / f"{briefing_path.stem}-{number:02d}.mp3"
+            generate_mp3(section.markdown, mp3_path)
+            if not args.send_email:
+                continue
             send_email(
                 subject=f"Weekly AI Briefing - {date} - {section.title}",
                 body=(
                     f"Hi Steve,\n\n"
                     f"This is section {number} of {len(sections)} of this "
                     f"week's AI briefing (dated {date}): {section.title}. "
-                    "It has no audio version.\n\n"
-                    + section.markdown
+                    "The audio version is attached as an MP3.\n"
                 ),
-                mp3_path=None,
+                mp3_path=mp3_path,
             )
-            continue
-        mp3_path = STAGED_AUDIO_FOLDER / f"{briefing_path.stem}-{number:02d}.mp3"
-        generate_mp3(section.markdown, mp3_path)
-        send_email(
-            subject=f"Weekly AI Briefing - {date} - {section.title}",
-            body=(
-                f"Hi Steve,\n\n"
-                f"This is section {number} of {len(sections)} of this "
-                f"week's AI briefing (dated {date}): {section.title}. "
-                "The audio version is attached as an MP3.\n"
-            ),
-            mp3_path=mp3_path,
-        )
+    except KeyboardInterrupt:
+        print("Interrupted")
 
 
 if __name__ == "__main__":

@@ -173,10 +173,13 @@ def convert(source: Path, output_dir: Path = BLOG_POSTS_FOLDER) -> Path:
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Convert a briefing .md file to a Blogger import .xml file.")
-    parser.add_argument("source", type=Path, help="path to a .md file in the history folder")
-    args = parser.parse_args()
-    print(f"Wrote {convert(args.source)}")
+    try:
+        parser = argparse.ArgumentParser(description="Convert a briefing .md file to a Blogger import .xml file.")
+        parser.add_argument("source", type=Path, help="path to a .md file in the history folder")
+        args = parser.parse_args()
+        print(f"Wrote {convert(args.source)}")
+    except KeyboardInterrupt:
+        print("Interrupted")
 
 
 if __name__ == "__main__":

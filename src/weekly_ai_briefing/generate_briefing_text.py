@@ -193,7 +193,10 @@ def generate_weekly_report() -> None:
 
 
 def main() -> None:
-    generate_weekly_report()
+    try:
+        generate_weekly_report()
+    except KeyboardInterrupt:
+        print("Interrupted")
 
 
 if __name__ == "__main__":
