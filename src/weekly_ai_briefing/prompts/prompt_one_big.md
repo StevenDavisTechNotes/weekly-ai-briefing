@@ -34,6 +34,7 @@ Start each of these parts with a level-2 heading (`##`) using exactly the title 
 
 - Format: Professional executive briefing format optimized for text-to-speech listening. Present all comparisons and data via structured narrative paragraphs and clear bulleted breakdowns. Omit conversational podcast filler, greetings, and timestamps.
 - Analytical Data Presentation: In the text, sparingly use comparisons such as "80% faster". Do not say "Version X runs at 1.1 while version Y runs at 2.0." as this does not translate well to audio playback. Markdown tables, grid matrices, or comparative tables are allowed as secondary information, but will be skipped in the primary audio playback.
+- Citations: Never put identifiers, arXiv numbers, URLs or other reference strings in the running text, because they do not work in audio playback. Name the source in words instead (for example "a paper by Bürger and colleagues") and mark the claim with a numbered footnote reference such as `[^1]` immediately after the sentence it supports. Number references in order of first appearance across the whole briefing, and reuse a number when citing the same source again. Define every reference once, in the "Source Notes and Attribution" part, using the form `[^1]: [Anchor Text](URL)` or, when there is no URL, `[^1]: citation text`. For example: "Python 3.11 introduced major speed improvements through specialized adaptive interpreter caches[^1]." with the definition `[^1]: Python Documentation, What's New in Python 3.11`. For an arXiv paper, use the paper title and identifier as the definition text, with the arXiv link as the URL.
 - Signal over Noise: Maximize information density and technical depth. Strictly omit corporate deal noise, commoditized press releases (e.g. standard vendor partnerships, generic fundraising rounds), and consensus rehash. Focus intensely on "entropy"—what is unexpected, surprising, counter-intuitive, or anomalous in current technical developments.
 
 ---
@@ -43,7 +44,7 @@ Start each of these parts with a level-2 heading (`##`) using exactly the title 
 - Research: For each section, research and synthesize the latest frontier developments for unexpected anomalies from the preceding week.
 - Research Presentation
   - No-change dimensions: When a dimension has only expected follow-through, with no directional changes or net-new anomalies, say so briefly in one or two sentences rather than rehashing the current baseline state.
-  - For each finding with changes, include a summary followed by a First-Derivative Forward Extrapolation ("So-What?" analysis) in a paragraph that begins with the bold lead-in "**So what:**", not a heading, so the audio does not announce a heading after every finding. For example, after a breakthrough in AI model quantization: "**So what:** Extrapolating forward, self-contained generative AI on mobile devices becomes plausible within the next two years."
+  - For each finding with changes, include a summary followed by a First-Derivative Forward Extrapolation (“So-What?” analysis) as a separate paragraph, not a heading, that opens with a spoken cue such as “Extrapolating forward,” so listeners hear where the forecast begins. For example, after a breakthrough in AI model quantization: “Extrapolating forward, self-contained generative AI on mobile devices becomes plausible within the next two years.”
 - Continuity: Later sections may build on earlier ones. Do not repeat material already covered in earlier sections; refer back to it briefly where needed.
 
 ---
@@ -62,7 +63,8 @@ Start each of these parts with a level-2 heading (`##`) using exactly the title 
 - Open with one line stating the date window of the principal sources consulted.
 - List the sources as bullets grouped by topic (for example decision models, research, edge and enterprise, physical AI and OT, fixed income, quantum). Within each bullet, name the outlet or author, what it covered, and its date; mark older items as "for background". Cite arXiv papers by identifier. Do not include bare URLs.
 - Follow with a "Discrepancies and limits noted during research" list: figures that sources report differently, claims confirmed by only one source, secondary or anonymously sourced reports, primary documents that could not be reviewed, research that failed (for example rate-limited or unreadable sources), and expected developments that were looked for and not found.
-- Following with an attribution to the model that generated the briefing.
+- Then give the footnote definitions for every `[^n]` reference used in the briefing, one per line, in numeric order, in the form described under Citations. Every reference in the text must have a definition and every definition must be referenced. These definitions are the only place URLs may appear.
+- Finish with an attribution to the model that generated the briefing.
 
 ---
 
