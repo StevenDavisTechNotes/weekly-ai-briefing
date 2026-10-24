@@ -221,4 +221,7 @@ __marimo__/
 
 # Generated Blogger import files
 editions/blogger_format/
+
+# Generated briefing audio; too large to commit
+editions/mp3_format/
 models/
