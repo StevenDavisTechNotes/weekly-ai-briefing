@@ -219,7 +219,6 @@ __marimo__/
 # Streamlit
 .streamlit/secrets.toml
 
-# Generated briefing audio
-staged_audio/
-blog_posts/
+# Generated Blogger import files
+editions/blogger_format/
 models/

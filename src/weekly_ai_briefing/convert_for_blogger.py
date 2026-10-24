@@ -1,8 +1,10 @@
 #! python3
-# usage: uv run python -m src.weekly_ai_briefing.convert_for_blogger history/YYYY-MM-DD-ai-outlook-briefing.md
+# usage: uv run python -m src.weekly_ai_briefing.convert_for_blogger editions/markdown_format/YYYY-MM-DD-ai-outlook-briefing.md
 #
-# Writes blog_posts/<same stem>.xml: a Blogger import file (an Atom feed holding
+# Writes editions/blogger_format/<same stem>.xml: a Blogger import file (an Atom feed holding
 # one post) that Blogger accepts under Settings > Manage blog > Import content.
+# The statement_of_intent.md beside the briefing is converted the same way, so
+# the public statement is always re-exported with each briefing.
 
 import argparse
 import html
@@ -11,10 +13,16 @@ import xml.etree.ElementTree as ET
 from datetime import UTC, datetime
 from pathlib import Path
 
-BLOG_POSTS_FOLDER = Path("blog_posts")
+from weekly_ai_briefing.config import (
+    AUTHOR,
+    BLOGGER_FOLDER,
+    LABEL,
+    POST_TITLE,
+    STATEMENT_OF_INTENT,
+    STATEMENT_TITLE,
+)
+
 BRIEFING_DATE = re.compile(r"(\d{4}-\d{2}-\d{2})")
-AUTHOR = "Steven Davis"
-LABEL = "Weekly AI Briefing"
 
 ATOM_NS = "http://www.w3.org/2005/Atom"
 KIND_SCHEME = "http://schemas.google.com/g/2005#kind"
@@ -113,22 +121,16 @@ def markdown_to_html(markdown: str) -> str:
     return "\n".join(blocks)
 
 
-def split_title(markdown: str, fallback: str) -> tuple[str, str]:
-    """Pulls a leading '# ' heading out to serve as the post title."""
-    match = re.match(r"\s*#\s+(.+?)\s*#*\s*(?:\n|$)", markdown)
-    if not match:
-        return fallback, markdown
-    title, body_start = match.group(1).strip(), match.end()
-    return title, markdown[body_start:]
+def strip_heading(markdown: str) -> str:
+    """Drops a leading '# ' heading; the post title is generated instead."""
+    return re.sub(r"\A\s*#\s+.+?\s*#*\s*(?:\n|$)", "", markdown, count=1)
 
 
-def post_timestamp(source: Path) -> str:
+def post_moment(source: Path) -> datetime:
     """Uses the briefing date in the file name, else the file's modified time."""
     if match := BRIEFING_DATE.search(source.stem):
-        moment = datetime.fromisoformat(match.group(1)).replace(hour=12, tzinfo=UTC)
-    else:
-        moment = datetime.fromtimestamp(source.stat().st_mtime, tz=UTC)
-    return moment.strftime("%Y-%m-%dT%H:%M:%S.000Z")
+        return datetime.fromisoformat(match.group(1)).replace(hour=12, tzinfo=UTC)
+    return datetime.fromtimestamp(source.stat().st_mtime, tz=UTC)
 
 
 def build_feed(title: str, body_html: str, timestamp: str, post_id: str) -> ET.ElementTree[ET.Element]:
@@ -159,13 +161,14 @@ def build_feed(title: str, body_html: str, timestamp: str, post_id: str) -> ET.E
     return ET.ElementTree(feed)
 
 
-def convert(source: Path, output_dir: Path = BLOG_POSTS_FOLDER) -> Path:
+def convert(source: Path, output_dir: Path = BLOGGER_FOLDER) -> Path:
     """Writes output_dir/<source stem>.xml and returns its path."""
     markdown = source.read_text(encoding="utf-8")
-    title, body = split_title(markdown, fallback=source.stem)
-    timestamp = post_timestamp(source)
+    moment = post_moment(source)
+    timestamp = moment.strftime("%Y-%m-%dT%H:%M:%S.000Z")
     post_id = re.sub(r"\D", "", timestamp)[:14]
-    feed = build_feed(title, markdown_to_html(body), timestamp, post_id)
+    title = STATEMENT_TITLE if source.name == STATEMENT_OF_INTENT else f"{POST_TITLE} - {moment.date().isoformat()}"
+    feed = build_feed(title, markdown_to_html(strip_heading(markdown)), timestamp, post_id)
     output_dir.mkdir(parents=True, exist_ok=True)
     output_path = output_dir / f"{source.stem}.xml"
     feed.write(output_path, encoding="utf-8", xml_declaration=True)
@@ -175,9 +178,14 @@ def convert(source: Path, output_dir: Path = BLOG_POSTS_FOLDER) -> Path:
 def main() -> None:
     try:
         parser = argparse.ArgumentParser(description="Convert a briefing .md file to a Blogger import .xml file.")
-        parser.add_argument("source", type=Path, help="path to a .md file in the history folder")
+        parser.add_argument("source", type=Path, help="path to a .md file in editions/markdown_format")
         args = parser.parse_args()
-        print(f"Wrote {convert(args.source)}")
+        sources = [args.source]
+        statement = args.source.parent / STATEMENT_OF_INTENT
+        if statement.is_file() and statement.resolve() != args.source.resolve():
+            sources.append(statement)
+        for source in sources:
+            print(f"Wrote {convert(source)}")
     except KeyboardInterrupt:
         print("Interrupted")
 

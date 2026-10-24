@@ -12,7 +12,7 @@ from email.message import EmailMessage
 from email.utils import make_msgid, parseaddr
 from pathlib import Path
 
-from .config import (
+from weekly_ai_briefing.config import (
     IMAP_HOST,
     RECIPIENTS,
     SENDER_EMAIL,

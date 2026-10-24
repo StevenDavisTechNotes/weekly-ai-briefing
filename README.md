@@ -14,4 +14,4 @@ curl -L -o models/kokoro-v1.0.fp16.onnx https://github.com/thewh1teagle/kokoro-o
 curl -L -o models/voices-v1.0.bin https://github.com/thewh1teagle/kokoro-onnx/releases/download/model-files-v1.1/voices-v1.0.bin
 ```
 
-The voice is set by `VOICE` in `src/weekly_ai_briefing/email_briefing/config.py`; any voice in `voices-v1.0.bin` works.
+The voice is set by `VOICE` in `src/weekly_ai_briefing/config.py`; any voice in `voices-v1.0.bin` works.

@@ -7,24 +7,21 @@ from pathlib import Path
 
 import httpx2
 from anthropic import Anthropic, APIConnectionError, APIStatusError
-from anthropic.types import Message, MessageParam, ThinkingConfigAdaptiveParam, ToolUnionParam
+from anthropic.types import Message, MessageParam, ThinkingConfigAdaptiveParam
 
-HISTORY_FOLDER = Path("history")
-PROMPT_FOLDER = Path(__file__).resolve().parent / "prompts"
-MODEL = "claude-opus-5-5"
-EFFORT = "medium"
-MAX_TOKENS: int = 128000
-HISTORY_LOOKBACK: int = 2
-MAX_CONTINUATIONS: int = 10  # per request: pause_turn resumes + max_tokens continues
-# The whole briefing is one long streamed call, so a dropped connection or an
-# overloaded API would otherwise discard all the research done so far.
-STREAM_RETRIES: int = 4
-STREAM_RETRY_BASE_SECONDS: int = 30
-
-# The briefing is about the preceding week, so the model must be able to search.
-TOOLS: list[ToolUnionParam] = [
-    {"type": "web_search_20260318", "name": "web_search"},
-]
+from weekly_ai_briefing.config import (
+    EFFORT,
+    HISTORY_LOOKBACK,
+    MARKDOWN_FOLDER,
+    MAX_CONTINUATIONS,
+    MAX_TOKENS,
+    MODEL,
+    PROMPT_FOLDER,
+    STREAM_RETRIES,
+    STREAM_RETRY_BASE_SECONDS,
+    TOOLS,
+    TRANSIENT_ERROR_TYPES,
+)
 
 
 def load_recent_reports(
@@ -51,9 +48,6 @@ def load_recent_reports(
         + "--- END ---"
         for f in files[:limit]
     ]
-
-
-TRANSIENT_ERROR_TYPES = {"overloaded_error", "api_error", "rate_limit_error"}
 
 
 def is_transient(error: Exception) -> bool:
@@ -153,7 +147,7 @@ def send(
 def generate_weekly_report() -> None:
     client = Anthropic()
     today = datetime.date.today().isoformat()
-    output_path = HISTORY_FOLDER / f"{today}-ai-outlook-briefing.md"
+    output_path = MARKDOWN_FOLDER / f"{today}-ai-outlook-briefing.md"
 
     system_prompt = (
         PROMPT_FOLDER / "prompt_one_big.md").read_text(encoding="utf-8")
@@ -164,7 +158,7 @@ def generate_weekly_report() -> None:
             "::past_reports_context::",
             "\n\n".join(
                 load_recent_reports(
-                    reports_dir=HISTORY_FOLDER,
+                    reports_dir=MARKDOWN_FOLDER,
                     limit=HISTORY_LOOKBACK,
                     exclude_name=output_path.name,
                 )
@@ -173,7 +167,7 @@ def generate_weekly_report() -> None:
     )
 
     # Single pass: the whole briefing is written in one response, so the
-    # 15,000-word target applies to the briefing as a whole.
+    # 20,000-word target applies to the briefing as a whole.
     messages: list[MessageParam] = [
         {
             "role": "user",
@@ -186,7 +180,7 @@ def generate_weekly_report() -> None:
 
     report = f"Coverage week ending on {today}\n\n{briefing}"
 
-    HISTORY_FOLDER.mkdir(exist_ok=True)
+    MARKDOWN_FOLDER.mkdir(parents=True, exist_ok=True)
     output_path.write_text(report, encoding="utf-8")
 
     print(f"Report successfully generated and saved to {output_path}")

@@ -7,7 +7,7 @@ import numpy as np
 import onnxruntime
 from kokoro_onnx import Kokoro
 
-from .config import (
+from weekly_ai_briefing.config import (
     CHUNK_PAUSE_SECONDS,
     MAX_BITRATE_KBPS,
     MAX_MP3_BYTES,

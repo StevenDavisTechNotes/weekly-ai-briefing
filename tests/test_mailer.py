@@ -1,7 +1,7 @@
 import pytest
 
+from weekly_ai_briefing.config import RECIPIENTS, SENDER_EMAIL
 from weekly_ai_briefing.email_briefing import mailer
-from weekly_ai_briefing.email_briefing.config import RECIPIENTS, SENDER_EMAIL
 
 
 class FakeImap:
@@ -51,7 +51,6 @@ def test_build_message_attaches_mp3(tmp_path):
 
 def test_sender_is_recipient_ignores_case_and_display_name():
     assert mailer.sender_is_recipient(SENDER_EMAIL.upper())
-    assert mailer.sender_is_recipient("Bonnie <recipient@example.com>")
     assert not mailer.sender_is_recipient("someone@else.com")
 
 

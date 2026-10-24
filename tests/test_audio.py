@@ -1,5 +1,5 @@
+from weekly_ai_briefing.config import MAX_BITRATE_KBPS, MIN_BITRATE_KBPS
 from weekly_ai_briefing.email_briefing.audio import choose_bitrate_kbps
-from weekly_ai_briefing.email_briefing.config import MAX_BITRATE_KBPS, MIN_BITRATE_KBPS
 
 
 def test_short_audio_uses_max_bitrate():

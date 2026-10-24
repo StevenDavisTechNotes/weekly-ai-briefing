@@ -1,7 +1,11 @@
+import re
 from pathlib import Path
 from typing import NamedTuple
 
-from .config import BRIEFING_PATTERN, SECTION_HEADING
+from weekly_ai_briefing.config import BRIEFING_PATTERN, SECTION_HEADING
+
+BRIEFING_FILENAME = re.compile(BRIEFING_PATTERN)
+SECTION_HEADING_LINE = re.compile(SECTION_HEADING, re.MULTILINE)
 
 
 class Section(NamedTuple):
@@ -14,7 +18,7 @@ def find_latest_briefing(history_dir: Path) -> tuple[Path, str]:
     candidates = [
         (match.group(1), path)
         for path in history_dir.iterdir()
-        if (match := BRIEFING_PATTERN.fullmatch(path.name))
+        if (match := BRIEFING_FILENAME.fullmatch(path.name))
     ]
     if not candidates:
         raise FileNotFoundError(f"No YYYY-MM-DD-ai-outlook-briefing.md files in {history_dir}")
@@ -24,7 +28,7 @@ def find_latest_briefing(history_dir: Path) -> tuple[Path, str]:
 
 def split_sections(markdown: str) -> list[Section]:
     """Splits a briefing on its '##' headings; any preamble joins the first section."""
-    parts = SECTION_HEADING.split(markdown)
+    parts = SECTION_HEADING_LINE.split(markdown)
     preamble, rest = parts[0], parts[1:]
     if not rest:
         raise ValueError("Briefing has no '##' section headings")

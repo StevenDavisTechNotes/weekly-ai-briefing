@@ -4,9 +4,10 @@
 
 import argparse
 
+from weekly_ai_briefing.config import MARKDOWN_FOLDER, MP3_FOLDER, TEXT_ONLY_SECTIONS
+
 from .audio import generate_mp3
 from .briefing import Section, find_latest_briefing, split_sections
-from .config import HISTORY_FOLDER, STAGED_AUDIO_FOLDER, TEXT_ONLY_SECTIONS
 from .mailer import send_email
 
 
@@ -18,7 +19,7 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     )
     parser.add_argument(
         "--send-email", action=argparse.BooleanOptionalAction, default=True,
-        help="email each section; --no-send-email only writes the mp3 files to staged_audio/",
+        help="email each section; --no-send-email only writes the mp3 files to editions/mp3_format/ai-outlook-briefing-<date>/",
     )
     return parser.parse_args(argv)
 
@@ -50,11 +51,12 @@ def email_body(date: str, number: int, count: int, section: Section, has_audio: 
 def main(argv: list[str] | None = None) -> None:
     args = parse_args(argv)
     try:
-        briefing_path, date = find_latest_briefing(HISTORY_FOLDER)
+        briefing_path, date = find_latest_briefing(MARKDOWN_FOLDER)
         sections = split_sections(briefing_path.read_text(encoding="utf-8"))
         print(f"Using {briefing_path}: {len(sections)} sections")
         selected = select_sections(args.section, len(sections))
-        STAGED_AUDIO_FOLDER.mkdir(exist_ok=True)
+        edition_folder = MP3_FOLDER / f"ai-outlook-briefing-{date}"
+        edition_folder.mkdir(parents=True, exist_ok=True)
         for number, section in enumerate(sections, start=1):
             if number not in selected:
                 continue
@@ -65,7 +67,7 @@ def main(argv: list[str] | None = None) -> None:
                     print("  Text-only section; nothing to generate")
                     continue
             else:
-                mp3_path = STAGED_AUDIO_FOLDER / f"{briefing_path.stem}-{number:02d}.mp3"
+                mp3_path = edition_folder / f"{briefing_path.stem}-{number:02d}.mp3"
                 generate_mp3(section.markdown, mp3_path)
                 if not args.send_email:
                     continue

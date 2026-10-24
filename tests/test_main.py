@@ -41,10 +41,10 @@ def run_env(tmp_path, monkeypatch):
     history = tmp_path / "history"
     history.mkdir()
     (history / "2026-10-17-ai-outlook-briefing.md").write_text(BRIEFING, encoding="utf-8")
-    monkeypatch.setattr(cli, "HISTORY_FOLDER", history)
-    monkeypatch.setattr(cli, "STAGED_AUDIO_FOLDER", tmp_path / "staged")
+    monkeypatch.setattr(cli, "MARKDOWN_FOLDER", history)
+    monkeypatch.setattr(cli, "MP3_FOLDER", tmp_path / "staged")
     generated, emails = [], []
-    monkeypatch.setattr(cli, "generate_mp3", lambda md, path: generated.append(path.name))
+    monkeypatch.setattr(cli, "generate_mp3", lambda md, path: generated.append(f"{path.parent.name}/{path.name}"))
     monkeypatch.setattr(cli, "send_email", lambda **kw: emails.append(kw))
     return generated, emails
 
@@ -52,7 +52,7 @@ def run_env(tmp_path, monkeypatch):
 def test_main_voices_and_emails_each_section(run_env):
     generated, emails = run_env
     cli.main([])
-    assert generated == ["2026-10-17-ai-outlook-briefing-01.mp3"]
+    assert generated == ["ai-outlook-briefing-2026-10-17/2026-10-17-ai-outlook-briefing-01.mp3"]
     assert [e["mp3_path"] is not None for e in emails] == [True, False]
     assert "Sources." in emails[1]["body"]
 
@@ -60,7 +60,7 @@ def test_main_voices_and_emails_each_section(run_env):
 def test_main_without_email_only_generates_audio(run_env):
     generated, emails = run_env
     cli.main(["--no-send-email"])
-    assert generated == ["2026-10-17-ai-outlook-briefing-01.mp3"]
+    assert generated == ["ai-outlook-briefing-2026-10-17/2026-10-17-ai-outlook-briefing-01.mp3"]
     assert emails == []
 
 
