@@ -4,10 +4,10 @@
 
 import argparse
 
-from weekly_ai_briefing.config import MARKDOWN_FOLDER, MP3_FOLDER, TEXT_ONLY_SECTIONS
+from weekly_ai_briefing.config import MARKDOWN_FOLDER, MP3_FOLDER
 
 from .audio import generate_mp3
-from .briefing import Section, find_latest_briefing, split_sections
+from .briefing import Section, edition_name, find_latest_briefing, is_text_only, mp3_filename, split_sections
 from .mailer import send_email
 
 
@@ -55,19 +55,19 @@ def main(argv: list[str] | None = None) -> None:
         sections = split_sections(briefing_path.read_text(encoding="utf-8"))
         print(f"Using {briefing_path}: {len(sections)} sections")
         selected = select_sections(args.section, len(sections))
-        edition_folder = MP3_FOLDER / f"ai-outlook-briefing-{date}"
+        edition_folder = MP3_FOLDER / edition_name(date)
         edition_folder.mkdir(parents=True, exist_ok=True)
         for number, section in enumerate(sections, start=1):
             if number not in selected:
                 continue
             print(f"[{number}/{len(sections)}] {section.title}")
             mp3_path = None
-            if section.title.lower() in TEXT_ONLY_SECTIONS:
+            if is_text_only(section):
                 if not args.send_email:
                     print("  Text-only section; nothing to generate")
                     continue
             else:
-                mp3_path = edition_folder / f"{briefing_path.stem}-{number:02d}.mp3"
+                mp3_path = edition_folder / mp3_filename(briefing_path.stem, number)
                 generate_mp3(section.markdown, mp3_path)
                 if not args.send_email:
                     continue

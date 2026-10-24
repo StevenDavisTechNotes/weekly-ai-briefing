@@ -9,9 +9,11 @@ EDITIONS_FOLDER = Path("editions")
 MARKDOWN_FOLDER = EDITIONS_FOLDER / "markdown_format"
 MP3_FOLDER = EDITIONS_FOLDER / "mp3_format"
 BLOGGER_FOLDER = EDITIONS_FOLDER / "blogger_format"
+HTML_FOLDER = EDITIONS_FOLDER / "html_format"
 PROMPT_FOLDER = Path(__file__).resolve().parent / "prompts"
 BRIEFING_PATTERN = r"(\d{4}-\d{2}-\d{2})-ai-outlook-briefing\.md"
 STATEMENT_OF_INTENT = "statement_of_intent.md"
+EDITION_PREFIX = "ai-outlook-briefing-"  # an edition's mp3 folder and GitHub release tag: <prefix><date>
 
 # --- Briefing generation (generate_briefing_text.py) ---
 MODEL = "claude-opus-5-5"
@@ -35,6 +37,10 @@ AUTHOR = "Steven Davis"
 LABEL = "Weekly AI Briefing"
 POST_TITLE = "AI Off-Consensus: The Entropy Brief"
 STATEMENT_TITLE = "Statement of Intent"
+
+# --- GitHub publishing (publish.py) ---
+GITHUB_REPO = "StevenDavisTechNotes/weekly-ai-briefing"
+SITE_INDEX = Path("index.html")  # GitHub Pages serves the repository root
 
 # --- Email briefing ---
 # Each "## " heading starts a section that is voiced and emailed on its own.

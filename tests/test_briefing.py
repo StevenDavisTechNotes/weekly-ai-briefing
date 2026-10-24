@@ -1,6 +1,6 @@
 import pytest
 
-from weekly_ai_briefing.email_briefing.briefing import Section, find_latest_briefing, split_sections
+from weekly_ai_briefing.email_briefing.briefing import Section, find_latest_briefing, list_briefings, split_sections
 
 
 def test_find_latest_briefing_picks_newest_matching_file(tmp_path):
@@ -18,6 +18,12 @@ def test_find_latest_briefing_picks_newest_matching_file(tmp_path):
 def test_find_latest_briefing_without_candidates_raises(tmp_path):
     with pytest.raises(FileNotFoundError):
         find_latest_briefing(tmp_path)
+
+
+def test_list_briefings_is_newest_first_and_skips_other_files(tmp_path):
+    for name in ("2026-10-03-ai-outlook-briefing.md", "2026-10-17-ai-outlook-briefing.md", "notes.md"):
+        (tmp_path / name).write_text("x")
+    assert [date for date, _ in list_briefings(tmp_path)] == ["2026-10-17", "2026-10-03"]
 
 
 def test_split_sections_titles_and_bodies():

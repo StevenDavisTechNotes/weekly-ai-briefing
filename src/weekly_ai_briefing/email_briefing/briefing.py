@@ -2,7 +2,7 @@ import re
 from pathlib import Path
 from typing import NamedTuple
 
-from weekly_ai_briefing.config import BRIEFING_PATTERN, SECTION_HEADING
+from weekly_ai_briefing.config import BRIEFING_PATTERN, EDITION_PREFIX, SECTION_HEADING, TEXT_ONLY_SECTIONS
 
 BRIEFING_FILENAME = re.compile(BRIEFING_PATTERN)
 SECTION_HEADING_LINE = re.compile(SECTION_HEADING, re.MULTILINE)
@@ -13,16 +13,37 @@ class Section(NamedTuple):
     markdown: str
 
 
-def find_latest_briefing(history_dir: Path) -> tuple[Path, str]:
-    """Returns (path, date string) of the newest YYYY-MM-DD-ai-outlook-briefing.md."""
-    candidates = [
+def is_text_only(section: Section) -> bool:
+    """Text-only sections are emailed for reference and have no mp3."""
+    return section.title.lower() in TEXT_ONLY_SECTIONS
+
+
+def edition_name(date: str) -> str:
+    """Names an edition's mp3 folder and its GitHub release tag."""
+    return f"{EDITION_PREFIX}{date}"
+
+
+def mp3_filename(briefing_stem: str, number: int) -> str:
+    """Names the mp3 of the 1-based section number of a briefing."""
+    return f"{briefing_stem}-{number:02d}.mp3"
+
+
+def list_briefings(folder: Path) -> list[tuple[str, Path]]:
+    """Returns (date string, path) of every YYYY-MM-DD-ai-outlook-briefing.md, newest first."""
+    found = [
         (match.group(1), path)
-        for path in history_dir.iterdir()
+        for path in folder.iterdir()
         if (match := BRIEFING_FILENAME.fullmatch(path.name))
     ]
-    if not candidates:
+    return sorted(found, reverse=True)  # ISO dates sort lexicographically
+
+
+def find_latest_briefing(history_dir: Path) -> tuple[Path, str]:
+    """Returns (path, date string) of the newest YYYY-MM-DD-ai-outlook-briefing.md."""
+    briefings = list_briefings(history_dir)
+    if not briefings:
         raise FileNotFoundError(f"No YYYY-MM-DD-ai-outlook-briefing.md files in {history_dir}")
-    date, path = max(candidates)  # ISO dates sort lexicographically
+    date, path = briefings[0]
     return path, date
 
 

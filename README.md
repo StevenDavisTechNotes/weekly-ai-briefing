@@ -15,3 +15,19 @@ curl -L -o models/voices-v1.0.bin https://github.com/thewh1teagle/kokoro-onnx/re
 ```
 
 The voice is set by `VOICE` in `src/weekly_ai_briefing/config.py`; any voice in `voices-v1.0.bin` works.
+
+## Publishing
+
+The mp3 files are too large to commit, so they are uploaded as assets of one GitHub release per edition
+(tag `ai-outlook-briefing-<date>`). GitHub Pages serves `index.html` and `editions/html_format/`, whose pages play
+the mp3s from those release assets. One-time setup: install the [GitHub CLI](https://cli.github.com/)
+(`winget install GitHub.cli`) and run `gh auth login`. Each week, after `email_briefing` has written the mp3 files:
+
+```sh
+uv run python -m weekly_ai_briefing.publish
+git add index.html editions/html_format
+git commit -m "Publish <date> edition"
+git push
+```
+
+`--date YYYY-MM-DD` publishes an older edition; `--no-upload` only rebuilds the pages.
