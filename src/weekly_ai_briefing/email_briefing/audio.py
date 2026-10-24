@@ -9,10 +9,8 @@ from kokoro_onnx import Kokoro
 
 from weekly_ai_briefing.config import (
     CHUNK_PAUSE_SECONDS,
-    MAX_BITRATE_KBPS,
-    MAX_MP3_BYTES,
-    MIN_BITRATE_KBPS,
     MODEL_PATH,
+    MP3_BITRATE_KBPS,
     TTS_CHUNK_CHARS,
     VOICE,
     VOICES_PATH,
@@ -41,17 +39,8 @@ def synthesize(chunks: list[str]) -> tuple[np.ndarray, int]:
     return np.concatenate(parts), rate
 
 
-def choose_bitrate_kbps(seconds: float) -> int:
-    """Returns the highest bitrate, capped at MAX_BITRATE_KBPS, that keeps the audio under MAX_MP3_BYTES."""
-    return min(MAX_BITRATE_KBPS, max(MIN_BITRATE_KBPS, int(MAX_MP3_BYTES * 8 / seconds / 1000)))
-
-
 def encode_mp3(samples: np.ndarray, rate: int, mp3_path: Path) -> None:
-    """Encodes samples as a mono CBR mp3, lowering the bitrate if needed to fit MAX_MP3_BYTES."""
-    seconds = len(samples) / rate
-    kbps = choose_bitrate_kbps(seconds)
-    if kbps < MAX_BITRATE_KBPS:
-        print(f"  {seconds / 60:.0f} minutes of audio; encoding at {kbps} kbps to fit email limits")
+    """Encodes samples as a mono CBR mp3 at MP3_BITRATE_KBPS."""
     pcm = (np.clip(samples, -1.0, 1.0) * 32767).astype("<i2").tobytes()  # cSpell: ignore tobytes
     subprocess.run(
         [
@@ -61,15 +50,12 @@ def encode_mp3(samples: np.ndarray, rate: int, mp3_path: Path) -> None:
             "-codec:a",
             "libmp3lame",   # cSpell: ignore libmp
             "-b:a",
-            f"{kbps}k",
+            f"{MP3_BITRATE_KBPS}k",
             str(mp3_path),
         ],
         input=pcm,
         check=True,
     )
-    if mp3_path.stat().st_size > MAX_MP3_BYTES:
-        raise RuntimeError(
-            f"MP3 is still {mp3_path.stat().st_size / 1e6:.1f} MB at {kbps} kbps; too large to email")
 
 
 def generate_mp3(markdown: str, mp3_path: Path) -> None:

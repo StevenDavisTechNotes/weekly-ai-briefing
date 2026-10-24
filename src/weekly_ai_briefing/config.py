@@ -65,8 +65,4 @@ VOICE = "af_heart"
 TTS_CHUNK_CHARS = 3000
 CHUNK_PAUSE_SECONDS = 0.4
 
-# Gmail rejects messages over 25 MB; base64 inflates attachments by ~4/3 (plus
-# line breaks), so the raw mp3 must stay comfortably below 18 MB.
-MAX_MP3_BYTES = 17 * 1024 * 1024
-MAX_BITRATE_KBPS = 48
-MIN_BITRATE_KBPS = 8
+MP3_BITRATE_KBPS = 48  # mono speech

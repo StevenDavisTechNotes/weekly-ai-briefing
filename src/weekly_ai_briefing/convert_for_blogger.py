@@ -34,12 +34,23 @@ RULE = re.compile(r"^\s*(?:-{3,}|\*{3,}|_{3,})\s*$")
 BULLET = re.compile(r"^\s*[-*+]\s+(.*)$")
 NUMBERED = re.compile(r"^\s*\d+[.)]\s+(.*)$")
 TABLE_DELIMITER = re.compile(r"^\s*\|?\s*:?-+:?\s*(?:\|\s*:?-+:?\s*)*\|?\s*$")
+FOOTNOTE_DEFINITION = re.compile(r"^\[\^([^\]\s]+)\]:\s*(.*)$")
+FOOTNOTE_REFERENCE = re.compile(r"\[\^([^\]\s]+)\]")
+
+
+def footnote_id(escaped_label: str) -> str:
+    """Returns the anchor id of the footnote with the given HTML-escaped label."""
+    return "fn-" + escaped_label.replace('"', "&quot;")
 
 
 def inline_html(text: str) -> str:
-    """Escapes text and renders inline code, links, bold and italics."""
+    """Escapes text and renders inline code, footnote references, links, bold and italics."""
     text = html.escape(text, quote=False)
     text = re.sub(r"`([^`]+)`", r"<code>\1</code>", text)
+    text = FOOTNOTE_REFERENCE.sub(
+        lambda m: f'<sup><a href="#{footnote_id(m.group(1))}">[{m.group(1)}]</a></sup>',
+        text,
+    )
     text = re.sub(
         r"\[([^\]]+)\]\(([^)\s]+)\)",
         lambda m: f'<a href="{m.group(2).replace('"', "&quot;")}">{m.group(1)}</a>',
@@ -75,6 +86,16 @@ def take_while(lines: list[str], index: int, pattern: re.Pattern[str]) -> tuple[
     return items, index
 
 
+def footnotes_html(lines: list[str], index: int) -> tuple[str, int]:
+    """Renders consecutive '[^label]: text' lines as a list whose items the references link to."""
+    items: list[str] = []
+    while index < len(lines) and (match := FOOTNOTE_DEFINITION.match(lines[index])):
+        label = html.escape(match.group(1), quote=False)
+        items.append(f'<li id="{footnote_id(label)}">[{label}] {inline_html(match.group(2))}</li>')
+        index += 1
+    return '<ul class="footnotes" style="list-style:none;padding-left:0">' + "".join(items) + "</ul>", index
+
+
 def take_paragraph(lines: list[str], index: int) -> tuple[str, int]:
     """Joins lines up to the next blank line or block-level element."""
     parts: list[str] = []
@@ -86,7 +107,9 @@ def take_paragraph(lines: list[str], index: int) -> tuple[str, int]:
 
 def starts_block(lines: list[str], index: int) -> bool:
     line = lines[index]
-    return any(p.match(line) for p in (HEADING, RULE, BULLET, NUMBERED)) or is_table_start(lines, index)
+    return any(p.match(line) for p in (HEADING, RULE, BULLET, NUMBERED, FOOTNOTE_DEFINITION)) or is_table_start(
+        lines, index
+    )
 
 
 def markdown_to_html(markdown: str) -> str:
@@ -105,6 +128,9 @@ def markdown_to_html(markdown: str) -> str:
         elif RULE.match(line):
             blocks.append("<hr />")
             index += 1
+        elif FOOTNOTE_DEFINITION.match(line):
+            block, index = footnotes_html(lines, index)
+            blocks.append(block)
         elif is_table_start(lines, index):
             end = index + 2
             while end < len(lines) and "|" in lines[end] and lines[end].strip():
