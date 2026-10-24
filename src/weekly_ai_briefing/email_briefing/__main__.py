@@ -56,7 +56,7 @@ def select_sections(requested: list[int] | None, count: int) -> set[int]:
 
 
 def email_subject(date: str) -> str:
-    return f"Weekly AI Briefing - {date}"
+    return f"AI Off-Consensus: The Entropy Brief - {date}"
 
 
 def email_body(date: str, page_url: str, sections: list[Section]) -> str:
