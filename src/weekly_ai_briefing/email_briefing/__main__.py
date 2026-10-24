@@ -1,27 +1,49 @@
 #! python3
-# usage: uv run python -m weekly_ai_briefing.email_briefing [--section N [N ...]] [--no-send-email]
+# usage: uv run python -m weekly_ai_briefing.email_briefing [--voice [--section N [N ...]]] [--email]
+#
+# Weekly order: --voice writes the mp3 files; weekly_ai_briefing.publish uploads them and builds the
+# pages; push; then --email mails the link to the latest briefing's page (it refuses until the page is live).
 # Email credentials come from the environment; see mailer.py.
 
 import argparse
+import urllib.error
+import urllib.request
 
 from weekly_ai_briefing.config import MARKDOWN_FOLDER, MP3_FOLDER
 
 from .audio import generate_mp3
-from .briefing import Section, edition_name, find_latest_briefing, is_text_only, mp3_filename, split_sections
+from .briefing import (
+    Section,
+    edition_name,
+    edition_page_url,
+    find_latest_briefing,
+    is_text_only,
+    mp3_filename,
+    split_sections,
+)
 from .mailer import send_email
 
 
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="Voice the latest weekly briefing and email it section by section.")
+    parser = argparse.ArgumentParser(description="Voice the latest weekly briefing and/or email the link to its page.")
+    parser.add_argument(
+        "--voice", action="store_true",
+        help="write one mp3 per section to editions/mp3_format/ai-outlook-briefing-<date>/",
+    )
     parser.add_argument(
         "--section", type=int, nargs="+", metavar="N", default=None,
-        help="1-based section numbers to process (default: all sections)",
+        help="with --voice: 1-based section numbers to voice (default: all sections)",
     )
     parser.add_argument(
-        "--send-email", action=argparse.BooleanOptionalAction, default=True,
-        help="email each section; --no-send-email only writes the mp3 files to editions/mp3_format/ai-outlook-briefing-<date>/",
+        "--email", action="store_true",
+        help="email the link to the latest briefing's published page",
     )
-    return parser.parse_args(argv)
+    args = parser.parse_args(argv)
+    if not (args.voice or args.email):
+        parser.error("nothing to do; pass --voice and/or --email")
+    if args.section is not None and not args.voice:
+        parser.error("--section only applies with --voice")
+    return args
 
 
 def select_sections(requested: list[int] | None, count: int) -> set[int]:
@@ -33,19 +55,43 @@ def select_sections(requested: list[int] | None, count: int) -> set[int]:
     return selected
 
 
-def email_subject(date: str, section: Section) -> str:
-    return f"Weekly AI Briefing - {date} - {section.title}"
+def email_subject(date: str) -> str:
+    return f"Weekly AI Briefing - {date}"
 
 
-def email_body(date: str, number: int, count: int, section: Section, has_audio: bool) -> str:
-    intro = (
-        f"Hi Steve,\n\n"
-        f"This is section {number} of {count} of this "
-        f"week's AI briefing (dated {date}): {section.title}. "
-    )
-    if has_audio:
-        return intro + "The audio version is attached as an MP3.\n"
-    return intro + "It has no audio version.\n\n" + section.markdown
+def email_body(date: str, page_url: str, sections: list[Section]) -> str:
+    lines = [
+        "Hi Steve,",
+        "",
+        f"This week's AI briefing (dated {date}) is ready to read and listen to:",
+        page_url,
+        "",
+        "Sections:",
+        *(f"{number}. {section.title}: {page_url}#section-{number}" for number, section in enumerate(sections, start=1)),
+    ]
+    return "\n".join(lines) + "\n"
+
+
+def page_is_live(url: str) -> bool:
+    request = urllib.request.Request(url, method="HEAD")
+    try:
+        with urllib.request.urlopen(request, timeout=15) as response:
+            return response.status == 200
+    except urllib.error.URLError:  # includes HTTPError, e.g. 404 before GitHub Pages has built the page
+        return False
+
+
+def voice_sections(briefing_stem: str, date: str, sections: list[Section], selected: set[int]) -> None:
+    edition_folder = MP3_FOLDER / edition_name(date)
+    edition_folder.mkdir(parents=True, exist_ok=True)
+    for number, section in enumerate(sections, start=1):
+        if number not in selected:
+            continue
+        print(f"[{number}/{len(sections)}] {section.title}")
+        if is_text_only(section):
+            print("  Text-only section; nothing to generate")
+            continue
+        generate_mp3(section.markdown, edition_folder / mp3_filename(briefing_stem, number))
 
 
 def main(argv: list[str] | None = None) -> None:
@@ -54,28 +100,16 @@ def main(argv: list[str] | None = None) -> None:
         briefing_path, date = find_latest_briefing(MARKDOWN_FOLDER)
         sections = split_sections(briefing_path.read_text(encoding="utf-8"))
         print(f"Using {briefing_path}: {len(sections)} sections")
-        selected = select_sections(args.section, len(sections))
-        edition_folder = MP3_FOLDER / edition_name(date)
-        edition_folder.mkdir(parents=True, exist_ok=True)
-        for number, section in enumerate(sections, start=1):
-            if number not in selected:
-                continue
-            print(f"[{number}/{len(sections)}] {section.title}")
-            mp3_path = None
-            if is_text_only(section):
-                if not args.send_email:
-                    print("  Text-only section; nothing to generate")
-                    continue
-            else:
-                mp3_path = edition_folder / mp3_filename(briefing_path.stem, number)
-                generate_mp3(section.markdown, mp3_path)
-                if not args.send_email:
-                    continue
-            send_email(
-                subject=email_subject(date, section),
-                body=email_body(date, number, len(sections), section, has_audio=mp3_path is not None),
-                mp3_path=mp3_path,
-            )
+        if args.voice:
+            voice_sections(briefing_path.stem, date, sections, select_sections(args.section, len(sections)))
+        if args.email:
+            page_url = edition_page_url(briefing_path.stem)
+            if not page_is_live(page_url):
+                raise SystemExit(
+                    f"error: {page_url} is not live; run weekly_ai_briefing.publish, push, "
+                    "wait for GitHub Pages to build, then retry"
+                )
+            send_email(subject=email_subject(date), body=email_body(date, page_url, sections))
     except KeyboardInterrupt:
         print("Interrupted")
 

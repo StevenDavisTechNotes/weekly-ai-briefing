@@ -20,14 +20,19 @@ The voice is set by `VOICE` in `src/weekly_ai_briefing/config.py`; any voice in 
 
 The mp3 files are too large to commit, so they are uploaded as assets of one GitHub release per edition
 (tag `ai-outlook-briefing-<date>`). GitHub Pages serves `index.html` and `editions/html_format/`, whose pages play
-the mp3s from those release assets. One-time setup: install the [GitHub CLI](https://cli.github.com/)
-(`winget install GitHub.cli`) and run `gh auth login`. Each week, after `email_briefing` has written the mp3 files:
+the mp3s from those release assets. The weekly email is a single message linking to the edition's page, not the
+audio. One-time setup: install the [GitHub CLI](https://cli.github.com/) (`winget install GitHub.cli`) and run
+`gh auth login`. Each week, after the briefing text is generated:
 
 ```sh
+uv run python -m weekly_ai_briefing.email_briefing --voice
 uv run python -m weekly_ai_briefing.publish
 git add index.html editions/html_format
 git commit -m "Publish <date> edition"
 git push
+# wait for GitHub Pages to build, about a minute
+uv run python -m weekly_ai_briefing.email_briefing --email
 ```
 
-`--date YYYY-MM-DD` publishes an older edition; `--no-upload` only rebuilds the pages.
+`--email` refuses to send until the page is live. `--voice --section N` voices only some sections. `publish
+--date YYYY-MM-DD` publishes an older edition; `publish --no-upload` only rebuilds the pages.

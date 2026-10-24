@@ -2,7 +2,14 @@ import re
 from pathlib import Path
 from typing import NamedTuple
 
-from weekly_ai_briefing.config import BRIEFING_PATTERN, EDITION_PREFIX, SECTION_HEADING, TEXT_ONLY_SECTIONS
+from weekly_ai_briefing.config import (
+    BRIEFING_PATTERN,
+    EDITION_PREFIX,
+    HTML_FOLDER,
+    SECTION_HEADING,
+    SITE_URL,
+    TEXT_ONLY_SECTIONS,
+)
 
 BRIEFING_FILENAME = re.compile(BRIEFING_PATTERN)
 SECTION_HEADING_LINE = re.compile(SECTION_HEADING, re.MULTILINE)
@@ -14,7 +21,7 @@ class Section(NamedTuple):
 
 
 def is_text_only(section: Section) -> bool:
-    """Text-only sections are emailed for reference and have no mp3."""
+    """Text-only sections have no mp3; the page shows only their text."""
     return section.title.lower() in TEXT_ONLY_SECTIONS
 
 
@@ -26,6 +33,11 @@ def edition_name(date: str) -> str:
 def mp3_filename(briefing_stem: str, number: int) -> str:
     """Names the mp3 of the 1-based section number of a briefing."""
     return f"{briefing_stem}-{number:02d}.mp3"
+
+
+def edition_page_url(briefing_stem: str) -> str:
+    """Returns the public URL of a briefing's page (see publish.py)."""
+    return f"{SITE_URL}{HTML_FOLDER.as_posix()}/{briefing_stem}.html"
 
 
 def list_briefings(folder: Path) -> list[tuple[str, Path]]:

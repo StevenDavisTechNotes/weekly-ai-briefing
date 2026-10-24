@@ -41,11 +41,12 @@ STATEMENT_TITLE = "Statement of Intent"
 # --- GitHub publishing (publish.py) ---
 GITHUB_REPO = "StevenDavisTechNotes/weekly-ai-briefing"
 SITE_INDEX = Path("index.html")  # GitHub Pages serves the repository root
+SITE_URL = "https://stevendavistechnotes.github.io/weekly-ai-briefing/"
 
 # --- Email briefing ---
-# Each "## " heading starts a section that is voiced and emailed on its own.
+# Each "## " heading starts a section that is voiced and linked on its own.
 SECTION_HEADING = r"^(##[ \t].*)$"  # compiled with re.MULTILINE
-# Sections emailed as text only: for reference not worth hearing.
+# Sections shown as text only: for reference not worth hearing.
 TEXT_ONLY_SECTIONS = {"source notes and attribution"}  # compared against the lowercased title
 
 SENDER_EMAIL = "stevendavisma@gmail.com"

@@ -10,7 +10,6 @@ import smtplib
 import time
 from email.message import EmailMessage
 from email.utils import make_msgid, parseaddr
-from pathlib import Path
 
 from weekly_ai_briefing.config import (
     IMAP_HOST,
@@ -71,20 +70,13 @@ def delete_sent_copy(sender: str, password: str, message_id: str) -> None:
     print("  Deleted the sent copy")
 
 
-def build_message(sender: str, subject: str, body: str, mp3_path: Path | None) -> EmailMessage:
+def build_message(sender: str, subject: str, body: str) -> EmailMessage:
     message = EmailMessage()
     message["Subject"] = subject
     message["From"] = sender
     message["To"] = ", ".join(RECIPIENTS)
     message["Message-ID"] = make_msgid(domain=sender.split("@")[-1])
     message.set_content(body)
-    if mp3_path is not None:
-        message.add_attachment(
-            mp3_path.read_bytes(),
-            maintype="audio",
-            subtype="mpeg",
-            filename=mp3_path.name,
-        )
     return message
 
 
@@ -92,17 +84,17 @@ def sender_is_recipient(sender: str) -> bool:
     return parseaddr(sender)[1].lower() in [parseaddr(x)[1].lower() for x in RECIPIENTS]
 
 
-def send_email(subject: str, body: str, mp3_path: Path | None) -> None:
+def send_email(subject: str, body: str) -> None:
     password = os.environ.get("GMAIL_APP_PASSWORD")
     if not password:
         raise RuntimeError("Set GMAIL_APP_PASSWORD to a Google app password")
     sender = os.environ.get("GMAIL_USER", SENDER_EMAIL)
-    message = build_message(sender, subject, body, mp3_path)
+    message = build_message(sender, subject, body)
 
     with smtplib.SMTP_SSL(SMTP_HOST, SMTP_PORT) as smtp:
         smtp.login(sender, password)
         smtp.send_message(message)
-    print(f"Emailed {mp3_path.name if mp3_path else subject} to {', '.join(RECIPIENTS)}")
+    print(f"Emailed {subject} to {', '.join(RECIPIENTS)}")
 
     # Mailing yourself stores one message labelled both Inbox and Sent, so
     # there is no second copy to delete (deleting it would empty the Inbox too).
