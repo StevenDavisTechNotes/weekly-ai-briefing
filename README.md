@@ -24,15 +24,11 @@ the mp3s from those release assets. The weekly email is a single message linking
 audio. One-time setup: install the [GitHub CLI](https://cli.github.com/) (`winget install GitHub.cli`) and run
 `gh auth login`. Each week, after the briefing text is generated:
 
-```sh
-uv run python -m weekly_ai_briefing.email_briefing --voice
-uv run python -m weekly_ai_briefing.publish
-git add index.html editions/html_format
-git commit -m "Publish <date> edition"
-git push
-# wait for GitHub Pages to build, about a minute
-uv run python -m weekly_ai_briefing.email_briefing --email
+```powershell
+.\scripts\publish_text.ps1
 ```
 
-`--email` refuses to send until the page is live. `--voice --section N` voices only some sections. `publish
---date YYYY-MM-DD` publishes an older edition; `publish --no-upload` only rebuilds the pages.
+The script waits for the edition page to return HTTP 200 before sending the email (up to 10 minutes). If that
+times out, rerun `uv run python -m weekly_ai_briefing.email_briefing --email` once the page is live.
+`--voice --section N` voices only some sections. `publish --date YYYY-MM-DD` publishes an older edition;
+`publish --no-upload` only rebuilds the pages.
