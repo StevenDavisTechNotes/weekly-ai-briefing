@@ -16,6 +16,9 @@ curl -L -o models/voices-v1.0.bin https://github.com/thewh1teagle/kokoro-onnx/re
 
 The voice is set by `VOICE` in `src/weekly_ai_briefing/config.py`; any voice in `voices-v1.0.bin` works.
 
+Other text-to-speech backends (OpenVINO GenAI on the Arc GPU and NPU, Qwen3-TTS) were benchmarked and did not beat
+this CPU setup; see [documents/model_selection.md](documents/model_selection.md).
+
 ## Publishing
 
 The mp3 files are too large to commit, so they are uploaded as assets of one GitHub release per edition
