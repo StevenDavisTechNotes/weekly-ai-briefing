@@ -2,6 +2,10 @@
 
 Use Claude to generate a high information density weekly briefing
 
+Read the briefings online: <https://stevendavistechnotes.github.io/weekly-ai-briefing/index.html> (GitHub Pages; the
+[repository](https://github.com/StevenDavisTechNotes/weekly-ai-briefing) holds the source and the
+[markdown editions](editions/markdown_format/)).
+
 ## Kokoro model files
 
 `email_briefing` voices each section locally with [kokoro-onnx](https://github.com/thewh1teagle/kokoro-onnx), so no

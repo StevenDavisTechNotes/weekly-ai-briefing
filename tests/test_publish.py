@@ -44,4 +44,4 @@ def test_index_keeps_given_order_and_marks_audio():
     ]
     index = publish.render_index(editions)
     assert index.index("2026-10-17") < index.index("2026-10-10")
-    assert index.count("(audio)") == 1
+    assert index.count("(with embedded audio)") == 1

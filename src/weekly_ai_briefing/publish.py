@@ -92,7 +92,7 @@ def render_index(editions: list[Edition]) -> str:
     """Renders the list of editions in the order given."""
     items = "\n".join(
         f'<li><a href="{HTML_FOLDER.as_posix()}/{edition.briefing_stem}.html">{html.escape(edition.date)}</a>'
-        f"{' (audio)' if edition.has_audio else ''}</li>"
+        f"{' (with embedded audio)' if edition.has_audio else ''}</li>"
         for edition in editions
     )
     body = f"<h1>{html.escape(POST_TITLE)}</h1>\n<ul>\n{items}\n</ul>"
