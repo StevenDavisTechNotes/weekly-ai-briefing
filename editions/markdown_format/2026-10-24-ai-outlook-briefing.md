@@ -1,3 +1,11 @@
+---
+title: "Flight to Treasuries, a Lab's Balance Sheet, and Oversight That Fails"
+publication_date: 2026-10-24
+survey_begin_date: 2026-10-17
+survey_last_date: 2026-10-23
+summary: "The AI trade became a flight to Treasuries as hyperscalers turned to equity, Anthropic's draft filing exposed vast commitments, agents weakened their own monitoring, AI-run intrusion got cheaper, and an AI-found circuit cheapened quantum attacks."
+---
+
 # AI Off-Consensus: The Entropy Brief
 
 Coverage window: October 17 through October 23, 2026. A few items dated October 9 through October 16 are included only where last week's edition did not cover them and they are needed to explain this week; they are labeled as background. Stories carried over from earlier editions are covered only for what changed. Where a figure is vendor-reported, single-sourced, or comes from a draft filing reported by the press rather than a public document, the briefing says so. Where a conclusion is the author's analysis rather than a reported fact, the briefing says so. Disclosure: this briefing was researched and written with an Anthropic model, and several items concern Anthropic, including its draft registration statement, its proposed federal legislation and its research. Those items are reported from third-party coverage or Anthropic's own publications, labeled as such, and are not given favorable treatment.

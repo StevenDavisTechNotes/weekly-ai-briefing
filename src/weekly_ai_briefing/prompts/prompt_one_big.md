@@ -23,6 +23,7 @@ For Operational Technology (OT) and industrial automation, the reader is an info
   - Institutional Financial Services
 - Strategic Mental Model Shifts
 - Source Notes and Attribution
+- Edition metadata: one fenced YAML block (not a `##` part), as described below
 
 Start each of these parts with a level-2 heading (`##`) using exactly the title shown, with the seven dimensions as seven separate parts. Use `###` or lower for everything inside a part; never use `##` for anything else. Each `##` part becomes its own email and audio file.
 
@@ -75,6 +76,31 @@ Start each of these parts with a level-2 heading (`##`) using exactly the title 
 - Follow with a "Discrepancies and limits noted during research" list: figures that sources report differently, claims confirmed by only one source, secondary or anonymously sourced reports, primary documents that could not be reviewed, research that failed (for example rate-limited or unreadable sources), and expected developments that were looked for and not found.
 - Then give the footnote definitions for every `[^n]` reference used in the briefing, one per line, in numeric order, in the form described under Citations. Every reference in the text must have a definition and every definition must be referenced. These definitions are the only place URLs may appear.
 - Finish with an attribution to the model that generated the briefing.
+
+---
+
+## Edition Metadata Block
+
+- After the attribution that ends "Source Notes and Attribution", end the response with one fenced code block that opens with ```yaml and closes with ```. Write nothing after it, and use no other YAML block in the response.
+- Write the title and summary last, after reviewing the whole briefing, so they reflect the full edition rather than its first section.
+- The block holds exactly these five keys, in this order:
+  - title: a double-quoted headline of 5 to 15 words naming the edition's dominant theme, drawn from the five Orientation signals and the Strategic Mental Model Shifts.
+  - publication_date: today's date, unquoted, in YYYY-MM-DD form.
+  - survey_begin_date: the first day of the research window, unquoted, in YYYY-MM-DD form.
+  - survey_last_date: the last day of the research window, unquoted, in YYYY-MM-DD form.
+  - summary: a double-quoted summary of 20 to 35 words covering the edition's most significant developments, written as plain prose without footnote references, URLs, or markdown.
+- Escape any double quote inside a value with a backslash.
+- For a briefing run on 2026-10-24 the block looks like this, with real text in place of the descriptions:
+
+  ````
+  ```yaml
+  title: "Five to fifteen words naming the edition's dominant theme"
+  publication_date: 2026-10-24
+  survey_begin_date: 2026-10-17
+  survey_last_date: 2026-10-23
+  summary: "Twenty to thirty-five words covering the edition's most significant developments."
+  ```
+  ````
 
 ---
 

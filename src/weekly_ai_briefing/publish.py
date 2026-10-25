@@ -23,31 +23,16 @@ from weekly_ai_briefing.email_briefing.briefing import (
     mp3_filename,
     split_sections,
 )
-
-PAGE_TEMPLATE = """<!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>{title}</title>
-<style>
-body {{ font: 16px/1.5 system-ui, sans-serif; max-width: 46rem; margin: 0 auto; padding: 1rem; }}
-audio {{ width: 100%; }}
-table {{ border-collapse: collapse; display: block; overflow-x: auto; }}
-td, th {{ padding: 0.25rem 0.5rem; }}
-</style>
-</head>
-<body>
-{body}
-</body>
-</html>
-"""
+from weekly_ai_briefing.front_matter import split_front_matter
+from weekly_ai_briefing.html_rendering import render_template
 
 
 class Edition(NamedTuple):
     date: str
     briefing_stem: str
     has_audio: bool
+    title: str
+    summary: str
 
 
 def page_title(date: str) -> str:
@@ -82,21 +67,15 @@ def render_edition_page(date: str, briefing_stem: str, sections: list[Section], 
         if has_audio and not is_text_only(section):
             url = release_asset_url(tag, mp3_filename(briefing_stem, number))
             rendered = insert_after_heading(rendered, audio_player(url))
-        parts.append(f'<section id="section-{number}">\n{rendered}\n</section>')
-    title = html.escape(page_title(date))
-    body = f'<p><a href="../../index.html">All editions</a></p>\n<h1>{title}</h1>\n' + "\n".join(parts)
-    return PAGE_TEMPLATE.format(title=title, body=body)
+        parts.append((number, rendered))
+    return render_template("github_hosted_edition.html.j2", title=page_title(date), sections=parts)
 
 
 def render_index(editions: list[Edition]) -> str:
-    """Renders the list of editions in the order given."""
-    items = "\n".join(
-        f'<li><a href="{HTML_FOLDER.as_posix()}/{edition.briefing_stem}.html">{html.escape(edition.date)}</a>'
-        f"{' (with embedded audio)' if edition.has_audio else ''}</li>"
-        for edition in editions
+    """Renders the editions in the order given: date, title with summary, and icons, with no column headings."""
+    return render_template(
+        "github_hosted_index.html.j2", title=POST_TITLE, html_folder=HTML_FOLDER.as_posix(), editions=editions
     )
-    body = f"<h1>{html.escape(POST_TITLE)}</h1>\n<ul>\n{items}\n</ul>"
-    return PAGE_TEMPLATE.format(title=html.escape(POST_TITLE), body=body)
 
 
 def write_site(release_tags: set[str]) -> list[Edition]:
@@ -104,8 +83,17 @@ def write_site(release_tags: set[str]) -> list[Edition]:
     HTML_FOLDER.mkdir(parents=True, exist_ok=True)
     editions = []
     for date, path in list_briefings(MARKDOWN_FOLDER):
-        edition = Edition(date, path.stem, has_audio=edition_name(date) in release_tags)
-        sections = split_sections(path.read_text(encoding="utf-8"))
+        front_matter, body = split_front_matter(path.read_text(encoding="utf-8"))
+        if front_matter is None:
+            raise ValueError(
+                f"{path} has no YAML front matter (title, publication_date, survey_begin_date, survey_last_date, summary)"
+            )
+        if front_matter.publication_date.isoformat() != date:
+            raise ValueError(
+                f"{path}: publication_date {front_matter.publication_date} does not match the file name date {date}"
+            )
+        edition = Edition(date, path.stem, edition_name(date) in release_tags, front_matter.title, front_matter.summary)
+        sections = split_sections(body)
         page = render_edition_page(date, path.stem, sections, edition.has_audio)
         (HTML_FOLDER / f"{path.stem}.html").write_text(page, encoding="utf-8")
         editions.append(edition)
@@ -171,6 +159,8 @@ def main(argv: list[str] | None = None) -> None:
         print(f"Next: git add {SITE_INDEX} {HTML_FOLDER.as_posix()}; git commit; git push")
     except KeyboardInterrupt:
         print("Interrupted")
+    except ValueError as error:
+        raise SystemExit(f"error: {error}") from error
 
 
 if __name__ == "__main__":

@@ -10,6 +10,8 @@ import urllib.error
 import urllib.request
 
 from weekly_ai_briefing.config import MARKDOWN_FOLDER, MP3_FOLDER
+from weekly_ai_briefing.front_matter import split_front_matter
+from weekly_ai_briefing.html_rendering import render_template
 
 from .audio import generate_mp3
 from .briefing import (
@@ -72,6 +74,13 @@ def email_body(date: str, page_url: str, sections: list[Section]) -> str:
     return "\n".join(lines) + "\n"
 
 
+def email_html(date: str, page_url: str, sections: list[Section]) -> str:
+    """The HTML alternative of email_body: the same greeting, page link and section links."""
+    return render_template(
+        "email_base.html.j2", subject=email_subject(date), date=date, page_url=page_url, sections=sections
+    )
+
+
 def page_is_live(url: str) -> bool:
     request = urllib.request.Request(url, method="HEAD")
     try:
@@ -98,7 +107,8 @@ def main(argv: list[str] | None = None) -> None:
     args = parse_args(argv)
     try:
         briefing_path, date = find_latest_briefing(MARKDOWN_FOLDER)
-        sections = split_sections(briefing_path.read_text(encoding="utf-8"))
+        _, body = split_front_matter(briefing_path.read_text(encoding="utf-8"))
+        sections = split_sections(body)
         print(f"Using {briefing_path}: {len(sections)} sections")
         if args.voice:
             voice_sections(briefing_path.stem, date, sections, select_sections(args.section, len(sections)))
@@ -109,7 +119,11 @@ def main(argv: list[str] | None = None) -> None:
                     f"error: {page_url} is not live; run weekly_ai_briefing.publish, push, "
                     "wait for GitHub Pages to build, then retry"
                 )
-            send_email(subject=email_subject(date), body=email_body(date, page_url, sections))
+            send_email(
+                subject=email_subject(date),
+                body=email_body(date, page_url, sections),
+                html_body=email_html(date, page_url, sections),
+            )
     except KeyboardInterrupt:
         print("Interrupted")
 

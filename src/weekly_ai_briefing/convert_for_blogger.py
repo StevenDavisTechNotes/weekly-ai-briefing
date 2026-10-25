@@ -21,6 +21,7 @@ from weekly_ai_briefing.config import (
     STATEMENT_OF_INTENT,
     STATEMENT_TITLE,
 )
+from weekly_ai_briefing.front_matter import split_front_matter
 
 BRIEFING_DATE = re.compile(r"(\d{4}-\d{2}-\d{2})")
 
@@ -194,7 +195,8 @@ def convert(source: Path, output_dir: Path = BLOGGER_FOLDER) -> Path:
     timestamp = moment.strftime("%Y-%m-%dT%H:%M:%S.000Z")
     post_id = re.sub(r"\D", "", timestamp)[:14]
     title = STATEMENT_TITLE if source.name == STATEMENT_OF_INTENT else f"{POST_TITLE} - {moment.date().isoformat()}"
-    feed = build_feed(title, markdown_to_html(strip_heading(markdown)), timestamp, post_id)
+    _, body = split_front_matter(markdown)
+    feed = build_feed(title, markdown_to_html(strip_heading(body)), timestamp, post_id)
     output_dir.mkdir(parents=True, exist_ok=True)
     output_path = output_dir / f"{source.stem}.xml"
     feed.write(output_path, encoding="utf-8", xml_declaration=True)

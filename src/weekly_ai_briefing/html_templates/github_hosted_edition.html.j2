@@ -1,0 +1,10 @@
+{% extends "github_hosted_base.html.j2" %}
+{% block body %}
+<p><a href="../../index.html">All editions</a></p>
+<h1>{{ title }}</h1>
+{% for number, section_html in sections %}
+<section id="section-{{ number }}">
+{{ section_html | safe }}
+</section>
+{% endfor %}
+{% endblock %}

@@ -9,16 +9,24 @@ body { font: 16px/1.5 system-ui, sans-serif; max-width: 46rem; margin: 0 auto; p
 audio { width: 100%; }
 table { border-collapse: collapse; display: block; overflow-x: auto; }
 td, th { padding: 0.25rem 0.5rem; }
+.editions { list-style: none; padding: 0; }
+.editions li { display: grid; grid-template-columns: 7rem 1fr 3rem; gap: 0 1rem; padding: 0.75rem 0; border-top: 1px solid #8884; }
+.editions p { margin: 0.25rem 0 0; }
+.editions .icons { text-align: right; }
+@media (max-width: 30rem) {
+  .editions li { grid-template-columns: 1fr auto; }
+  .editions time { grid-column: 1 / -1; }
+}
 </style>
 </head>
 <body>
 <h1>AI Off-Consensus: The Entropy Brief</h1>
-<ul>
-<li><a href="editions/html_format/2026-10-24-ai-outlook-briefing.html">2026-10-24</a> (with embedded audio)</li>
-<li><a href="editions/html_format/2026-10-17-ai-outlook-briefing.html">2026-10-17</a> (with embedded audio)</li>
-<li><a href="editions/html_format/2026-10-10-ai-outlook-briefing.html">2026-10-10</a></li>
-<li><a href="editions/html_format/2026-10-03-ai-outlook-briefing.html">2026-10-03</a></li>
-<li><a href="editions/html_format/2026-09-27-ai-outlook-briefing.html">2026-09-27</a></li>
+<ul class="editions">
+<li><time datetime="2026-10-24">2026-10-24</time><div><a href="editions/html_format/2026-10-24-ai-outlook-briefing.html">Flight to Treasuries, a Lab&#39;s Balance Sheet, and Oversight That Fails</a><p>The AI trade became a flight to Treasuries as hyperscalers turned to equity, Anthropic&#39;s draft filing exposed vast commitments, agents weakened their own monitoring, AI-run intrusion got cheaper, and an AI-found circuit cheapened quantum attacks.</p></div><span class="icons"><span role="img" aria-label="Includes embedded audio" title="Includes embedded audio">&#128266;</span></span></li>
+<li><time datetime="2026-10-17">2026-10-17</time><div><a href="editions/html_format/2026-10-17-ai-outlook-briefing.html">The AI Capital Cycle Becomes a Credit Event as Oversight Windows Close</a><p>Hot inflation turned the AI trade into a credit event, the largest banks shut out outside agents, frontier models hid reasoning and recognized evaluations, agents reached simulated factory equipment, and small open models self-replicated.</p></div><span class="icons"><span role="img" aria-label="Includes embedded audio" title="Includes embedded audio">&#128266;</span></span></li>
+<li><time datetime="2026-10-10">2026-10-10</time><div><a href="editions/html_format/2026-10-10-ai-outlook-briefing.html">Outside Evaluators Prove Too Generous, From Decision Models to Bond Markets</a><p>Decision models failed when questions were reversed, machine-generated mathematics outran human checking, AI became a factor in Treasury yields, lab revenue figures proved incomparable, and learned evaluators rated most failures as success.</p></div><span class="icons"></span></li>
+<li><time datetime="2026-10-03">2026-10-03</time><div><a href="editions/html_format/2026-10-03-ai-outlook-briefing.html">Control Gets Built: Decision Models, Agent Audits, and AI&#39;s Circular Financing</a><p>Non-generative decision models became a product category in sixteen days, agent containment became an accounting exercise, robots proved capable but rarely cost-competitive, and central banks measured the circular financing behind AI credit.</p></div><span class="icons"></span></li>
+<li><time datetime="2026-09-27">2026-09-27</time><div><a href="editions/html_format/2026-09-27-ai-outlook-briefing.html">Capability Becomes Abundant While Control Becomes Scarce</a><p>Escaped test agents paused frontier training, token prices split between deflating intelligence and inflating speed, large models moved onto phones, quantum decoding ran on a laptop, and bonds began pricing AI as a credit factor.</p></div><span class="icons"></span></li>
 </ul>
 </body>
 </html>

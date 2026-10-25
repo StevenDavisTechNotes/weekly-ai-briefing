@@ -1,3 +1,5 @@
+import pytest
+
 from weekly_ai_briefing import publish
 from weekly_ai_briefing.email_briefing.briefing import Section
 
@@ -37,11 +39,57 @@ def test_leading_h1_is_replaced_by_the_page_title():
     assert "Title" not in page.split("<h1>", 1)[1].split("</h1>", 1)[0]
 
 
-def test_index_keeps_given_order_and_marks_audio():
+def test_index_keeps_given_order_and_marks_audio_with_an_icon():
     editions = [
-        publish.Edition("2026-10-17", STEM, has_audio=True),
-        publish.Edition("2026-10-10", "2026-10-10-ai-outlook-briefing", has_audio=False),
+        publish.Edition("2026-10-17", STEM, True, "Week <A>", "First."),
+        publish.Edition("2026-10-10", "2026-10-10-ai-outlook-briefing", False, "Week B", "Second."),
     ]
     index = publish.render_index(editions)
     assert index.index("2026-10-17") < index.index("2026-10-10")
-    assert index.count("(with embedded audio)") == 1
+    assert index.count('aria-label="Includes embedded audio"') == 1
+    assert "(with embedded audio)" not in index
+    assert "<th" not in index  # no column headings
+    assert "Week &lt;A&gt;" in index
+
+
+FRONT_MATTER = (
+    "---\n"
+    'title: "Costs: the real story"\n'
+    "publication_date: 2026-10-17\n"
+    "survey_begin_date: 2026-10-11\n"
+    "survey_last_date: 2026-10-17\n"
+    'summary: "Short summary."\n'
+    "---\n"
+)
+
+
+@pytest.fixture
+def site(tmp_path, monkeypatch):
+    markdown = tmp_path / "markdown"
+    markdown.mkdir()
+    monkeypatch.setattr(publish, "MARKDOWN_FOLDER", markdown)
+    monkeypatch.setattr(publish, "HTML_FOLDER", tmp_path / "html")
+    monkeypatch.setattr(publish, "SITE_INDEX", tmp_path / "index.html")
+    return tmp_path
+
+
+def test_site_index_uses_front_matter_and_pages_omit_it(site):
+    (site / "markdown" / f"{STEM}.md").write_text(FRONT_MATTER + "\n## Orientation\n\nIntro.\n", encoding="utf-8")
+    publish.write_site(set())
+    index = (site / "index.html").read_text(encoding="utf-8")
+    assert "Costs: the real story" in index
+    assert "Short summary." in index
+    assert "survey_begin_date" not in (site / "html" / f"{STEM}.html").read_text(encoding="utf-8")
+
+
+def test_site_refuses_a_briefing_without_front_matter(site):
+    (site / "markdown" / f"{STEM}.md").write_text("## Orientation\n\nIntro.\n", encoding="utf-8")
+    with pytest.raises(ValueError, match="no YAML front matter"):
+        publish.write_site(set())
+
+
+def test_site_refuses_a_publication_date_that_differs_from_the_file_name(site):
+    text = FRONT_MATTER.replace("publication_date: 2026-10-17", "publication_date: 2026-10-18")
+    (site / "markdown" / f"{STEM}.md").write_text(text + "\n## Orientation\n\nIntro.\n", encoding="utf-8")
+    with pytest.raises(ValueError, match="does not match the file name date"):
+        publish.write_site(set())

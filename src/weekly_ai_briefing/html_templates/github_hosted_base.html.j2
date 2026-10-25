@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{ title }}</title>
+<style>
+body { font: 16px/1.5 system-ui, sans-serif; max-width: 46rem; margin: 0 auto; padding: 1rem; }
+audio { width: 100%; }
+table { border-collapse: collapse; display: block; overflow-x: auto; }
+td, th { padding: 0.25rem 0.5rem; }
+{% block extra_style %}{% endblock %}
+</style>
+</head>
+<body>
+{% block body %}{% endblock %}
+</body>
+</html>

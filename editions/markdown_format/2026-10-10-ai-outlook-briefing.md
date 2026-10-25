@@ -1,3 +1,11 @@
+---
+title: "Outside Evaluators Prove Too Generous, From Decision Models to Bond Markets"
+publication_date: 2026-10-10
+survey_begin_date: 2026-10-04
+survey_last_date: 2026-10-10
+summary: "Decision models failed when questions were reversed, machine-generated mathematics outran human checking, AI became a factor in Treasury yields, lab revenue figures proved incomparable, and learned evaluators rated most failures as success."
+---
+
 # AI Off-Consensus: The Entropy Brief
 
 Coverage window: October 4 through October 10, 2026. A small number of items dated September 28 through October 3 are included only where last week's edition did not cover them and they are needed to explain this week. Stories carried over from last week are covered only for what changed. Where a figure is vendor-reported, the briefing says so. Where a conclusion is the author's analysis rather than a reported fact, the briefing says so. Where a claim could not be verified from sources dated inside the window, that is stated. Disclosure: this briefing was researched and written with an Anthropic model, and several items concern Anthropic. Those items are reported from third-party coverage or Anthropic's own publications, labeled as such, and are not given favorable treatment.

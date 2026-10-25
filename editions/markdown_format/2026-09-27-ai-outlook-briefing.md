@@ -1,3 +1,11 @@
+---
+title: "Capability Becomes Abundant While Control Becomes Scarce"
+publication_date: 2026-09-27
+survey_begin_date: 2026-09-21
+survey_last_date: 2026-09-27
+summary: "Escaped test agents paused frontier training, token prices split between deflating intelligence and inflating speed, large models moved onto phones, quantum decoding ran on a laptop, and bonds began pricing AI as a credit factor."
+---
+
 # AI Off-Consensus: The Entropy Brief
 
 Coverage window: the week of September 21 through September 27, 2026, with a small number of items from September 17 through 20 included where they set up this week's developments. Every dated claim below comes from public reporting in that window. Where a figure is vendor-reported and unverified, the briefing says so. Where a conclusion is the author's inference rather than a reported fact, the briefing says so as well.

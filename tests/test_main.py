@@ -68,14 +68,40 @@ def test_voice_section_filter(run_env):
     assert generated == []
 
 
+def test_voice_text_excludes_front_matter(run_env, monkeypatch):
+    front_matter = (
+        "---\n"
+        'title: "T"\n'
+        "publication_date: 2026-10-17\n"
+        "survey_begin_date: 2026-10-11\n"
+        "survey_last_date: 2026-10-17\n"
+        'summary: "S"\n'
+        "---\n"
+    )
+    (cli.MARKDOWN_FOLDER / "2026-10-17-ai-outlook-briefing.md").write_text(front_matter + "\n" + BRIEFING, encoding="utf-8")
+    spoken = []
+    monkeypatch.setattr(cli, "generate_mp3", lambda md, path: spoken.append(md))
+    cli.main(["--voice"])
+    assert spoken == ["## Orientation\n\nIntro.\n\n"]
+
+
 def test_email_sends_one_link_message_when_page_is_live(run_env):
     generated, emails = run_env
     cli.main(["--email"])
     assert generated == []
     (email,) = emails
-    assert email["subject"] == "Weekly AI Briefing - 2026-10-17"
+    assert email["subject"] == "AI Off-Consensus: The Entropy Brief - 2026-10-17"
     assert PAGE_URL in email["body"]
-    assert set(email) == {"subject", "body"}
+    assert set(email) == {"subject", "body", "html_body"}
+
+
+def test_email_html_links_each_section_and_escapes_titles():
+    html = cli.email_html(
+        "2026-10-17", "https://example.org/p.html", [Section("Q & A", "## Q & A\n"), Section("Outlook", "## Outlook\n")]
+    )
+    assert '<a href="https://example.org/p.html">read and listen to</a>' in html
+    assert '<a href="https://example.org/p.html#section-1">Q &amp; A</a>' in html
+    assert '<a href="https://example.org/p.html#section-2">Outlook</a>' in html
 
 
 def test_email_refuses_until_page_is_live(run_env, monkeypatch):

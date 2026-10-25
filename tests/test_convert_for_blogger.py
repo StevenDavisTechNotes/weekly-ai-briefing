@@ -1,4 +1,4 @@
-from weekly_ai_briefing.convert_for_blogger import markdown_to_html
+from weekly_ai_briefing.convert_for_blogger import convert, markdown_to_html
 
 
 def test_footnote_references_link_to_their_definitions():
@@ -12,3 +12,20 @@ def test_footnote_definitions_end_the_preceding_paragraph():
     rendered = markdown_to_html("Text\n[^1]: Note\n")
     assert "<p>Text</p>" in rendered
     assert 'id="fn-1"' in rendered
+
+
+def test_convert_leaves_front_matter_out_of_the_post(tmp_path):
+    source = tmp_path / "2026-10-17-ai-outlook-briefing.md"
+    source.write_text(
+        "---\n"
+        'title: "T"\n'
+        "publication_date: 2026-10-17\n"
+        "survey_begin_date: 2026-10-11\n"
+        "survey_last_date: 2026-10-17\n"
+        'summary: "S"\n'
+        "---\n\n# T\n\n## A\n\nText.\n",
+        encoding="utf-8",
+    )
+    text = convert(source, tmp_path / "out").read_text(encoding="utf-8")
+    assert "Text." in text
+    assert "survey_begin_date" not in text

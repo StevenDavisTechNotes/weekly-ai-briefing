@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>{{ subject }}</title>
+</head>
+<body style="font: 16px/1.5 system-ui, sans-serif;">
+{% block content %}
+<p>Hi Steve,</p>
+<p>This week's AI briefing (dated {{ date }}) is ready to <a href="{{ page_url }}">read and listen to</a>.</p>
+<p>Sections:</p>
+<ol>
+{% for section in sections %}
+<li><a href="{{ page_url }}#section-{{ loop.index }}">{{ section.title }}</a></li>
+{% endfor %}
+</ol>
+{% endblock %}
+</body>
+</html>

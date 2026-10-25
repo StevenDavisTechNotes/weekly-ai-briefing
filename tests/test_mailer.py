@@ -1,3 +1,6 @@
+import imaplib
+from typing import cast
+
 import pytest
 
 from weekly_ai_briefing.config import RECIPIENTS, SENDER_EMAIL
@@ -12,6 +15,10 @@ class FakeImap:
         return "OK", self.lines
 
 
+def fake_imap(lines) -> imaplib.IMAP4_SSL:
+    return cast(imaplib.IMAP4_SSL, FakeImap(lines))
+
+
 GMAIL_LINES = [
     b'(\\HasNoChildren) "/" "INBOX"',
     b'(\\HasNoChildren \\Sent) "/" "[Gmail]/Sent Mail"',
@@ -21,21 +28,30 @@ GMAIL_LINES = [
 
 
 def test_find_special_folder_quotes_name():
-    imap = FakeImap(GMAIL_LINES)
+    imap = fake_imap(GMAIL_LINES)
     assert mailer.find_special_folder(imap, r"\Sent") == '"[Gmail]/Sent Mail"'
     assert mailer.find_special_folder(imap, r"\Trash") == '"[Gmail]/Trash"'
 
 
 def test_find_special_folder_missing_raises():
     with pytest.raises(RuntimeError):
-        mailer.find_special_folder(FakeImap(GMAIL_LINES[:1]), r"\Sent")
+        mailer.find_special_folder(fake_imap(GMAIL_LINES[:1]), r"\Sent")
 
 
 def test_build_message_addresses_all_recipients():
-    message = mailer.build_message(SENDER_EMAIL, "Subj", "Body")
+    message = mailer.build_message(SENDER_EMAIL, "Subj", "Body", "<p>Body</p>")
     assert message["Subject"] == "Subj"
     assert message["To"] == ", ".join(RECIPIENTS)
     assert message["Message-ID"].endswith("@gmail.com>")
+
+
+def test_build_message_carries_text_and_html_alternatives():
+    m = mailer.build_message(SENDER_EMAIL, "Subj", "Body", "<p>Body</p>")
+    assert m.get_content_type() == "multipart/alternative"
+    plain, html = m.get_body(("plain",)), m.get_body(("html",))
+    assert plain is not None and html is not None
+    assert plain.get_content() == "Body\n"
+    assert "<p>Body</p>" in html.get_content()
 
 
 def test_sender_is_recipient_ignores_case_and_display_name():
@@ -46,7 +62,7 @@ def test_sender_is_recipient_ignores_case_and_display_name():
 def test_send_email_requires_password(monkeypatch):
     monkeypatch.delenv("GMAIL_APP_PASSWORD", raising=False)
     with pytest.raises(RuntimeError, match="GMAIL_APP_PASSWORD"):
-        mailer.send_email("s", "b")
+        mailer.send_email("s", "b", "<p>b</p>")
 
 
 class FakeSmtp:
@@ -80,7 +96,7 @@ def deleted_copies(monkeypatch):
 
 def test_send_email_to_self_keeps_single_copy(deleted_copies, monkeypatch):
     monkeypatch.delenv("GMAIL_USER", raising=False)
-    mailer.send_email("Subj", "Body")
+    mailer.send_email("Subj", "Body", "<p>Body</p>")
     assert len(FakeSmtp.sent) == 1
     assert FakeSmtp.sent[0][0] == (SENDER_EMAIL, "secret")
     assert deleted_copies == []
@@ -88,7 +104,7 @@ def test_send_email_to_self_keeps_single_copy(deleted_copies, monkeypatch):
 
 def test_send_email_from_other_account_deletes_sent_copy(deleted_copies, monkeypatch):
     monkeypatch.setenv("GMAIL_USER", "other@example.com")
-    mailer.send_email("Subj", "Body")
+    mailer.send_email("Subj", "Body", "<p>Body</p>")
     ((sender, password, message_id),) = deleted_copies
     assert (sender, password) == ("other@example.com", "secret")
     assert message_id == FakeSmtp.sent[0][1]["Message-ID"]

@@ -11,6 +11,7 @@ MP3_FOLDER = EDITIONS_FOLDER / "mp3_format"
 BLOGGER_FOLDER = EDITIONS_FOLDER / "blogger_format"
 HTML_FOLDER = EDITIONS_FOLDER / "html_format"
 PROMPT_FOLDER = Path(__file__).resolve().parent / "prompts"
+TEMPLATE_FOLDER = Path(__file__).resolve().parent / "html_templates"
 BRIEFING_PATTERN = r"(\d{4}-\d{2}-\d{2})-ai-outlook-briefing\.md"
 STATEMENT_OF_INTENT = "statement_of_intent.md"
 EDITION_PREFIX = "ai-outlook-briefing-"  # an edition's mp3 folder and GitHub release tag: <prefix><date>

@@ -22,6 +22,7 @@ from weekly_ai_briefing.config import (
     TOOLS,
     TRANSIENT_ERROR_TYPES,
 )
+from weekly_ai_briefing.front_matter import extract_yaml_block, format_front_matter
 
 
 def load_recent_reports(
@@ -178,7 +179,13 @@ def generate_weekly_report() -> None:
     print("Generating briefing...")
     briefing = send(client, system_prompt, messages)
 
-    report = f"Coverage week ending on {today}\n\n{briefing}"
+    try:
+        front_matter, body = extract_yaml_block(briefing)
+    except ValueError as error:
+        print(f"Warning: {error}; saved without front matter, add it by hand before publishing")
+        report = f"Coverage week ending on {today}\n\n{briefing}"
+    else:
+        report = f"{format_front_matter(front_matter)}\nCoverage week ending on {today}\n\n{body}"
 
     MARKDOWN_FOLDER.mkdir(parents=True, exist_ok=True)
     output_path.write_text(report, encoding="utf-8")

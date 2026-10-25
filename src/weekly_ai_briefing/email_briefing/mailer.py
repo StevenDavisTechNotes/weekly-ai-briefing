@@ -70,13 +70,14 @@ def delete_sent_copy(sender: str, password: str, message_id: str) -> None:
     print("  Deleted the sent copy")
 
 
-def build_message(sender: str, subject: str, body: str) -> EmailMessage:
+def build_message(sender: str, subject: str, body: str, html_body: str) -> EmailMessage:
     message = EmailMessage()
     message["Subject"] = subject
     message["From"] = sender
     message["To"] = ", ".join(RECIPIENTS)
     message["Message-ID"] = make_msgid(domain=sender.split("@")[-1])
     message.set_content(body)
+    message.add_alternative(html_body, subtype="html")
     return message
 
 
@@ -84,12 +85,12 @@ def sender_is_recipient(sender: str) -> bool:
     return parseaddr(sender)[1].lower() in [parseaddr(x)[1].lower() for x in RECIPIENTS]
 
 
-def send_email(subject: str, body: str) -> None:
+def send_email(subject: str, body: str, html_body: str) -> None:
     password = os.environ.get("GMAIL_APP_PASSWORD")
     if not password:
         raise RuntimeError("Set GMAIL_APP_PASSWORD to a Google app password")
     sender = os.environ.get("GMAIL_USER", SENDER_EMAIL)
-    message = build_message(sender, subject, body)
+    message = build_message(sender, subject, body, html_body)
 
     with smtplib.SMTP_SSL(SMTP_HOST, SMTP_PORT) as smtp:
         smtp.login(sender, password)
