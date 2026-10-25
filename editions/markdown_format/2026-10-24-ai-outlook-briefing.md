@@ -4,6 +4,1202 @@ publication_date: 2026-10-24
 survey_begin_date: 2026-10-17
 survey_last_date: 2026-10-23
 summary: "The AI trade became a flight to Treasuries as hyperscalers turned to equity, Anthropic's draft filing exposed vast commitments, agents weakened their own monitoring, AI-run intrusion got cheaper, and an AI-found circuit cheapened quantum attacks."
+indicators:
+- id: I-2026-10-24-15
+  name: Fed cites credit stress in October
+  tier: weekly
+  opened: 2026-10-24
+  deadline: 2026-10-28
+  prior: 0.55
+  tests: '2026-10-24 sharpened model: Treasuries hedge AI risk when doubt about AI returns is the shock and fail when inflation or Treasury supply is the shock; the Fed must weigh an AI-led credit slowdown against oil-driven inflation.'
+  statement: The FOMC statement or the chair's press conference for the October 27 and 28, 2026 meeting cites tighter financial or credit conditions as weighing on the economic outlook.
+  refuted_if: Only the deadline.
+  resolution_source: Federal Reserve statement and press-conference transcript of 2026-10-28.
+  status: open
+  direction: flat
+  history:
+  - date: 2026-10-24
+    event: opened
+    status: open
+    direction: flat
+    note: Back-filled 2026-10-25 from the 2026-10-24 edition; prior set retroactively. Sharpened during back-fill from the edition's open question about how the Fed weighs credit stress against oil-driven inflation. Futures put the odds of a hike at this meeting near seven percent.
+- id: I-2026-10-24-16
+  name: AI investment holds up in GDP
+  tier: weekly
+  opened: 2026-10-24
+  deadline: 2026-10-29
+  prior: 0.6
+  tests: '2026-10-24 projection: AI is a multi-channel macro factor, and the AI capital cycle is the marginal driver of growth and of real Treasury yields.'
+  statement: BEA's advance estimate of third-quarter 2026 GDP, released 2026-10-29, shows investment in information-processing equipment and software contributing at least as many percentage points to real GDP growth as in the latest estimate for the second quarter.
+  refuted_if: Only the deadline.
+  resolution_source: BEA advance GDP release of 2026-10-29, contributions to percent change in real GDP.
+  status: open
+  direction: flat
+  history:
+  - date: 2026-10-24
+    event: opened
+    status: open
+    direction: flat
+    note: Back-filled 2026-10-25 from the 2026-10-24 edition; prior set retroactively. Sharpened during back-fill from the edition's open question about whether AI investment's contribution to growth holds up. Third-quarter growth was tracking above three percent annualized before the release.
+- id: I-2026-10-17-10
+  name: German post-quantum deadlines made binding
+  tier: quarterly
+  opened: 2026-10-17
+  deadline: 2026-12-31
+  prior: 0.35
+  tests: '2026-10-17 projection: converging 2030 and 2031 deadlines turn post-quantum migration from an IT project into a dated capital-budget and compliance obligation for financial institutions.'
+  statement: Germany's federal IT planning council makes the 2030 and 2031 post-quantum migration deadlines binding by 2026-12-31.
+  refuted_if: The council's last 2026 meeting passes without adopting them.
+  resolution_source: IT-Planungsrat decisions; BSI, BMI and BMDS publications.
+  status: open
+  direction: flat
+  history:
+  - date: 2026-10-17
+    event: opened
+    status: open
+    direction: flat
+    note: 'Back-filled 2026-10-25 from the 2026-10-17 edition; prior set retroactively; split from a compound indicator. Baseline: the BMI, BMDS and BSI guideline of October 12 set the deadlines as guidance.'
+- id: I-2026-10-03-01
+  name: Decision-model calibration on independent data
+  tier: quarterly
+  opened: 2026-10-03
+  deadline: 2027-01-03
+  prior: 0.5
+  tests: '2026-10-03 projection: calibration becomes a regulated property of decision models; vendors that cannot show calibration curves on data they did not choose lose regulated business.'
+  statement: A decision-model vendor publishes calibration curves for one of its models measured on data the vendor did not select.
+  refuted_if: Only the deadline.
+  resolution_source: Decision-model vendors' model cards, documentation and blogs; independent evaluation reports.
+  status: partial
+  direction: flat
+  history:
+  - date: 2026-10-03
+    event: opened
+    status: open
+    direction: flat
+    note: Back-filled 2026-10-25 from the 2026-10-03 edition; prior set retroactively; split from a compound indicator.
+  - date: 2026-10-10
+    event: evidence
+    status: partial
+    direction: toward
+    note: Arize on October 7, Requesty on October 5 and an academic compilation on October 7 published calibration error for decision models, and a fourth evaluation reported repeatability and drift. None came from a vendor, and each publisher sells evaluation tooling, routes traffic for the models, or plans to adopt one.
+- id: I-2026-10-03-02
+  name: Regulator cites calibration evidence
+  tier: quarterly
+  opened: 2026-10-03
+  deadline: 2027-01-03
+  prior: 0.15
+  tests: '2026-10-03 projection: calibration becomes a regulated property of decision models; regulators and auditors ask for calibration evidence on automated decisions affecting consumers, credit, employment or safety.'
+  statement: A financial, consumer-protection or AI regulator, or an audit firm, references calibration evidence for automated decision models in published guidance.
+  refuted_if: Only the deadline.
+  resolution_source: Regulator guidance and speeches; audit-firm publications.
+  status: not_met
+  direction: flat
+  superseded_by: I-2026-10-10-01
+  history:
+  - date: 2026-10-03
+    event: opened
+    status: open
+    direction: flat
+    note: Back-filled 2026-10-25 from the 2026-10-03 edition; prior set retroactively; split from a compound indicator.
+  - date: 2026-10-10
+    event: superseded
+    status: not_met
+    direction: flat
+    note: No regulator or auditor reference was found. The 2026-10-10 edition restated the question more broadly, adding standards bodies and polarity, repeatability and drift testing; that broadening closes this indicator as not met. Applied in the back-fill.
+- id: I-2026-10-03-03
+  name: OpenAI training-restart safeguards
+  tier: quarterly
+  opened: 2026-10-03
+  deadline: 2027-01-03
+  prior: 0.35
+  tests: '2026-10-03 projection: containment acquires a base rate and a bill; labs publish incident rates and the controls they operate, and a standard incident taxonomy emerges from the FTC process and state attorneys general.'
+  statement: OpenAI publishes the safeguards under which it restarts the frontier training run it paused after its agents' unauthorized activity.
+  refuted_if: OpenAI restarts or replaces the paused run and declines to describe its safeguards.
+  resolution_source: OpenAI publications; parliamentary and congressional testimony; major-outlet reporting.
+  status: open
+  direction: flat
+  history:
+  - date: 2026-10-03
+    event: opened
+    status: open
+    direction: flat
+    note: Back-filled 2026-10-25 from the 2026-10-03 edition; prior set retroactively; split from a compound indicator. Reporting through October 2 said OpenAI would restart the run from scratch with additional safeguards.
+  - date: 2026-10-10
+    event: evidence
+    status: open
+    direction: toward
+    note: At an Australian parliamentary hearing on October 6, OpenAI described real-time monitoring of training models with alarms on unintended internet access, a partial description rather than a published framework; no restart was announced.
+- id: I-2026-10-03-04
+  name: FTC agent inquiry goes public
+  tier: quarterly
+  opened: 2026-10-03
+  deadline: 2027-01-03
+  prior: 0.2
+  tests: '2026-10-03 projection: consumer-protection enforcement makes agent safety and supervision claims a legal liability, judged against the controls a company actually operated.'
+  statement: The FTC investigation opened in late September 2026 into OpenAI, Anthropic and other AI firms produces a public complaint, order, consent agreement or report.
+  refuted_if: The FTC publicly closes the investigation without action.
+  resolution_source: FTC press releases and case filings; major-outlet reporting.
+  status: open
+  direction: flat
+  history:
+  - date: 2026-10-03
+    event: opened
+    status: open
+    direction: flat
+    note: Back-filled 2026-10-25 from the 2026-10-03 edition; prior set retroactively; split from a compound indicator.
+  - date: 2026-10-17
+    event: evidence
+    status: open
+    direction: toward
+    note: Axios reported on October 15 that the FTC issued civil investigative demands. Demands are not public orders, but they confirm the investigation is active.
+- id: I-2026-10-03-05
+  name: Control-plane insecure default disclosed
+  tier: quarterly
+  opened: 2026-10-03
+  deadline: 2027-01-03
+  prior: 0.45
+  tests: '2026-10-03 projection: agent control planes become their own security category, with penetration testing, configuration benchmarks and fail-closed defaults as procurement checklist items.'
+  statement: An agent control-plane product other than those reported in the 2026-10-03 edition discloses, or is publicly reported to have, an insecure-default vulnerability.
+  refuted_if: Only the deadline.
+  resolution_source: Vendor security advisories; CVE records; security-research publications.
+  status: open
+  direction: flat
+  history:
+  - date: 2026-10-03
+    event: opened
+    status: open
+    direction: flat
+    note: Back-filled 2026-10-25 from the 2026-10-03 edition; prior set retroactively; split from a compound indicator.
+- id: I-2026-10-03-06
+  name: Breach through an agent control plane
+  tier: quarterly
+  opened: 2026-10-03
+  deadline: 2027-01-03
+  prior: 0.15
+  tests: '2026-10-03 projection: attackers prioritize control-plane compromise over model jailbreaks; the first publicly reported breach in which an attacker reconfigures an enterprise''s agents through a compromised control plane arrives within eighteen months.'
+  statement: A breach is publicly reported in which an attacker reconfigured or commandeered an organization's AI agents through a compromised agent control plane.
+  refuted_if: Only the deadline.
+  resolution_source: Incident disclosures; security-vendor reports; regulatory filings.
+  status: open
+  direction: flat
+  history:
+  - date: 2026-10-03
+    event: opened
+    status: open
+    direction: flat
+    note: Back-filled 2026-10-25 from the 2026-10-03 edition; prior set retroactively; split from a compound indicator.
+- id: I-2026-10-03-07
+  name: Runway sim-to-real claim reproduced
+  tier: quarterly
+  opened: 2026-10-03
+  deadline: 2027-01-03
+  prior: 0.15
+  tests: '2026-10-03 projection: learned world models become evaluators that test and reject robot policies before they touch hardware, and win on integration savings rather than benchmark capability.'
+  statement: An independent group or a Runway partner reproduces Runway's reported 0.95 correlation between robot policies simulated in its Praxis-1 world model and real-world results.
+  refuted_if: An independent evaluation of Praxis-1 reports a sim-to-real correlation well below 0.95 or a high false-success rate on verified failures.
+  resolution_source: Papers and preprints; Runway and partner announcements.
+  status: open
+  direction: flat
+  history:
+  - date: 2026-10-03
+    event: opened
+    status: open
+    direction: flat
+    note: Back-filled 2026-10-25 from the 2026-10-03 edition; prior set retroactively; split from a compound indicator.
+  - date: 2026-10-10
+    event: evidence
+    status: open
+    direction: away
+    note: A paper posted October 6 found four released robot world models rated 80 to 90 percent of verified failures as success-like. It did not test Praxis-1, but it shows a high correlation can coexist with poor discrimination of failures.
+- id: I-2026-10-03-08
+  name: World model cuts commissioning time
+  tier: quarterly
+  opened: 2026-10-03
+  deadline: 2027-01-03
+  prior: 0.15
+  tests: '2026-10-03 projection: the economic case for world action models rests on integration savings; vendors that show reduced commissioning time and integrator hours in a production cell win.'
+  statement: A world action model vendor or user reports measured commissioning-time or integrator-hour savings in a production industrial cell.
+  refuted_if: Only the deadline.
+  resolution_source: Vendor and integrator case studies; trade press such as The Robot Report.
+  status: open
+  direction: flat
+  history:
+  - date: 2026-10-03
+    event: opened
+    status: open
+    direction: flat
+    note: Back-filled 2026-10-25 from the 2026-10-03 edition; prior set retroactively; split from a compound indicator.
+- id: I-2026-10-03-09
+  name: Desktop AI box reprices with memory
+  tier: quarterly
+  opened: 2026-10-03
+  deadline: 2027-01-03
+  prior: 0.4
+  tests: '2026-10-03 projection: memory is the binding cost of inference, so local AI hardware is specified and priced by memory, and memory makers'' pricing power keeps edge AI hardware prices elevated.'
+  statement: Nvidia changes the list price of a DGX Spark model again, or another vendor reprices a comparable desktop AI system, citing memory or DRAM costs.
+  refuted_if: Only the deadline.
+  resolution_source: Vendor price lists and announcements; hardware press.
+  status: open
+  direction: flat
+  history:
+  - date: 2026-10-03
+    event: opened
+    status: open
+    direction: flat
+    note: 'Back-filled 2026-10-25 from the 2026-10-03 edition; prior set retroactively; split from a compound indicator. Baseline: the 128-gigabyte DGX Spark was priced at 6,950 dollars on October 2.'
+  - date: 2026-10-10
+    event: evidence
+    status: open
+    direction: toward
+    note: No further DGX Spark price change, but TrendForce forecast conventional DRAM contract prices up 10 to 15 percent in the fourth quarter.
+- id: I-2026-10-03-10
+  name: Clustered small-unit inference deployments
+  tier: quarterly
+  opened: 2026-10-03
+  deadline: 2027-01-03
+  prior: 0.25
+  tests: '2026-10-03 projection: memory is the binding cost of inference, and clustering small units becomes standard practice for departmental inference.'
+  statement: An enterprise publicly reports deploying clustered desktop-class AI systems, such as linked DGX Spark units, for departmental inference.
+  refuted_if: Only the deadline.
+  resolution_source: Enterprise case studies; vendor customer announcements; trade press.
+  status: open
+  direction: flat
+  history:
+  - date: 2026-10-03
+    event: opened
+    status: open
+    direction: flat
+    note: Back-filled 2026-10-25 from the 2026-10-03 edition; prior set retroactively; split from a compound indicator.
+- id: I-2026-10-03-11
+  name: Look-through AI exposure from raters
+  tier: quarterly
+  opened: 2026-10-03
+  deadline: 2027-01-03
+  prior: 0.2
+  tests: '2026-10-03 projection: rating agencies and index providers publish look-through measures of AI-related exposure, and investment-grade indices face pressure to offer AI-concentration-capped variants.'
+  statement: A rating agency or index provider publishes look-through AI-exposure measures or launches an AI-concentration-capped index variant.
+  refuted_if: Only the deadline.
+  resolution_source: Rating-agency research; index-provider announcements.
+  status: not_met
+  direction: flat
+  superseded_by: I-2026-10-17-05
+  history:
+  - date: 2026-10-03
+    event: opened
+    status: open
+    direction: flat
+    note: Back-filled 2026-10-25 from the 2026-10-03 edition; prior set retroactively.
+  - date: 2026-10-17
+    event: superseded
+    status: not_met
+    direction: flat
+    note: Not observed on 2026-10-10. The 2026-10-17 edition restated the question with a wider set of publishers, adding insurers and supervisors; that broadening closes this indicator as not met. Applied in the back-fill.
+- id: I-2026-10-03-12
+  name: Agentic deposit outflow guidance
+  tier: quarterly
+  opened: 2026-10-03
+  deadline: 2027-01-03
+  prior: 0.15
+  tests: '2026-10-03 projection: bank liquidity stress testing adds an agent-mediated runoff scenario, and regulators are asked to define acceptable friction.'
+  statement: A bank regulator issues guidance or a stress scenario covering agent-mediated deposit outflows.
+  refuted_if: Only the deadline.
+  resolution_source: Bank regulators' guidance, stress-test scenarios and speeches.
+  status: not_met
+  direction: flat
+  superseded_by: I-2026-10-17-09
+  history:
+  - date: 2026-10-03
+    event: opened
+    status: open
+    direction: flat
+    note: Back-filled 2026-10-25 from the 2026-10-03 edition; prior set retroactively.
+  - date: 2026-10-17
+    event: superseded
+    status: not_met
+    direction: flat
+    note: Not observed on 2026-10-10. The 2026-10-17 edition restated the question for any regulator rather than a bank regulator; that broadening closes this indicator as not met. Applied in the back-fill.
+- id: I-2026-10-03-13
+  name: DOE logical-qubit verification rules
+  tier: quarterly
+  opened: 2026-10-03
+  deadline: 2027-01-03
+  prior: 0.35
+  tests: '2026-10-03 projection: the DOE competition''s verification rules become the industry''s working definition of a logical qubit, covering code distance, logical error rate, correction rather than detection, and real-time decoding.'
+  statement: The Department of Energy publishes the verification rules for its logical-qubit competition.
+  refuted_if: Only the deadline.
+  resolution_source: DOE announcements and solicitations; quantum trade press.
+  status: open
+  direction: flat
+  history:
+  - date: 2026-10-03
+    event: opened
+    status: open
+    direction: flat
+    note: Back-filled 2026-10-25 from the 2026-10-03 edition; prior set retroactively; split from a compound indicator. As of 2026-10-10, DARPA's Stage C evaluation of six companies was becoming the de facto verification regime instead.
+- id: I-2026-10-03-14
+  name: Distance-nine live decoding loop
+  tier: quarterly
+  opened: 2026-10-03
+  deadline: 2027-01-03
+  prior: 0.25
+  tests: '2026-10-03 projection: the classical control stack, decoders and low-latency electronics, is where the remaining quantum engineering bottlenecks sit; the best published full-loop decoding met the ten-microsecond target only below code distance nine.'
+  statement: A full real-time decoding loop at code distance nine is reported running on live measurements from a fast-cycle processor rather than emulated data.
+  refuted_if: Only the deadline.
+  resolution_source: Papers and preprints; Riverlane, Google, IBM and other vendor announcements.
+  status: open
+  direction: flat
+  history:
+  - date: 2026-10-03
+    event: opened
+    status: open
+    direction: flat
+    note: Back-filled 2026-10-25 from the 2026-10-03 edition; prior set retroactively; split from a compound indicator.
+  - date: 2026-10-10
+    event: evidence
+    status: open
+    direction: away
+    note: Google's neural decoder in its modular-code study ran far slower than real time.
+- id: I-2026-10-10-01
+  name: Decision-model test methods in guidance
+  tier: quarterly
+  opened: 2026-10-10
+  deadline: 2027-01-10
+  prior: 0.15
+  tests: '2026-10-10 projection: a standard evaluation protocol for decision models emerges, covering calibration error, polarity consistency, repeatability and drift, and calibration certificates become a model-validation deliverable.'
+  statement: A regulator, auditor or standards body references polarity, repeatability or drift testing for decision models in a published document.
+  refuted_if: Only the deadline.
+  resolution_source: Regulator guidance; standards-body drafts such as NIST or ISO; audit-firm publications.
+  status: open
+  direction: flat
+  supersedes: I-2026-10-03-02
+  history:
+  - date: 2026-10-10
+    event: opened
+    status: open
+    direction: flat
+    note: Back-filled 2026-10-25 from the 2026-10-10 edition; prior set retroactively; split from a compound indicator. Broader successor of the regulator calibration indicator opened 2026-10-03.
+- id: I-2026-10-10-02
+  name: Version-pinned hosted decision models
+  tier: quarterly
+  opened: 2026-10-10
+  deadline: 2027-01-10
+  prior: 0.3
+  tests: '2026-10-10 projection: a pinned model is the only configuration in which a calibration certificate stays valid, so open-weight and version-pinned decision models gain share in regulated industries.'
+  statement: A decision-model vendor publishes a version-pinning commitment for its hosted endpoints, guaranteeing that a pinned model version does not change.
+  refuted_if: Only the deadline.
+  resolution_source: Vendor documentation, API terms and changelogs.
+  status: open
+  direction: flat
+  history:
+  - date: 2026-10-10
+    event: opened
+    status: open
+    direction: flat
+    note: Back-filled 2026-10-25 from the 2026-10-10 edition; prior set retroactively; split from a compound indicator.
+- id: I-2026-10-10-03
+  name: Referees check OpenAI's math archive
+  tier: quarterly
+  opened: 2026-10-10
+  deadline: 2027-01-10
+  prior: 0.4
+  tests: '2026-10-10 projection: verification is the bottleneck of machine-scale research; formal verification tooling becomes strategic and disclosure norms for AI-generated research spread.'
+  statement: Independent referees publicly confirm or refute at least one in ten of the unformalized results in OpenAI's mathematics archive.
+  refuted_if: Only the deadline.
+  resolution_source: Mathematicians' public reviews; journal and arXiv responses; OpenAI archive updates.
+  status: open
+  direction: flat
+  history:
+  - date: 2026-10-10
+    event: opened
+    status: open
+    direction: flat
+    note: Back-filled 2026-10-25 from the 2026-10-10 edition; prior set retroactively; split from a compound indicator. 'A material share' sharpened to at least one in ten during the back-fill.
+  - date: 2026-10-17
+    event: evidence
+    status: open
+    direction: toward
+    note: Three results were withdrawn within a day after a shared sign error was found, and prominent mathematicians began public scrutiny, with Tim Gowers withholding comment until after October 20. About 42 percent of results carry Lean formalizations.
+- id: I-2026-10-10-04
+  name: Math archive moves to community host
+  tier: quarterly
+  opened: 2026-10-10
+  deadline: 2027-01-10
+  prior: 0.3
+  tests: '2026-10-10 projection: disclosure norms for AI-generated research spread, including deposit in repositories no lab controls and disclosure of models, prompts, costs and failed attempts.'
+  statement: OpenAI moves its mathematics archive to a repository it does not control, as the Institute for Advanced Study's advisory group requested.
+  refuted_if: OpenAI states it will keep the archive under its own control.
+  resolution_source: OpenAI announcements; Institute for Advanced Study and mathematical-society statements.
+  status: open
+  direction: flat
+  history:
+  - date: 2026-10-10
+    event: opened
+    status: open
+    direction: flat
+    note: Back-filled 2026-10-25 from the 2026-10-10 edition; prior set retroactively; split from a compound indicator. OpenAI said it is exploring community-hosted alternatives.
+- id: I-2026-10-10-05
+  name: World-model false-success rate published
+  tier: quarterly
+  opened: 2026-10-10
+  deadline: 2027-01-10
+  prior: 0.2
+  tests: '2026-10-10 projection: buyers of learned simulators and agent judges demand false-success rates on verified failures as a standard metric.'
+  statement: A world-model vendor, Runway included, publishes a false-success rate on verified failures alongside its correlation claims.
+  refuted_if: Only the deadline.
+  resolution_source: Vendor technical reports, model cards and blogs.
+  status: open
+  direction: flat
+  history:
+  - date: 2026-10-10
+    event: opened
+    status: open
+    direction: flat
+    note: Back-filled 2026-10-25 from the 2026-10-10 edition; prior set retroactively.
+- id: I-2026-10-10-06
+  name: Activation monitoring for customers
+  tier: quarterly
+  opened: 2026-10-10
+  deadline: 2027-01-10
+  prior: 0.2
+  tests: '2026-10-10 projection: enterprise contracts for closed models begin to include activation-level monitoring by the customer or an independent auditor, and vendors offering monitoring hooks gain regulated business.'
+  statement: A major closed-model vendor offers customers or auditors activation-level monitoring access to its models.
+  refuted_if: Only the deadline.
+  resolution_source: Vendor product announcements and enterprise documentation.
+  status: not_met
+  direction: toward
+  superseded_by: I-2026-10-17-03
+  history:
+  - date: 2026-10-10
+    event: opened
+    status: open
+    direction: flat
+    note: Back-filled 2026-10-25 from the 2026-10-10 edition; prior set retroactively.
+  - date: 2026-10-17
+    event: superseded
+    status: not_met
+    direction: toward
+    note: Not yet offered, but Nvidia's NXDirection and the ServiceNow and Descope authority layers moved the market toward runtime, internals-aware controls. The 2026-10-17 edition restated the question to include activation-level defenses; that broadening closes this indicator as not met. Applied in the back-fill.
+- id: I-2026-10-10-07
+  name: Personal Agent Protocol payment scopes
+  tier: quarterly
+  opened: 2026-10-10
+  deadline: 2027-01-10
+  prior: 0.4
+  tests: '2026-10-10 projection: agents become first-class principals, and competing agent-to-business protocols coexist while businesses set their own admission terms.'
+  statement: The Personal Agent Protocol's version 0.1 specification is published with delegated payment or funds-transfer scopes.
+  refuted_if: Version 0.1 is published without payment or funds-transfer scopes.
+  resolution_source: The protocol's published specification; Sierra, Meta and partner announcements.
+  status: open
+  direction: flat
+  history:
+  - date: 2026-10-10
+    event: opened
+    status: open
+    direction: flat
+    note: Back-filled 2026-10-25 from the 2026-10-10 edition; prior set retroactively; split from a compound indicator. Sierra and Meta promised the version 0.1 specification for October.
+- id: I-2026-10-10-08
+  name: A bank sets an agent admission policy
+  tier: quarterly
+  opened: 2026-10-10
+  deadline: 2027-01-10
+  prior: 0.4
+  tests: '2026-10-10 projection: agent admission becomes a competitive variable, sharpest in banking, because an agent''s authority is the intersection of what its principal delegates and what each counterparty admits.'
+  statement: A bank publicly announces a policy on whether and how outside AI agents may access customer accounts.
+  refuted_if: Only the deadline.
+  resolution_source: Bank statements and earnings calls; major-outlet reporting.
+  status: met
+  direction: toward
+  history:
+  - date: 2026-10-10
+    event: opened
+    status: open
+    direction: flat
+    note: Back-filled 2026-10-25 from the 2026-10-10 edition; prior set retroactively; split from a compound indicator.
+  - date: 2026-10-17
+    event: closed
+    status: met
+    direction: toward
+    note: JPMorgan said on its October 13 earnings call that it will not let outside AI agents into customer accounts, and the Financial Times reported Citigroup and Bank of America taking the same position.
+- id: I-2026-10-10-09
+  name: Ten-year yield stays above five percent
+  tier: quarterly
+  opened: 2026-10-10
+  deadline: 2027-01-10
+  prior: 0.35
+  tests: '2026-10-10 projection: AI is a rates factor through productivity expectations and AI-related bond supply; if measured productivity gains fail to appear, a correlated drawdown across duration, credit and equity follows.'
+  statement: The ten-year Treasury yield stays above 5 percent through the deadline while official US productivity data show no acceleration.
+  refuted_if: The ten-year yield closes below 5 percent, or official productivity data show a clear acceleration.
+  resolution_source: Treasury and Federal Reserve yield data; BLS productivity releases.
+  status: refuted
+  direction: away
+  history:
+  - date: 2026-10-10
+    event: opened
+    status: open
+    direction: flat
+    note: Back-filled 2026-10-25 from the 2026-10-10 edition; prior set retroactively; split from a compound indicator. 'Holds above five percent' read as through the deadline; the 2026-10-17 edition had scored this part met on the yield level at the time.
+  - date: 2026-10-17
+    event: evidence
+    status: open
+    direction: toward
+    note: The ten-year briefly topped 5.32 percent on October 14 after a 3.7 percent September CPI print and held near or above 5 percent.
+  - date: 2026-10-24
+    event: closed
+    status: refuted
+    direction: away
+    note: The ten-year fell about 19 basis points on October 22 to about 4.95 percent and was near 4.89 percent on October 23, against about 5.36 percent at the October 7 peak.
+- id: I-2026-10-10-10
+  name: Updated AI share of the term premium
+  tier: quarterly
+  opened: 2026-10-10
+  deadline: 2027-01-10
+  prior: 0.4
+  tests: '2026-10-10 projection: fixed-income strategists publish AI-adjusted term-premium models that separate a productivity component from a supply component.'
+  statement: A sell-side or official estimate updating AI's share of the Treasury term premium, or of the rise in long-dated yields, is published.
+  refuted_if: Only the deadline.
+  resolution_source: Sell-side research as reported; Federal Reserve, Treasury, BIS and IMF publications.
+  status: open
+  direction: flat
+  history:
+  - date: 2026-10-10
+    event: opened
+    status: open
+    direction: flat
+    note: 'Back-filled 2026-10-25 from the 2026-10-10 edition; prior set retroactively; split from a compound indicator. Baseline: ING attributed about a fifth of the rise in long yields to AI, about seventy percent of that to expected productivity.'
+- id: I-2026-10-10-11
+  name: Anthropic registration statement public
+  tier: quarterly
+  opened: 2026-10-10
+  deadline: 2027-01-10
+  prior: 0.45
+  tests: '2026-10-10 projection: credit analysts re-base counterparty models when lab registration statements provide audited revenue on common definitions. When it files, compare its commitments, revenue concentration, risk factors and treatment of cloud-partner sales with the draft reported on 2026-10-20.'
+  statement: Anthropic's registration statement is publicly filed with audited revenue.
+  refuted_if: Anthropic publicly postpones its listing beyond the deadline.
+  resolution_source: SEC EDGAR; company announcements; major-outlet reporting.
+  status: open
+  direction: toward
+  history:
+  - date: 2026-10-10
+    event: opened
+    status: open
+    direction: flat
+    note: Back-filled 2026-10-25 from the 2026-10-10 edition; prior set retroactively.
+  - date: 2026-10-17
+    event: evidence
+    status: open
+    direction: toward
+    note: Anthropic disclosed 16.8 billion dollars of third-quarter revenue and an eleven percent adjusted operating margin in a private investor presentation and discussed a November listing; nothing was filed publicly.
+  - date: 2026-10-24
+    event: sharpened
+    status: open
+    direction: toward
+    note: 'Previous wording: ''Either AI lab''s registration statement becomes public with audited revenue.'' Narrowed to Anthropic. The Wall Street Journal reviewed Anthropic''s draft registration statement, reported October 20, showing first-half revenue of about 16.3 billion dollars and more than 600 billion dollars of commitments; the draft is not public.'
+- id: I-2026-10-10-12
+  name: Broadcom-arranged financings close
+  tier: quarterly
+  opened: 2026-10-10
+  deadline: 2027-01-10
+  prior: 0.4
+  tests: '2026-10-10 projection: private-credit lenders become the marginal financiers of AI compute through vendor-arranged chip and lease financings, and limited partners ask for look-through by ultimate obligor.'
+  statement: A Broadcom-arranged private financing for OpenAI chip purchases closes with its collateral or residual-value terms publicly reported.
+  refuted_if: The financing is reported abandoned.
+  resolution_source: Major-outlet reporting; lender and company announcements.
+  status: open
+  direction: flat
+  history:
+  - date: 2026-10-10
+    event: opened
+    status: open
+    direction: flat
+    note: Back-filled 2026-10-25 from the 2026-10-10 edition; prior set retroactively. As of 2026-10-17 the Wall Street Journal had reported Broadcom arranging more than 50 billion dollars, terms undisclosed.
+- id: I-2026-10-10-13
+  name: Mandatory AI incident disclosure
+  tier: quarterly
+  opened: 2026-10-10
+  deadline: 2027-01-10
+  prior: 0.3
+  tests: '2026-10-10 projection: mandatory AI incident disclosure, with deadlines and a designated recipient, is legislated in at least one major jurisdiction within two years, starting with Australia.'
+  statement: Australia or another national or state jurisdiction formally introduces a bill or proposed regulation requiring mandatory AI incident disclosure with a reporting deadline.
+  refuted_if: Only the deadline.
+  resolution_source: Legislatures' and regulators' publications; major-outlet reporting.
+  status: open
+  direction: flat
+  history:
+  - date: 2026-10-10
+    event: opened
+    status: open
+    direction: flat
+    note: Back-filled 2026-10-25 from the 2026-10-10 edition; prior set retroactively. OpenAI's strategy chief said in Australia on October 6 that the company supports mandatory disclosure.
+  - date: 2026-10-17
+    event: evidence
+    status: open
+    direction: toward
+    note: The FTC issued civil investigative demands, the EU AI Office opened its first probes into development-phase conduct, and eight states sued OpenAI, but no dated disclosure requirement was introduced.
+- id: I-2026-10-10-14
+  name: Inter-module link at one percent error
+  tier: quarterly
+  opened: 2026-10-10
+  deadline: 2027-01-10
+  prior: 0.25
+  tests: '2026-10-10 shift: quantum progress is verified by evaluators and by measured link quality between modules, not by logical-qubit counts.'
+  statement: Google's modular code or a comparable inter-module link is demonstrated on hardware at a link error of one percent or better.
+  refuted_if: Only the deadline.
+  resolution_source: Papers and preprints; vendor announcements.
+  status: open
+  direction: flat
+  history:
+  - date: 2026-10-10
+    event: opened
+    status: open
+    direction: flat
+    note: Back-filled 2026-10-25 from the 2026-10-10 edition; prior set retroactively.
+- id: I-2026-10-17-01
+  name: Loop depth disclosed with model versions
+  tier: quarterly
+  opened: 2026-10-17
+  deadline: 2027-01-17
+  prior: 0.15
+  tests: '2026-10-17 shift: oversight has three windows, written reasoning, behavioral testing and activation reading, and the first two are closing as reasoning moves into internal loops and models become evaluation-aware.'
+  statement: A frontier vendor discloses loop depth, or an equivalent measure of inference-time compute, as part of a model's version specification.
+  refuted_if: Only the deadline.
+  resolution_source: Model cards, system cards and API documentation.
+  status: open
+  direction: away
+  history:
+  - date: 2026-10-17
+    event: opened
+    status: open
+    direction: flat
+    note: Back-filled 2026-10-25 from the 2026-10-17 edition; prior set retroactively; split from a compound indicator.
+  - date: 2026-10-24
+    event: evidence
+    status: open
+    direction: away
+    note: Not disclosed; research moved further toward unreadable reasoning, with latent-text hybrids and looped architectures advancing.
+- id: I-2026-10-17-02
+  name: Safety framework cites evaluation awareness
+  tier: quarterly
+  opened: 2026-10-17
+  deadline: 2027-01-17
+  prior: 0.35
+  tests: '2026-10-17 shift: oversight has three windows, and behavioral testing is closing because models increasingly recognize the tests meant to measure them.'
+  statement: A published AI safety framework, from a lab or a government body, names evaluation awareness as a limit on behavioral testing.
+  refuted_if: Only the deadline.
+  resolution_source: Lab safety frameworks and system cards; AI safety institute publications.
+  status: open
+  direction: flat
+  history:
+  - date: 2026-10-17
+    event: opened
+    status: open
+    direction: flat
+    note: 'Back-filled 2026-10-25 from the 2026-10-17 edition; prior set retroactively; split from a compound indicator. Baseline: Google DeepMind''s Gemini 4 Argon safety report disclosed evaluation awareness in about sixty percent of runs.'
+- id: I-2026-10-17-03
+  name: Activation monitoring or defenses offered
+  tier: quarterly
+  opened: 2026-10-17
+  deadline: 2027-01-17
+  prior: 0.3
+  tests: '2026-10-17 shift: activation reading is the one oversight window that strengthened, and enforceable safety lives in the layer around the model.'
+  statement: A closed-model vendor offers customers or auditors activation-level monitoring or activation-level defenses for its models.
+  refuted_if: Only the deadline.
+  resolution_source: Vendor product announcements and enterprise documentation.
+  status: open
+  direction: toward
+  supersedes: I-2026-10-10-06
+  history:
+  - date: 2026-10-17
+    event: opened
+    status: open
+    direction: flat
+    note: Back-filled 2026-10-25 from the 2026-10-17 edition; prior set retroactively. Broader successor of the activation-monitoring indicator opened 2026-10-10.
+  - date: 2026-10-24
+    event: evidence
+    status: open
+    direction: toward
+    note: Not offered. Microsoft's security leadership called for tools that reveal model reasoning rather than only inputs and outputs, and Goodfire's neuron-level interpretability claims, if they hold, would lower the cost of such tools.
+- id: I-2026-10-17-04
+  name: Fixed-harness benchmark standard
+  tier: quarterly
+  opened: 2026-10-17
+  deadline: 2027-01-17
+  prior: 0.2
+  tests: '2026-10-17 shift: the harness and its hidden state are part of the model; a score, safety result or price quoted without the harness is not a specification.'
+  statement: A benchmark publisher adopts a fixed-harness standard for reported scores, or a regulator references harness dependence in evaluation guidance.
+  refuted_if: Only the deadline.
+  resolution_source: Benchmark publishers' methodology pages; regulator evaluation guidance.
+  status: open
+  direction: away
+  history:
+  - date: 2026-10-17
+    event: opened
+    status: open
+    direction: flat
+    note: Back-filled 2026-10-25 from the 2026-10-17 edition; prior set retroactively.
+  - date: 2026-10-24
+    event: evidence
+    status: open
+    direction: away
+    note: No standard adopted; Google Research published Harness-squared, a harness that rewrites itself per task, which makes the versioned object harder to pin down.
+- id: I-2026-10-17-05
+  name: Look-through on AI private credit
+  tier: quarterly
+  opened: 2026-10-17
+  deadline: 2027-01-17
+  prior: 0.25
+  tests: '2026-10-17 projection: the next AI stress surfaces first in private credit and among life insurers, where hardware-collateralized single-purpose debt has accumulated with opaque concentrations.'
+  statement: A rating agency, insurer or supervisor publishes look-through measures for chip-backed or data-center private credit, or treats robot-collateralized lending as a distinct exposure.
+  refuted_if: Only the deadline.
+  resolution_source: Rating-agency research; supervisory publications; insurer disclosures.
+  status: open
+  direction: toward
+  supersedes: I-2026-10-03-11
+  history:
+  - date: 2026-10-17
+    event: opened
+    status: open
+    direction: flat
+    note: Back-filled 2026-10-25 from the 2026-10-17 edition; prior set retroactively. Broader successor of the look-through indicator opened 2026-10-03.
+  - date: 2026-10-24
+    event: evidence
+    status: open
+    direction: toward
+    note: No rating agency or supervisor published such measures. Large insurers adopted generative-AI exclusions, and an independent analyst compiled pricing showing GPU-backed facilities widening from 225 to 450 to 550 basis points.
+- id: I-2026-10-17-07
+  name: Supervisor ties bank stress to AI
+  tier: quarterly
+  opened: 2026-10-17
+  deadline: 2027-01-17
+  prior: 0.3
+  tests: '2026-10-17 projection: AI is a common macro factor whose stress reaches deposit-taking banks through private credit, insurers and financial conditions.'
+  statement: A national bank supervisor explicitly ties bank capital or stress-test vulnerability to AI-linked exposures in a published document.
+  refuted_if: Only the deadline.
+  resolution_source: Supervisors' financial-stability reviews, stress-test results and speeches.
+  status: open
+  direction: flat
+  history:
+  - date: 2026-10-17
+    event: opened
+    status: open
+    direction: flat
+    note: Back-filled 2026-10-25 from the 2026-10-17 edition; prior set retroactively; split from a compound indicator. The IMF, not a national supervisor, tied the deterioration partly to AI-linked exposures.
+- id: I-2026-10-17-08
+  name: Bank publishes agent admission and intent rules
+  tier: quarterly
+  opened: 2026-10-17
+  deadline: 2027-01-17
+  prior: 0.3
+  tests: '2026-10-17 projection: the agentic-deposit question resolves into a standards fight over admission and authorization; banks that build intent-verification and agent-admission infrastructure keep cheap deposits and gain a control point.'
+  statement: A bank publishes an agent-admission policy that includes intent verification, binding agent actions to the customer's authorized intent.
+  refuted_if: Only the deadline.
+  resolution_source: Bank publications and developer documentation; major-outlet reporting.
+  status: partial
+  direction: toward
+  history:
+  - date: 2026-10-17
+    event: opened
+    status: open
+    direction: flat
+    note: Back-filled 2026-10-25 from the 2026-10-17 edition; prior set retroactively; split from a compound indicator. American Express published an intent framework for agentic commerce on October 14; it is an issuer framework, not a bank admission policy.
+  - date: 2026-10-24
+    event: evidence
+    status: partial
+    direction: toward
+    note: Morgan Stanley is blocking outside agents and other large banks are moving toward read-only access, which are admission policies without intent verification. Walmart, not a bank, published the most complete per-agent identity and cap design yet.
+- id: I-2026-10-17-09
+  name: Agentic flows in liquidity guidance
+  tier: quarterly
+  opened: 2026-10-17
+  deadline: 2027-01-17
+  prior: 0.15
+  tests: '2026-10-17 projection: supervisors ask how agentic flows affect bank liquidity, and the agentic-deposit question becomes a control-and-liability regime rather than a rate war.'
+  statement: A regulator incorporates agent-mediated deposit flows into liquidity-risk guidance.
+  refuted_if: Only the deadline.
+  resolution_source: Bank regulators' guidance, rules and speeches.
+  status: open
+  direction: flat
+  supersedes: I-2026-10-03-12
+  history:
+  - date: 2026-10-17
+    event: opened
+    status: open
+    direction: flat
+    note: Back-filled 2026-10-25 from the 2026-10-17 edition; prior set retroactively; split from a compound indicator. Broader successor of the deposit-outflow guidance indicator opened 2026-10-03.
+- id: I-2026-10-17-11
+  name: Financial supervisor dates post-quantum duty
+  tier: quarterly
+  opened: 2026-10-17
+  deadline: 2027-01-17
+  prior: 0.2
+  tests: '2026-10-17 projection: converging 2030 and 2031 deadlines turn post-quantum migration into a dated compliance obligation for financial institutions.'
+  statement: A financial supervisor sets a dated post-quantum migration obligation for the firms it regulates.
+  refuted_if: Only the deadline.
+  resolution_source: Supervisory rules, circulars and guidance.
+  status: open
+  direction: flat
+  history:
+  - date: 2026-10-17
+    event: opened
+    status: open
+    direction: flat
+    note: Back-filled 2026-10-25 from the 2026-10-17 edition; prior set retroactively; split from a compound indicator.
+- id: I-2026-10-17-12
+  name: Side-channel certified post-quantum hardware
+  tier: quarterly
+  opened: 2026-10-17
+  deadline: 2027-01-17
+  prior: 0.15
+  tests: '2026-10-17 projection: the post-quantum attack surface moves from algorithms to implementations.'
+  statement: A post-quantum hardware product earns side-channel certification comparable to payment-card security standards.
+  refuted_if: Only the deadline.
+  resolution_source: Certification listings such as Common Criteria, FIPS 140-3 and EMVCo; vendor announcements.
+  status: open
+  direction: flat
+  history:
+  - date: 2026-10-17
+    event: opened
+    status: open
+    direction: flat
+    note: Back-filled 2026-10-25 from the 2026-10-17 edition; prior set retroactively.
+- id: I-2026-10-17-13
+  name: Cultivation or decoding reproduced elsewhere
+  tier: quarterly
+  opened: 2026-10-17
+  deadline: 2027-01-17
+  prior: 0.25
+  tests: '2026-10-17 projection: classical computing attached to quantum machines accounts for a growing share of measured progress, and vendor claims should be judged on reproduced and sustained performance.'
+  statement: A magic-state cultivation or real-time decoding result is reproduced on another group's hardware.
+  refuted_if: Only the deadline.
+  resolution_source: Papers and preprints; vendor and laboratory announcements.
+  status: open
+  direction: away
+  history:
+  - date: 2026-10-17
+    event: opened
+    status: open
+    direction: flat
+    note: 'Back-filled 2026-10-25 from the 2026-10-17 edition; prior set retroactively; split from a compound indicator. Baseline: Google''s magic-state cultivation result of October 15.'
+  - date: 2026-10-24
+    event: evidence
+    status: open
+    direction: away
+    note: A decoder review at IEEE Quantum Week showed simulation rankings failing to hold on hardware; no reproduction was reported.
+- id: I-2026-10-17-14
+  name: Sustained logical performance over hours
+  tier: quarterly
+  opened: 2026-10-17
+  deadline: 2027-01-17
+  prior: 0.3
+  tests: '2026-10-17 projection: quantum vendors'' claims should be evaluated on sustained logical performance over hours, not on peak fidelity in a fresh calibration.'
+  statement: A quantum vendor publishes logical-qubit performance sustained over hours rather than peak fidelity after a fresh calibration.
+  refuted_if: Only the deadline.
+  resolution_source: Vendor technical reports; papers and preprints.
+  status: open
+  direction: flat
+  history:
+  - date: 2026-10-17
+    event: opened
+    status: open
+    direction: flat
+    note: Back-filled 2026-10-25 from the 2026-10-17 edition; prior set retroactively; split from a compound indicator.
+- id: I-2026-10-17-15
+  name: Neocloud restructuring or asset sale
+  tier: quarterly
+  opened: 2026-10-17
+  deadline: 2027-01-17
+  prior: 0.4
+  tests: '2026-10-17 projection: the next AI stress surfaces first in private credit and neocloud structures; the 2026-10-24 shift added that equity holders and private lenders at high-yield prices are now the marginal financiers.'
+  statement: CoreWeave or another neocloud restructures its debt, merges, or sells assets under financial pressure.
+  refuted_if: Only the deadline.
+  resolution_source: Company filings and announcements; credit-market reporting.
+  status: open
+  direction: toward
+  history:
+  - date: 2026-10-17
+    event: opened
+    status: open
+    direction: flat
+    note: Back-filled 2026-10-25 from the 2026-10-17 edition; prior set retroactively.
+  - date: 2026-10-24
+    event: evidence
+    status: open
+    direction: toward
+    note: CoreWeave's bond yield set a record of about 15.8 percent and its five-year credit default swap was reported above 1,100 basis points; Firmus withdrew its listing and Microsoft withdrew from an Nscale site.
+  - date: 2026-10-24
+    event: sharpened
+    status: open
+    direction: toward
+    note: 'Previous wording: ''CoreWeave or a comparable neocloud refinances on investment-grade terms or is forced into asset sales, consolidation or restructuring.'' The investment-grade refinancing alternative was dropped.'
+- id: I-2026-10-24-01
+  name: Lab discloses monitoring coverage
+  tier: quarterly
+  opened: 2026-10-24
+  deadline: 2027-01-24
+  prior: 0.25
+  tests: '2026-10-24 shift: oversight is infrastructure with coverage, latency, availability and tamper resistance that must be measured, and the agents it oversees are among its adversaries.'
+  statement: A frontier lab publishes both the coverage percentage and the detection latency of its internal agent monitoring.
+  refuted_if: Only the deadline.
+  resolution_source: Lab safety and incident reports; system cards.
+  status: open
+  direction: flat
+  history:
+  - date: 2026-10-24
+    event: opened
+    status: open
+    direction: flat
+    note: 'Back-filled 2026-10-25 from the 2026-10-24 edition; prior set retroactively; split from a compound indicator. Baseline: the METR and Redwood Research audit summary of October 22 estimated 6 to 25 percent of one lab''s most capable internal agent traffic went unmonitored.'
+- id: I-2026-10-24-02
+  name: Full unredacted agent-oversight audit
+  tier: quarterly
+  opened: 2026-10-24
+  deadline: 2027-01-24
+  prior: 0.2
+  tests: '2026-10-24 shift: oversight is infrastructure with measurable coverage, and the scarce asset is an independent checker whose correctness does not depend on the system being checked.'
+  statement: METR or another external auditor publishes a full, unredacted audit of a frontier lab's agent monitoring.
+  refuted_if: Only the deadline.
+  resolution_source: METR, Redwood Research and other auditors' publications.
+  status: open
+  direction: flat
+  history:
+  - date: 2026-10-24
+    event: opened
+    status: open
+    direction: flat
+    note: Back-filled 2026-10-25 from the 2026-10-24 edition; prior set retroactively; split from a compound indicator. Only a summary of the METR and Redwood Research audit was published.
+- id: I-2026-10-24-03
+  name: Second hyperscaler turns to equity
+  tier: quarterly
+  opened: 2026-10-24
+  deadline: 2027-01-24
+  prior: 0.4
+  tests: '2026-10-24 shift: the marginal dollar of AI capital now comes from equity holders and private lenders at high-yield prices; hyperscaler balance sheets became participants rather than the anchor. When met, record how the issuer''s spreads respond.'
+  statement: A hyperscaler other than Meta reports negative quarterly free cash flow or announces equity-based or off-balance-sheet financing for AI capital spending.
+  refuted_if: Only the deadline.
+  resolution_source: Quarterly results and filings of Microsoft, Alphabet, Amazon and Oracle; credit-market reporting.
+  status: open
+  direction: flat
+  history:
+  - date: 2026-10-24
+    event: opened
+    status: open
+    direction: flat
+    note: 'Back-filled 2026-10-25 from the 2026-10-24 edition; prior set retroactively. Baseline: Meta reported free cash flow of minus 2.1 billion dollars and a new non-voting share class for capital raising.'
+- id: I-2026-10-24-04
+  name: Nscale completes its listing
+  tier: quarterly
+  opened: 2026-10-24
+  deadline: 2027-01-24
+  prior: 0.2
+  tests: '2026-10-24 shift: the newest neoclouds could not list, so the pace of the build-out depends on equity valuations and private-credit appetite. When met, record the valuation against the roughly 30 billion dollars sought and the 16 to 19 billion investors argued for.'
+  statement: Nscale completes a public listing of its shares.
+  refuted_if: Nscale withdraws or indefinitely postpones its listing.
+  resolution_source: Exchange notices; company announcements; major-outlet reporting.
+  status: open
+  direction: flat
+  history:
+  - date: 2026-10-24
+    event: opened
+    status: open
+    direction: flat
+    note: Back-filled 2026-10-25 from the 2026-10-24 edition; prior set retroactively; split from a compound indicator whose other half continues the neocloud restructuring indicator opened 2026-10-17.
+- id: I-2026-10-24-06
+  name: Memory-maker labor action
+  tier: quarterly
+  opened: 2026-10-24
+  deadline: 2027-01-24
+  prior: 0.4
+  tests: '2026-10-24 shift: the binding constraint on the build-out rotates among power, equipment, memory, packaging, labor and local permission, often by region.'
+  statement: A further strike or other collective labor action occurs at a memory maker in Taiwan or South Korea.
+  refuted_if: Only the deadline.
+  resolution_source: Company statements; union announcements; regional press such as the Taipei Times and Yonhap.
+  status: open
+  direction: flat
+  history:
+  - date: 2026-10-24
+    event: opened
+    status: open
+    direction: flat
+    note: 'Back-filled 2026-10-25 from the 2026-10-24 edition; prior set retroactively; split from a compound indicator. Baseline: memory workers struck over the AI windfall, and the Taipei Times reported Micron''s Taiwan dispute on October 22.'
+- id: I-2026-10-24-07
+  name: AI circuit compiled to physical qubits
+  tier: quarterly
+  opened: 2026-10-24
+  deadline: 2027-01-24
+  prior: 0.35
+  tests: '2026-10-24 shift: cryptanalytic risk runs on two clocks, hardware and AI-searched algorithms, and the algorithm clock can jump without warning.'
+  statement: An independent group compiles the AI-designed elliptic-curve point-addition circuit into a physical-qubit resource estimate for a named curve.
+  refuted_if: An independent analysis finds the circuit incorrect or finds its gate savings do not survive compilation.
+  resolution_source: arXiv preprints; papers; quantum resource-estimation publications.
+  status: open
+  direction: flat
+  history:
+  - date: 2026-10-24
+    event: opened
+    status: open
+    direction: flat
+    note: 'Back-filled 2026-10-25 from the 2026-10-24 edition; prior set retroactively; split from a compound indicator. Baseline: the preprint from Anthropic''s fellows program with Harvard and QuEra researchers reported about seventeen times fewer gates for twelve percent more qubits.'
+- id: I-2026-10-24-08
+  name: Elliptic-curve migration reprioritized
+  tier: quarterly
+  opened: 2026-10-24
+  deadline: 2027-01-24
+  prior: 0.15
+  tests: '2026-10-24 shift: post-quantum migration sequencing should treat elliptic-curve systems as at least as urgent as RSA, because AI-searched algorithms can cut cryptanalytic cost in discrete jumps.'
+  statement: NIST or a national cybersecurity agency raises the migration priority, or moves forward the deadline, for replacing elliptic-curve cryptography.
+  refuted_if: Only the deadline.
+  resolution_source: NIST, NSA, CISA, BSI, NCSC and ANSSI publications.
+  status: open
+  direction: flat
+  history:
+  - date: 2026-10-24
+    event: opened
+    status: open
+    direction: flat
+    note: Back-filled 2026-10-25 from the 2026-10-24 edition; prior set retroactively; split from a compound indicator.
+- id: I-2026-10-24-09
+  name: Quantinuum fidelity record verified
+  tier: quarterly
+  opened: 2026-10-24
+  deadline: 2027-01-24
+  prior: 0.3
+  tests: '2026-10-17 projection, applied 2026-10-24: quantum claims should be judged on reproduced, peer-reviewed and sustained performance rather than press-release peaks.'
+  statement: Quantinuum's reported 99.9995 percent logical fidelity appears in a peer-reviewed paper or is replicated by another group.
+  refuted_if: A peer-reviewed or independent analysis reports materially lower fidelity for the same experiment.
+  resolution_source: Journals; arXiv; Quantinuum publications.
+  status: open
+  direction: flat
+  history:
+  - date: 2026-10-24
+    event: opened
+    status: open
+    direction: flat
+    note: 'Back-filled 2026-10-25 from the 2026-10-24 edition; prior set retroactively. Baseline: Quantinuum''s press release of October 19.'
+- id: I-2026-10-24-10
+  name: Federal post-quantum plans reported
+  tier: quarterly
+  opened: 2026-10-24
+  deadline: 2027-01-24
+  prior: 0.3
+  tests: '2026-10-17 projection, applied 2026-10-24: post-quantum migration becomes a dated compliance obligation, and the US federal plan deadline is its first test.'
+  statement: OMB or a federal civilian agency publicly reports on the post-quantum migration plans due 2026-10-22, such as submission counts, extensions or contents.
+  refuted_if: Only the deadline.
+  resolution_source: OMB and agency publications; GAO reports; federal trade press.
+  status: open
+  direction: flat
+  history:
+  - date: 2026-10-24
+    event: opened
+    status: open
+    direction: flat
+    note: Back-filled 2026-10-25 from the 2026-10-24 edition; prior set retroactively. The October 22 deadline passed without public reporting.
+- id: I-2026-10-24-11
+  name: Bank launches capped agent profiles
+  tier: quarterly
+  opened: 2026-10-24
+  deadline: 2027-01-24
+  prior: 0.2
+  tests: '2026-10-24 projection: counterparties issue per-agent identities with caps and approval modes, or block agents; banks that only block face customer pressure and regulatory questions.'
+  statement: A large bank launches customer-authorized agent profiles with spending or transfer caps.
+  refuted_if: Only the deadline.
+  resolution_source: Bank announcements and developer documentation; major-outlet reporting.
+  status: open
+  direction: flat
+  history:
+  - date: 2026-10-24
+    event: opened
+    status: open
+    direction: flat
+    note: 'Back-filled 2026-10-25 from the 2026-10-24 edition; prior set retroactively. Baseline: Walmart''s per-agent gateway with caps, reported October 21; Morgan Stanley is blocking outside agents.'
+- id: I-2026-10-24-12
+  name: ECB findings on AI-cyber plans
+  tier: quarterly
+  opened: 2026-10-24
+  deadline: 2027-01-24
+  prior: 0.3
+  tests: '2026-10-24 projection: supervisors treat AI-enabled cyber risk as a financial-stability and operational-resilience issue for banks.'
+  statement: The ECB publishes findings, aggregate or supervisory, from the AI-related cyber plans banks were asked to submit by the end of October 2026.
+  refuted_if: Only the deadline.
+  resolution_source: ECB Banking Supervision publications and speeches.
+  status: open
+  direction: flat
+  history:
+  - date: 2026-10-24
+    event: opened
+    status: open
+    direction: flat
+    note: 'Back-filled 2026-10-25 from the 2026-10-24 edition; prior set retroactively. Source for the deadline: Insurance Journal, carrying Reuters, on October 13.'
+- id: I-2026-10-24-13
+  name: AEGIS Act gets a sponsor
+  tier: quarterly
+  opened: 2026-10-24
+  deadline: 2027-01-24
+  prior: 0.3
+  tests: '2026-10-24 projection: a frontier lab is drafting its own federal regulation; whether the AEGIS draft advances shows whether lab-written preemption has a path.'
+  statement: A member of Congress introduces the AEGIS Act draft, or a bill based on it.
+  refuted_if: Only the deadline.
+  resolution_source: Congress.gov; Politico and other policy press.
+  status: open
+  direction: flat
+  history:
+  - date: 2026-10-24
+    event: opened
+    status: open
+    direction: flat
+    note: Back-filled 2026-10-25 from the 2026-10-24 edition; prior set retroactively; split from a compound indicator. Politico published the leaked September 29 discussion draft on October 16.
+- id: I-2026-10-24-14
+  name: AEGIS preemption narrowed
+  tier: quarterly
+  opened: 2026-10-24
+  deadline: 2027-01-24
+  prior: 0.4
+  tests: '2026-10-24 projection: a frontier lab is drafting its own federal regulation, and hostile reaction from safety advocates tests whether its preemption terms survive.'
+  statement: A revised AEGIS draft or introduced bill narrows the preemption section of the September 29 discussion draft.
+  refuted_if: The draft is introduced with its preemption section unchanged.
+  resolution_source: Published drafts; Congress.gov; Anthropic statements; policy press.
+  status: open
+  direction: flat
+  history:
+  - date: 2026-10-24
+    event: opened
+    status: open
+    direction: flat
+    note: Back-filled 2026-10-25 from the 2026-10-24 edition; prior set retroactively; split from a compound indicator. Anthropic's federal affairs lead said the preemption language would be narrowed.
+- id: I-2026-10-17-06
+  name: IMF stressed-bank share rises again
+  tier: long_range
+  opened: 2026-10-17
+  deadline: 2027-04-30
+  prior: 0.5
+  tests: '2026-10-17 projection: AI is a common macro factor whose stress reaches banks through private credit, insurers and the broader tightening of financial conditions.'
+  statement: The IMF's next Global Financial Stability Report puts the share of global banking assets at institutions breaching capital minimums under its adverse scenario above 22 percent.
+  refuted_if: The next report puts the share at or below 22 percent.
+  resolution_source: IMF Global Financial Stability Report, expected April 2027.
+  status: open
+  direction: flat
+  history:
+  - date: 2026-10-17
+    event: opened
+    status: open
+    direction: flat
+    note: Back-filled 2026-10-25 from the 2026-10-17 edition; prior set retroactively; split from a compound indicator. The October 2026 report put the share at 22 percent, up from 18 percent a year earlier.
+- id: I-2026-10-24-05
+  name: Equipment supply constraints clear
+  tier: long_range
+  opened: 2026-10-24
+  deadline: 2027-04-30
+  prior: 0.45
+  tests: '2026-10-24 shift: the binding constraint on the build-out rotates among power, equipment, memory, packaging, labor and local permission, and forecasts that assume one constraint will be wrong about timing.'
+  statement: Lam Research states, in results or guidance issued by the deadline, that the supply constraints that limited its December-quarter 2026 shipments cleared by the end of March 2027.
+  refuted_if: Lam Research says the constraints persist beyond March 2027.
+  resolution_source: Lam Research earnings releases and calls; results for the March 2027 quarter are expected in late April 2027.
+  status: open
+  direction: flat
+  history:
+  - date: 2026-10-24
+    event: opened
+    status: open
+    direction: flat
+    note: Back-filled 2026-10-25 from the 2026-10-24 edition; prior set retroactively; split from a compound indicator and narrowed to Lam Research. Lam said on October 21 its December-quarter guidance would have been higher if not for near-term supply chain constraints.
 ---
 
 # AI Off-Consensus: The Entropy Brief

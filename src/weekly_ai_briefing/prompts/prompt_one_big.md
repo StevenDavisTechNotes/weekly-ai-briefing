@@ -83,14 +83,15 @@ Start each of these parts with a level-2 heading (`##`) using exactly the title 
 
 - After the attribution that ends "Source Notes and Attribution", end the response with one fenced code block that opens with ```yaml and closes with ```. Write nothing after it, and use no other YAML block in the response.
 - Write the title and summary last, after reviewing the whole briefing, so they reflect the full edition rather than its first section.
-- The block holds exactly these five keys, in this order:
+- The block holds exactly these six keys, in this order:
   - title: a double-quoted headline of 5 to 15 words naming the edition's dominant theme, drawn from the five Orientation signals and the Strategic Mental Model Shifts.
   - publication_date: today's date, unquoted, in YYYY-MM-DD form.
   - survey_begin_date: the first day of the research window, unquoted, in YYYY-MM-DD form.
   - survey_last_date: the last day of the research window, unquoted, in YYYY-MM-DD form.
   - summary: a double-quoted summary of 20 to 35 words covering the edition's most significant developments, written as plain prose without footnote references, URLs, or markdown.
-- Escape any double quote inside a value with a backslash.
-- For a briefing run on 2026-10-24 the block looks like this, with real text in place of the descriptions:
+  - indicators: the updated indicator ledger, a list with one item per indicator, as described under "Indicator Ledger".
+- Escape any double quote inside a value with a backslash. Double-quote every text value in the ledger; write dates unquoted and prior as a decimal number.
+- For a briefing run on 2026-10-24 the block looks like this, with real text in place of the descriptions and one list item per indicator in the ledger:
 
   ````
   ```yaml
@@ -99,6 +100,25 @@ Start each of these parts with a level-2 heading (`##`) using exactly the title 
   survey_begin_date: 2026-10-17
   survey_last_date: 2026-10-23
   summary: "Twenty to thirty-five words covering the edition's most significant developments."
+  indicators:
+  - id: I-2026-10-24-03
+    name: "Three to eight spoken words"
+    tier: quarterly
+    opened: 2026-10-24
+    deadline: 2027-01-24
+    prior: 0.4
+    tests: "2026-10-24 shift: the projection or shift this indicator tests, stated in full"
+    statement: "One observable outcome that is either true or false by the deadline"
+    refuted_if: "An observable outcome that would settle the statement as false before the deadline, or Only the deadline."
+    resolution_source: "Where the evidence will appear"
+    status: open
+    direction: flat
+    history:
+    - date: 2026-10-24
+      event: opened
+      status: open
+      direction: flat
+      note: "One to three sentences giving the baseline or the evidence, with sources named in words and dates"
   ```
   ````
 
@@ -107,6 +127,58 @@ Start each of these parts with a level-2 heading (`##`) using exactly the title 
 ## Strategic Mental Model Shifts Section
 
 - Synthesize your research to articulate any fundamental revisions to our overarching structural paradigm relative to previous briefings.
+- End the part with two `###` subsections, in this order, written from the updated indicator ledger and consistent with it. Refer to indicators by name only, never by id, and say dates and probabilities in words suited to audio, such as "by January 24" and "a prior of forty percent".
+  - `### New indicators to watch`: one bullet per indicator opened in this edition, ordered by deadline. Each bullet gives the name, the statement in spoken form, the deadline, the prior, and the projection or shift it tests. If no indicator was opened, say so in one sentence.
+  - `### Scorecard on tracked indicators`: one bullet per carried-forward indicator that gained a history entry in this edition, meaning evidence, sharpened, closed or superseded. List closed indicators first, then the rest, each group ordered by deadline. Each bullet gives the name, the status and direction in words, and the evidence with its source. For a closed indicator, compare the outcome with its prior, for example "met, against a prior of twenty percent". For a deadline that passed without evidence, say "not met, no evidence found"; use "refuted" only for counter-evidence. For a sharpened indicator, give the narrower wording. For a superseded one, name its broader successor. Do not list, count or summarize indicators that had a flat week with no status change. If no carried-forward indicator gained a history entry, say so in one sentence.
+
+---
+
+## Indicator Ledger
+
+The ledger is the running record of checkable predictions that grounds the Strategic Mental Model Shifts. Every edition carries the whole ledger in its metadata block, and you may see only the most recent previous edition, so each entry must be complete enough to score without any older edition.
+
+Lifecycle:
+- Start from the `indicators` list in the YAML front matter, between the two `---` lines at the top, of the most recent previous edition in the context. If there is none, start an empty ledger.
+- Drop every indicator whose status in that edition is met, refuted or not_met. Carry every other indicator forward with all of its fields and its full history.
+- During research, look for evidence on every carried-forward indicator, then update its status, direction and history as described below.
+- Close as not_met, with a closed history entry, every indicator whose deadline is on or before survey_last_date and whose statement has not become true.
+- An indicator closed in this edition stays in this edition's ledger with its closing entry; the next edition drops it.
+- Open new indicators for the projections and shifts made in this edition. Do not open one that duplicates an open indicator; sharpen or supersede the existing one instead.
+- Order the ledger by deadline, then by id.
+
+Choosing indicators:
+- An indicator is worth tracking only if its outcome is uncertain. Prefer statements whose prior lies between 0.2 and 0.8; one that is nearly certain to be met or missed carries little information.
+- Prefer dated catalysts: a scheduled data release, central-bank meeting, earnings report, filing or statutory deadline resolves on a known day.
+- Open long_range indicators only for projections the briefing explicitly makes beyond one quarter.
+
+Fields, in this order, for every indicator:
+- id: `I-<opened>-<NN>`, where `<opened>` is the YYYY-MM-DD date of the edition that opened it and `<NN>` is a two-digit sequence within that edition starting at 01. Never change or reuse an id.
+- name: three to eight spoken words. The briefing text refers to indicators only by this name.
+- tier: weekly, quarterly or long_range. weekly: the deadline is at most 35 days after opened, normally a scheduled event. quarterly: 36 days to three calendar months after opened. long_range: more than three calendar months after opened.
+- opened: the publication date of the edition that opened it.
+- deadline: the last date by which the statement must become true; by default three calendar months after opened, or the date of the scheduled event.
+- prior: the probability, judged when the indicator opens, that the statement is met by the deadline, from 0.05 to 0.95 in steps of 0.05.
+- tests: the projection or mental-model shift the indicator tests, stated in full and prefixed with the date of the edition that made it, for example "2026-10-24 shift: ...". Never cite section numbers.
+- statement: one observable outcome that is either true or false by the deadline. Never join two questions with "and whether"; split them into separate indicators. Alternatives joined by "or" are allowed only when each alone would confirm the same projection. Name actors, instruments, thresholds and documents precisely enough that two readers would score it the same way.
+- refuted_if: an observable outcome that would settle the statement as false before the deadline, or "Only the deadline." when nothing short of the deadline can.
+- resolution_source: where the evidence will appear, such as named regulators, filings, journals or data releases.
+- status:
+  - open: no part of the statement is satisfied yet.
+  - partial: part of the statement is satisfied but not all of it; still open.
+  - met: the statement became true on or before the deadline; closed.
+  - refuted: the refuted_if outcome occurred; closed. Absence of evidence never refutes.
+  - not_met: the deadline passed without the statement becoming true, or the indicator was superseded by a broader one; closed.
+- direction: this edition's movement. toward: this week's evidence makes the statement more likely to be met by the deadline. away: less likely. flat: no material evidence this week, including absence of evidence.
+- supersedes, superseded_by: present only when one indicator replaced another; the id of the other indicator.
+- history: entries oldest first, each with date (this edition's publication date), event, status (after the event), direction and note. Never edit or remove earlier entries.
+  - event is one of opened, evidence, sharpened, closed, superseded.
+  - Add an entry only when the indicator opens, when direction is toward or away, when status changes, when the wording is sharpened, or when it is superseded. A flat week with no status change adds no entry.
+  - The note gives the evidence in one to three sentences, with sources named in words and dates; for sharpened, it quotes the previous wording.
+
+Changing wording:
+- Sharpening, which leaves fewer ways for the statement to be met, is allowed: a named actor in place of a class, a tighter threshold, an earlier deadline, or a dropped alternative. Rewrite statement, refuted_if or deadline, add a sharpened history entry that quotes the previous wording, and report it in the scorecard.
+- Broadening on any axis, which adds ways for the statement to be met, is never an edit: a wider class of actors or instruments, a looser threshold, a later deadline, or an added alternative. Close the old indicator as not_met with a superseded history entry and superseded_by. If the broader question is still worth tracking, open a new indicator with the broader statement, a new id, deadline and prior, and supersedes naming the old one.
+- id, name, tier, opened, prior and tests never change.
 
 ---
 

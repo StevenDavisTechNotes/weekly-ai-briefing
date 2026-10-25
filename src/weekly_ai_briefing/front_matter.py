@@ -1,4 +1,4 @@
-"""YAML front matter of an edition: title, dates and summary.
+"""YAML front matter of an edition: title, dates, summary and the indicator ledger.
 
 Writers emit format_front_matter(fm) + "\n" + body; split_front_matter undoes that.
 """
@@ -17,13 +17,13 @@ class FrontMatter(NamedTuple):
     survey_begin_date: datetime.date
     survey_last_date: datetime.date
     summary: str
+    indicators: tuple[dict, ...] = ()
 
 
 FRONT_MATTER_BLOCK = re.compile(r"\A---\n(.*?)\n---\n", re.DOTALL)
 YAML_FENCE = re.compile(r"^```ya?ml[ \t]*\n(.*?)\n```[ \t]*$", re.MULTILINE | re.DOTALL)
 
-TEXT_KEYS = ("title", "summary")
-DATE_KEYS = ("publication_date", "survey_begin_date", "survey_last_date")
+REQUIRED_KEYS = ("title", "publication_date", "survey_begin_date", "survey_last_date", "summary")
 
 
 def _text(data: dict, key: str) -> str:
@@ -45,6 +45,15 @@ def _date(data: dict, key: str) -> datetime.date:
     raise ValueError(f"front matter {key} must be a YYYY-MM-DD date")
 
 
+def _indicators(data: dict) -> tuple[dict, ...]:
+    value = data.get("indicators")
+    if value is None:
+        return ()
+    if not isinstance(value, list) or not all(isinstance(item, dict) for item in value):
+        raise ValueError("front matter indicators must be a list of mappings")
+    return tuple(value)
+
+
 def parse_front_matter(yaml_text: str) -> FrontMatter:
     try:
         data = yaml.safe_load(yaml_text)
@@ -52,7 +61,7 @@ def parse_front_matter(yaml_text: str) -> FrontMatter:
         raise ValueError(f"front matter is not valid YAML: {error}") from error
     if not isinstance(data, dict):
         raise ValueError("front matter is not a YAML mapping")
-    missing = [key for key in FrontMatter._fields if key not in data]
+    missing = [key for key in REQUIRED_KEYS if key not in data]
     if missing:
         raise ValueError(f"front matter is missing {', '.join(missing)}")
     title = _text(data, "title")
@@ -62,19 +71,25 @@ def parse_front_matter(yaml_text: str) -> FrontMatter:
     survey_last_date = _date(data, "survey_last_date")
     if survey_begin_date > survey_last_date:
         raise ValueError("front matter survey_begin_date is after survey_last_date")
-    return FrontMatter(title, publication_date, survey_begin_date, survey_last_date, summary)
+    return FrontMatter(
+        title, publication_date, survey_begin_date, survey_last_date, summary, _indicators(data)
+    )
 
 
 def format_front_matter(front_matter: FrontMatter) -> str:
     # JSON strings are valid YAML double-quoted scalars; they keep colons and quotes safe.
+    ledger = (
+        yaml.safe_dump({"indicators": list(front_matter.indicators)}, sort_keys=False, allow_unicode=True, width=4096)
+        if front_matter.indicators
+        else ""
+    )
     return (
         "---\n"
         f"title: {json.dumps(front_matter.title, ensure_ascii=False)}\n"
         f"publication_date: {front_matter.publication_date.isoformat()}\n"
         f"survey_begin_date: {front_matter.survey_begin_date.isoformat()}\n"
         f"survey_last_date: {front_matter.survey_last_date.isoformat()}\n"
-        f"summary: {json.dumps(front_matter.summary, ensure_ascii=False)}\n"
-        "---\n"
+        f"summary: {json.dumps(front_matter.summary, ensure_ascii=False)}\n" + ledger + "---\n"
     )
 
 
