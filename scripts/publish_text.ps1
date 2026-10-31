@@ -1,3 +1,5 @@
+# usage: .\scripts\publish_text.ps1
+
 $ErrorActionPreference = "Stop"
 
 function Invoke-CheckedCommand {
