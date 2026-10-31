@@ -14,16 +14,17 @@ def test_footnote_definitions_end_the_preceding_paragraph():
     assert 'id="fn-1"' in rendered
 
 
-def test_convert_leaves_front_matter_out_of_the_post(tmp_path):
+def test_convert_leaves_bottom_matter_out_of_the_post(tmp_path):
     source = tmp_path / "2026-10-17-ai-outlook-briefing.md"
     source.write_text(
+        "# T\n\n## A\n\nText.\n\n"
         "---\n"
         'title: "T"\n'
         "publication_date: 2026-10-17\n"
         "survey_begin_date: 2026-10-11\n"
         "survey_last_date: 2026-10-17\n"
         'summary: "S"\n'
-        "---\n\n# T\n\n## A\n\nText.\n",
+        "---\n",
         encoding="utf-8",
     )
     text = convert(source, tmp_path / "out").read_text(encoding="utf-8")

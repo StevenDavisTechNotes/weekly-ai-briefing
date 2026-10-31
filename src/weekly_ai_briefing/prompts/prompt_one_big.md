@@ -23,7 +23,7 @@ For Operational Technology (OT) and industrial automation, the reader is an info
   - Institutional Financial Services
 - Strategic Mental Model Shifts
 - Source Notes and Attribution
-- Edition metadata: one fenced YAML block (not a `##` part), as described below
+- Edition metadata: one YAML block between `---` lines at the very end (not a `##` part), as described below
 
 Start each of these parts with a level-2 heading (`##`) using exactly the title shown, with the seven dimensions as seven separate parts. Use `###` or lower for everything inside a part; never use `##` for anything else. Each `##` part becomes its own email and audio file.
 
@@ -81,7 +81,7 @@ Start each of these parts with a level-2 heading (`##`) using exactly the title 
 
 ## Edition Metadata Block
 
-- After the attribution that ends "Source Notes and Attribution", end the response with one fenced code block that opens with ```yaml and closes with ```. Write nothing after it, and use no other YAML block in the response.
+- After the attribution that ends "Source Notes and Attribution", end the response with the metadata block: a line holding only `---`, the YAML, and a final line holding only `---`. Do not wrap it in a code fence, write nothing after the closing `---`, and use no other YAML block in the response.
 - Write the title and summary last, after reviewing the whole briefing, so they reflect the full edition rather than its first section.
 - The block holds exactly these six keys, in this order:
   - title: a double-quoted headline of 5 to 15 words naming the edition's dominant theme, drawn from the five Orientation signals and the Strategic Mental Model Shifts.
@@ -93,8 +93,8 @@ Start each of these parts with a level-2 heading (`##`) using exactly the title 
 - Escape any double quote inside a value with a backslash. Double-quote every text value in the ledger; write dates unquoted and prior as a decimal number.
 - For a briefing run on 2026-10-24 the block looks like this, with real text in place of the descriptions and one list item per indicator in the ledger:
 
-  ````
-  ```yaml
+  ```
+  ---
   title: "Five to fifteen words naming the edition's dominant theme"
   publication_date: 2026-10-24
   survey_begin_date: 2026-10-17
@@ -119,8 +119,8 @@ Start each of these parts with a level-2 heading (`##`) using exactly the title 
       status: open
       direction: flat
       note: "One to three sentences giving the baseline or the evidence, with sources named in words and dates"
+  ---
   ```
-  ````
 
 ---
 
@@ -138,7 +138,8 @@ Start each of these parts with a level-2 heading (`##`) using exactly the title 
 The ledger is the running record of checkable predictions that grounds the Strategic Mental Model Shifts. Every edition carries the whole ledger in its metadata block, and you may see only the most recent previous edition, so each entry must be complete enough to score without any older edition.
 
 Lifecycle:
-- Start from the `indicators` list in the YAML front matter, between the two `---` lines at the top, of the most recent previous edition in the context. If there is none, start an empty ledger.
+
+- Start from the `indicators` list in the YAML bottom matter, between the last two `---` lines at the end, of the most recent previous edition in the context. If there is none, start an empty ledger.
 - Drop every indicator whose status in that edition is met, refuted or not_met. Carry every other indicator forward with all of its fields and its full history.
 - During research, look for evidence on every carried-forward indicator, then update its status, direction and history as described below.
 - Close as not_met, with a closed history entry, every indicator whose deadline is on or before survey_last_date and whose statement has not become true.
@@ -147,11 +148,13 @@ Lifecycle:
 - Order the ledger by deadline, then by id.
 
 Choosing indicators:
+
 - An indicator is worth tracking only if its outcome is uncertain. Prefer statements whose prior lies between 0.2 and 0.8; one that is nearly certain to be met or missed carries little information.
 - Prefer dated catalysts: a scheduled data release, central-bank meeting, earnings report, filing or statutory deadline resolves on a known day.
 - Open long_range indicators only for projections the briefing explicitly makes beyond one quarter.
 
 Fields, in this order, for every indicator:
+
 - id: `I-<opened>-<NN>`, where `<opened>` is the YYYY-MM-DD date of the edition that opened it and `<NN>` is a two-digit sequence within that edition starting at 01. Never change or reuse an id.
 - name: three to eight spoken words. The briefing text refers to indicators only by this name.
 - tier: weekly, quarterly or long_range. weekly: the deadline is at most 35 days after opened, normally a scheduled event. quarterly: 36 days to three calendar months after opened. long_range: more than three calendar months after opened.
@@ -176,6 +179,7 @@ Fields, in this order, for every indicator:
   - The note gives the evidence in one to three sentences, with sources named in words and dates; for sharpened, it quotes the previous wording.
 
 Changing wording:
+
 - Sharpening, which leaves fewer ways for the statement to be met, is allowed: a named actor in place of a class, a tighter threshold, an earlier deadline, or a dropped alternative. Rewrite statement, refuted_if or deadline, add a sharpened history entry that quotes the previous wording, and report it in the scorecard.
 - Broadening on any axis, which adds ways for the statement to be met, is never an edit: a wider class of actors or instruments, a looser threshold, a later deadline, or an added alternative. Close the old indicator as not_met with a superseded history entry and superseded_by. If the broader question is still worth tracking, open a new indicator with the broader statement, a new id, deadline and prior, and supersedes naming the old one.
 - id, name, tier, opened, prior and tests never change.

@@ -68,8 +68,8 @@ def test_voice_section_filter(run_env):
     assert generated == []
 
 
-def test_voice_text_excludes_front_matter(run_env, monkeypatch):
-    front_matter = (
+def test_voice_text_excludes_bottom_matter(run_env, monkeypatch):
+    bottom_matter = (
         "---\n"
         'title: "T"\n'
         "publication_date: 2026-10-17\n"
@@ -78,7 +78,8 @@ def test_voice_text_excludes_front_matter(run_env, monkeypatch):
         'summary: "S"\n'
         "---\n"
     )
-    (cli.MARKDOWN_FOLDER / "2026-10-17-ai-outlook-briefing.md").write_text(front_matter + "\n" + BRIEFING, encoding="utf-8")
+    briefing_path = cli.MARKDOWN_FOLDER / "2026-10-17-ai-outlook-briefing.md"
+    briefing_path.write_text(BRIEFING + "\n" + bottom_matter, encoding="utf-8")
     spoken = []
     monkeypatch.setattr(cli, "generate_mp3", lambda md, path: spoken.append(md))
     cli.main(["--voice"])

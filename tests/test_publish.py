@@ -52,7 +52,7 @@ def test_index_keeps_given_order_and_marks_audio_with_an_icon():
     assert "Week &lt;A&gt;" in index
 
 
-FRONT_MATTER = (
+BOTTOM_MATTER = (
     "---\n"
     'title: "Costs: the real story"\n'
     "publication_date: 2026-10-17\n"
@@ -73,8 +73,8 @@ def site(tmp_path, monkeypatch):
     return tmp_path
 
 
-def test_site_index_uses_front_matter_and_pages_omit_it(site):
-    (site / "markdown" / f"{STEM}.md").write_text(FRONT_MATTER + "\n## Orientation\n\nIntro.\n", encoding="utf-8")
+def test_site_index_uses_bottom_matter_and_pages_omit_it(site):
+    (site / "markdown" / f"{STEM}.md").write_text("## Orientation\n\nIntro.\n\n" + BOTTOM_MATTER, encoding="utf-8")
     publish.write_site(set())
     index = (site / "index.html").read_text(encoding="utf-8")
     assert "Costs: the real story" in index
@@ -82,14 +82,14 @@ def test_site_index_uses_front_matter_and_pages_omit_it(site):
     assert "survey_begin_date" not in (site / "html" / f"{STEM}.html").read_text(encoding="utf-8")
 
 
-def test_site_refuses_a_briefing_without_front_matter(site):
+def test_site_refuses_a_briefing_without_bottom_matter(site):
     (site / "markdown" / f"{STEM}.md").write_text("## Orientation\n\nIntro.\n", encoding="utf-8")
-    with pytest.raises(ValueError, match="no YAML front matter"):
+    with pytest.raises(ValueError, match="no YAML bottom matter"):
         publish.write_site(set())
 
 
 def test_site_refuses_a_publication_date_that_differs_from_the_file_name(site):
-    text = FRONT_MATTER.replace("publication_date: 2026-10-17", "publication_date: 2026-10-18")
-    (site / "markdown" / f"{STEM}.md").write_text(text + "\n## Orientation\n\nIntro.\n", encoding="utf-8")
+    text = BOTTOM_MATTER.replace("publication_date: 2026-10-17", "publication_date: 2026-10-18")
+    (site / "markdown" / f"{STEM}.md").write_text("## Orientation\n\nIntro.\n\n" + text, encoding="utf-8")
     with pytest.raises(ValueError, match="does not match the file name date"):
         publish.write_site(set())
