@@ -10,7 +10,7 @@ import urllib.error
 import urllib.request
 
 from weekly_ai_briefing.config import MARKDOWN_FOLDER, MP3_FOLDER
-from weekly_ai_briefing.front_matter import split_front_matter
+from weekly_ai_briefing.bottom_matter import split_bottom_matter
 from weekly_ai_briefing.html_rendering import render_template
 
 from .audio import generate_mp3
@@ -107,7 +107,7 @@ def main(argv: list[str] | None = None) -> None:
     args = parse_args(argv)
     try:
         briefing_path, date = find_latest_briefing(MARKDOWN_FOLDER)
-        _, body = split_front_matter(briefing_path.read_text(encoding="utf-8"))
+        _, body = split_bottom_matter(briefing_path.read_text(encoding="utf-8"))
         sections = split_sections(body)
         print(f"Using {briefing_path}: {len(sections)} sections")
         if args.voice:

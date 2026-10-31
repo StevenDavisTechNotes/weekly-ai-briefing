@@ -22,7 +22,7 @@ from weekly_ai_briefing.config import (
     TOOLS,
     TRANSIENT_ERROR_TYPES,
 )
-from weekly_ai_briefing.front_matter import extract_yaml_block, format_front_matter
+from weekly_ai_briefing.bottom_matter import format_bottom_matter, split_bottom_matter
 
 
 def load_recent_reports(
@@ -180,12 +180,16 @@ def generate_weekly_report() -> None:
     briefing = send(client, system_prompt, messages)
 
     try:
-        front_matter, body = extract_yaml_block(briefing)
+        bottom_matter, body = split_bottom_matter(briefing)
     except ValueError as error:
-        print(f"Warning: {error}; saved without front matter, add it by hand before publishing")
+        bottom_matter, problem = None, str(error)
+    else:
+        problem = "the briefing does not end with a --- delimited YAML block"
+    if bottom_matter is None:
+        print(f"Warning: {problem}; saved as written, fix the bottom matter by hand before publishing")
         report = f"Coverage week ending on {today}\n\n{briefing}"
     else:
-        report = f"{format_front_matter(front_matter)}\nCoverage week ending on {today}\n\n{body}"
+        report = f"Coverage week ending on {today}\n\n{body}\n{format_bottom_matter(bottom_matter)}"
 
     MARKDOWN_FOLDER.mkdir(parents=True, exist_ok=True)
     output_path.write_text(report, encoding="utf-8")

@@ -23,7 +23,7 @@ from weekly_ai_briefing.email_briefing.briefing import (
     mp3_filename,
     split_sections,
 )
-from weekly_ai_briefing.front_matter import split_front_matter
+from weekly_ai_briefing.bottom_matter import split_bottom_matter
 from weekly_ai_briefing.html_rendering import render_template
 
 
@@ -83,16 +83,19 @@ def write_site(release_tags: set[str]) -> list[Edition]:
     HTML_FOLDER.mkdir(parents=True, exist_ok=True)
     editions = []
     for date, path in list_briefings(MARKDOWN_FOLDER):
-        front_matter, body = split_front_matter(path.read_text(encoding="utf-8"))
-        if front_matter is None:
+        bottom_matter, body = split_bottom_matter(path.read_text(encoding="utf-8"))
+        if bottom_matter is None:
             raise ValueError(
-                f"{path} has no YAML front matter (title, publication_date, survey_begin_date, survey_last_date, summary)"
+                f"{path} has no YAML bottom matter"
+                " (title, publication_date, survey_begin_date, survey_last_date, summary)"
             )
-        if front_matter.publication_date.isoformat() != date:
+        if bottom_matter.publication_date.isoformat() != date:
             raise ValueError(
-                f"{path}: publication_date {front_matter.publication_date} does not match the file name date {date}"
+                f"{path}: publication_date {bottom_matter.publication_date} does not match the file name date {date}"
             )
-        edition = Edition(date, path.stem, edition_name(date) in release_tags, front_matter.title, front_matter.summary)
+        edition = Edition(
+            date, path.stem, edition_name(date) in release_tags, bottom_matter.title, bottom_matter.summary
+        )
         sections = split_sections(body)
         page = render_edition_page(date, path.stem, sections, edition.has_audio)
         (HTML_FOLDER / f"{path.stem}.html").write_text(page, encoding="utf-8")
