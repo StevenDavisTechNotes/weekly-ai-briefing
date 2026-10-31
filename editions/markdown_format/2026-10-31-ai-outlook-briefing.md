@@ -1053,7 +1053,7 @@ indicators:
   refuted_if: "Only the deadline."
   resolution_source: "Model cards, system cards and API documentation."
   status: "open"
-  direction: "away"
+  direction: "flat"
   history:
   - date: 2026-10-17
     event: "opened"
@@ -1094,7 +1094,7 @@ indicators:
   refuted_if: "Only the deadline."
   resolution_source: "Vendor product announcements and enterprise documentation."
   status: "open"
-  direction: "toward"
+  direction: "flat"
   supersedes: "I-2026-10-10-06"
   history:
   - date: 2026-10-17
@@ -1118,7 +1118,7 @@ indicators:
   refuted_if: "Only the deadline."
   resolution_source: "Benchmark publishers' methodology pages; regulator evaluation guidance."
   status: "open"
-  direction: "away"
+  direction: "flat"
   history:
   - date: 2026-10-17
     event: "opened"
@@ -1188,7 +1188,7 @@ indicators:
   refuted_if: "Only the deadline."
   resolution_source: "Bank publications and developer documentation; major-outlet reporting."
   status: "partial"
-  direction: "toward"
+  direction: "flat"
   history:
   - date: 2026-10-17
     event: "opened"
@@ -1266,7 +1266,7 @@ indicators:
   refuted_if: "Only the deadline."
   resolution_source: "Papers and preprints; vendor and laboratory announcements."
   status: "open"
-  direction: "away"
+  direction: "flat"
   history:
   - date: 2026-10-17
     event: "opened"
@@ -1307,7 +1307,7 @@ indicators:
   refuted_if: "Only the deadline."
   resolution_source: "Company filings and announcements; credit-market reporting."
   status: "open"
-  direction: "toward"
+  direction: "flat"
   history:
   - date: 2026-10-17
     event: "opened"

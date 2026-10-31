@@ -140,7 +140,7 @@ The ledger is the running record of checkable predictions that grounds the Strat
 Lifecycle:
 
 - Start from the `indicators` list in the YAML bottom matter, between the last two `---` lines at the end, of the most recent previous edition in the context. If there is none, start an empty ledger.
-- Drop every indicator whose status in that edition is met, refuted or not_met. Carry every other indicator forward with all of its fields and its full history.
+- Drop every indicator whose status in that edition is met, refuted or not_met. Carry every other indicator forward with all of its fields and its full history, but reset its direction to flat: direction describes one edition, so last edition's toward or away never carries over.
 - During research, look for evidence on every carried-forward indicator, then update its status, direction and history as described below.
 - Close as not_met, with a closed history entry, every indicator whose deadline is on or before survey_last_date and whose statement has not become true.
 - An indicator closed in this edition stays in this edition's ledger with its closing entry; the next edition drops it.
@@ -171,7 +171,7 @@ Fields, in this order, for every indicator:
   - met: the statement became true on or before the deadline; closed.
   - refuted: the refuted_if outcome occurred; closed. Absence of evidence never refutes.
   - not_met: the deadline passed without the statement becoming true, or the indicator was superseded by a broader one; closed.
-- direction: this edition's movement. toward: this week's evidence makes the statement more likely to be met by the deadline. away: less likely. flat: no material evidence this week, including absence of evidence.
+- direction: this edition's movement. toward: this week's evidence makes the statement more likely to be met by the deadline. away: less likely. flat: no material evidence this week, including absence of evidence. An indicator shows toward or away only when its last history entry is dated this edition and carries the same direction; otherwise it is flat.
 - supersedes, superseded_by: present only when one indicator replaced another; the id of the other indicator.
 - history: entries oldest first, each with date (this edition's publication date), event, status (after the event), direction and note. Never edit or remove earlier entries.
   - event is one of opened, evidence, sharpened, closed, superseded.

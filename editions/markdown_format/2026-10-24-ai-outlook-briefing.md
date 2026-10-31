@@ -783,30 +783,6 @@ indicators:
     status: partial
     direction: toward
     note: Arize on October 7, Requesty on October 5 and an academic compilation on October 7 published calibration error for decision models, and a fourth evaluation reported repeatability and drift. None came from a vendor, and each publisher sells evaluation tooling, routes traffic for the models, or plans to adopt one.
-- id: I-2026-10-03-02
-  name: Regulator cites calibration evidence
-  tier: quarterly
-  opened: 2026-10-03
-  deadline: 2027-01-03
-  prior: 0.15
-  tests: '2026-10-03 projection: calibration becomes a regulated property of decision models; regulators and auditors ask for calibration evidence on automated decisions affecting consumers, credit, employment or safety.'
-  statement: A financial, consumer-protection or AI regulator, or an audit firm, references calibration evidence for automated decision models in published guidance.
-  refuted_if: Only the deadline.
-  resolution_source: Regulator guidance and speeches; audit-firm publications.
-  status: not_met
-  direction: flat
-  superseded_by: I-2026-10-10-01
-  history:
-  - date: 2026-10-03
-    event: opened
-    status: open
-    direction: flat
-    note: Back-filled 2026-10-25 from the 2026-10-03 edition; prior set retroactively; split from a compound indicator.
-  - date: 2026-10-10
-    event: superseded
-    status: not_met
-    direction: flat
-    note: No regulator or auditor reference was found. The 2026-10-10 edition restated the question more broadly, adding standards bodies and polarity, repeatability and drift testing; that broadening closes this indicator as not met. Applied in the back-fill.
 - id: I-2026-10-03-03
   name: OpenAI training-restart safeguards
   tier: quarterly
@@ -971,54 +947,6 @@ indicators:
     status: open
     direction: flat
     note: Back-filled 2026-10-25 from the 2026-10-03 edition; prior set retroactively; split from a compound indicator.
-- id: I-2026-10-03-11
-  name: Look-through AI exposure from raters
-  tier: quarterly
-  opened: 2026-10-03
-  deadline: 2027-01-03
-  prior: 0.2
-  tests: '2026-10-03 projection: rating agencies and index providers publish look-through measures of AI-related exposure, and investment-grade indices face pressure to offer AI-concentration-capped variants.'
-  statement: A rating agency or index provider publishes look-through AI-exposure measures or launches an AI-concentration-capped index variant.
-  refuted_if: Only the deadline.
-  resolution_source: Rating-agency research; index-provider announcements.
-  status: not_met
-  direction: flat
-  superseded_by: I-2026-10-17-05
-  history:
-  - date: 2026-10-03
-    event: opened
-    status: open
-    direction: flat
-    note: Back-filled 2026-10-25 from the 2026-10-03 edition; prior set retroactively.
-  - date: 2026-10-17
-    event: superseded
-    status: not_met
-    direction: flat
-    note: Not observed on 2026-10-10. The 2026-10-17 edition restated the question with a wider set of publishers, adding insurers and supervisors; that broadening closes this indicator as not met. Applied in the back-fill.
-- id: I-2026-10-03-12
-  name: Agentic deposit outflow guidance
-  tier: quarterly
-  opened: 2026-10-03
-  deadline: 2027-01-03
-  prior: 0.15
-  tests: '2026-10-03 projection: bank liquidity stress testing adds an agent-mediated runoff scenario, and regulators are asked to define acceptable friction.'
-  statement: A bank regulator issues guidance or a stress scenario covering agent-mediated deposit outflows.
-  refuted_if: Only the deadline.
-  resolution_source: Bank regulators' guidance, stress-test scenarios and speeches.
-  status: not_met
-  direction: flat
-  superseded_by: I-2026-10-17-09
-  history:
-  - date: 2026-10-03
-    event: opened
-    status: open
-    direction: flat
-    note: Back-filled 2026-10-25 from the 2026-10-03 edition; prior set retroactively.
-  - date: 2026-10-17
-    event: superseded
-    status: not_met
-    direction: flat
-    note: Not observed on 2026-10-10. The 2026-10-17 edition restated the question for any regulator rather than a bank regulator; that broadening closes this indicator as not met. Applied in the back-fill.
 - id: I-2026-10-03-13
   name: DOE logical-qubit verification rules
   tier: quarterly
@@ -1156,30 +1084,6 @@ indicators:
     status: open
     direction: flat
     note: Back-filled 2026-10-25 from the 2026-10-10 edition; prior set retroactively.
-- id: I-2026-10-10-06
-  name: Activation monitoring for customers
-  tier: quarterly
-  opened: 2026-10-10
-  deadline: 2027-01-10
-  prior: 0.2
-  tests: '2026-10-10 projection: enterprise contracts for closed models begin to include activation-level monitoring by the customer or an independent auditor, and vendors offering monitoring hooks gain regulated business.'
-  statement: A major closed-model vendor offers customers or auditors activation-level monitoring access to its models.
-  refuted_if: Only the deadline.
-  resolution_source: Vendor product announcements and enterprise documentation.
-  status: not_met
-  direction: toward
-  superseded_by: I-2026-10-17-03
-  history:
-  - date: 2026-10-10
-    event: opened
-    status: open
-    direction: flat
-    note: Back-filled 2026-10-25 from the 2026-10-10 edition; prior set retroactively.
-  - date: 2026-10-17
-    event: superseded
-    status: not_met
-    direction: toward
-    note: Not yet offered, but Nvidia's NXDirection and the ServiceNow and Descope authority layers moved the market toward runtime, internals-aware controls. The 2026-10-17 edition restated the question to include activation-level defenses; that broadening closes this indicator as not met. Applied in the back-fill.
 - id: I-2026-10-10-07
   name: Personal Agent Protocol payment scopes
   tier: quarterly
@@ -1198,29 +1102,6 @@ indicators:
     status: open
     direction: flat
     note: Back-filled 2026-10-25 from the 2026-10-10 edition; prior set retroactively; split from a compound indicator. Sierra and Meta promised the version 0.1 specification for October.
-- id: I-2026-10-10-08
-  name: A bank sets an agent admission policy
-  tier: quarterly
-  opened: 2026-10-10
-  deadline: 2027-01-10
-  prior: 0.4
-  tests: '2026-10-10 projection: agent admission becomes a competitive variable, sharpest in banking, because an agent''s authority is the intersection of what its principal delegates and what each counterparty admits.'
-  statement: A bank publicly announces a policy on whether and how outside AI agents may access customer accounts.
-  refuted_if: Only the deadline.
-  resolution_source: Bank statements and earnings calls; major-outlet reporting.
-  status: met
-  direction: toward
-  history:
-  - date: 2026-10-10
-    event: opened
-    status: open
-    direction: flat
-    note: Back-filled 2026-10-25 from the 2026-10-10 edition; prior set retroactively; split from a compound indicator.
-  - date: 2026-10-17
-    event: closed
-    status: met
-    direction: toward
-    note: JPMorgan said on its October 13 earnings call that it will not let outside AI agents into customer accounts, and the Financial Times reported Citigroup and Bank of America taking the same position.
 - id: I-2026-10-10-09
   name: Ten-year yield stays above five percent
   tier: quarterly
