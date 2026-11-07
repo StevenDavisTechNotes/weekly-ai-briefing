@@ -20,7 +20,7 @@ EDITION_PREFIX = "ai-outlook-briefing-"  # an edition's mp3 folder and GitHub re
 MODEL = "claude-opus-5-5"
 EFFORT = "medium"
 MAX_TOKENS: int = 128000
-HISTORY_LOOKBACK: int = 2
+HISTORY_LOOKBACK: int = 3
 MAX_CONTINUATIONS: int = 10  # per request: pause_turn resumes + max_tokens continues
 # The whole briefing is one long streamed call, so a dropped connection or an
 # overloaded API would otherwise discard all the research done so far.

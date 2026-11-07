@@ -19,6 +19,7 @@ try {
     $date = Get-Date -Format "yyyy-MM-dd"
 
     Invoke-CheckedCommand { uv run python -m weekly_ai_briefing.email_briefing --voice } "Voice generation"
+    Invoke-CheckedCommand { uv run python -m weekly_ai_briefing.convert_for_blogger } "Blogger conversion"
     Invoke-CheckedCommand { uv run python -m weekly_ai_briefing.publish } "Publishing"
     Invoke-CheckedCommand { git add index.html editions/html_format } "git add"
     Invoke-CheckedCommand { git commit -m "Publish $date edition" } "git commit"

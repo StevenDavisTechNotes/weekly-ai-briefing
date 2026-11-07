@@ -1,5 +1,6 @@
 #! python3
-# usage: uv run python -m src.weekly_ai_briefing.convert_for_blogger editions/markdown_format/YYYY-MM-DD-ai-outlook-briefing.md
+# usage: uv run python -m weekly_ai_briefing.convert_for_blogger [editions/markdown_format/YYYY-MM-DD-ai-outlook-briefing.md]
+# (with no argument, the latest briefing in editions/markdown_format is converted)
 #
 # Writes editions/blogger_format/<same stem>.xml: a Blogger import file (an Atom feed holding
 # one post) that Blogger accepts under Settings > Manage blog > Import content.
@@ -13,15 +14,17 @@ import xml.etree.ElementTree as ET
 from datetime import UTC, datetime
 from pathlib import Path
 
+from weekly_ai_briefing.bottom_matter import split_bottom_matter
 from weekly_ai_briefing.config import (
     AUTHOR,
     BLOGGER_FOLDER,
     LABEL,
+    MARKDOWN_FOLDER,
     POST_TITLE,
     STATEMENT_OF_INTENT,
     STATEMENT_TITLE,
 )
-from weekly_ai_briefing.bottom_matter import split_bottom_matter
+from weekly_ai_briefing.email_briefing.briefing import find_latest_briefing
 
 BRIEFING_DATE = re.compile(r"(\d{4}-\d{2}-\d{2})")
 
@@ -206,8 +209,13 @@ def convert(source: Path, output_dir: Path = BLOGGER_FOLDER) -> Path:
 def main() -> None:
     try:
         parser = argparse.ArgumentParser(description="Convert a briefing .md file to a Blogger import .xml file.")
-        parser.add_argument("source", type=Path, help="path to a .md file in editions/markdown_format")
+        parser.add_argument(
+            "source", type=Path, nargs="?", default=None,
+            help="path to a .md file in editions/markdown_format (default: the latest briefing)",
+        )
         args = parser.parse_args()
+        if args.source is None:
+            args.source, _ = find_latest_briefing(MARKDOWN_FOLDER)
         sources = [args.source]
         statement = args.source.parent / STATEMENT_OF_INTENT
         if statement.is_file() and statement.resolve() != args.source.resolve():
