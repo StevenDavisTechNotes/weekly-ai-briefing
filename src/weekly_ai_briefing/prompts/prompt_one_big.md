@@ -189,4 +189,4 @@ Changing wording:
 
 ## Functional Steps
 
-- Compose an exhaustive, high-density briefing targeting 20,000 words (target, but do not pad), maximizing technical depth and conceptual granularity through prose, our bulleted executive briefing structure, and tables for the detailed figures.
+- Compose an exhaustive, high-density briefing targeting 20,000 words for the briefing body, excluding citations and the Edition Metadata Block (target, but do not pad), maximizing technical depth and conceptual granularity through prose, our bulleted executive briefing structure, and tables for the detailed figures.
