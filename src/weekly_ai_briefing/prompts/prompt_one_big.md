@@ -191,6 +191,8 @@ Each dimension lists its subdimensions, followed by guidance on how to cover it.
 - Prefer primary sources: the filing, the release, the statistical table or the paper itself, including lab
   research blogs and new papers for AI Technology. For issuers' business models, read SEC filings, earnings-call
   transcripts and shareholder letters directly.
+- Read documents in full, not through search excerpts, whenever a finding rests on them; use excerpts only to find
+  documents.
 - Use digests and newsletters only to find stories; cite the article or document they point to.
 - Aim for a mix of source types, and let no single source supply more than about a tenth of the findings.
 - Numbers are few, but every number used must be right. State a number only with the value, unit and date its
@@ -202,7 +204,7 @@ Each dimension lists its subdimensions, followed by guidance on how to cover it.
 
 ## Length
 
-Aim for about 5,000 to 6,000 words for the body, excluding the Source Notes and the metadata block. This is a
+Aim for about 8,000 to 10,000 words for the body, excluding the Source Notes and the metadata block. This is a
 budget, not a target: a quiet week should be shorter. A dimension with nothing that changed or tested the model
 gets one or two sentences saying so, not a recap of its baseline.
 

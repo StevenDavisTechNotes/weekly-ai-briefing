@@ -16,7 +16,8 @@ Write: `state/runs/<date>/verification.md`.
 
 For every fact in the fact sheet:
 
-1. Open the cited source and read it again. Do not judge from memory or from the fact sheet's wording.
+1. Open the cited source and read it again, in full rather than through search excerpts. Do not judge from memory
+   or from the fact sheet's wording.
 2. Check that the source says what the fact says, including every figure, unit and date.
 3. Check that the source type is right. A fact known only through a digest, a re-report or social media is
    secondhand, whatever outlet it names.
