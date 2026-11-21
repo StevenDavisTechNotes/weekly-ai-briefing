@@ -74,6 +74,10 @@ Each dimension lists its subdimensions, followed by guidance on how to cover it.
    - Relationships and discourse: how LLM-mediated social distancing affects relationships and political discourse.
    - The environmental footprint and local reception of the build-outs.
    - Political movements both for and against the revolution.
+   - Trust and the information ecosystem: how AI changes what people read, believe and can verify, such as AI
+     answers displacing publishers and search, synthetic content and deepfakes, machine-written submissions to
+     consultations and comment processes, the political leanings of the assistants people consult, and the licensing
+     and provenance arrangements that respond.
    - Healthcare: how AI is changing care delivery, diagnosis, clinical documentation, health administration and
      patients' use of AI for health advice, with the evidence on outcomes, safety and cost, and the regulatory
      response.
@@ -84,6 +88,13 @@ Each dimension lists its subdimensions, followed by guidance on how to cover it.
    movements for and against the revolution even-handedly without advocating for either. Here "entropy" means
    unexpected shifts in behavior, institutions, or politics rather than technical anomalies. Aggregate statistics
    and prices (labor-market aggregates, productivity, power supply and cost) belong to Economic Structural Change.
+
+   Cadence: measured evidence on behavior and institutions arrives monthly or quarterly, not weekly. In most weeks,
+   give this dimension one short paragraph on what moved, and do not fill it with anecdotes or with "no new
+   evidence" lists. Give it full treatment when a scheduled study, survey or dataset is released, or when a
+   documented event changes the picture. Track the slow measures (public opinion on AI, entry-level and engineering
+   hiring, AI use in schools and in health care, trust in information sources) as state-table rows when they bear on
+   a model claim, so their movement is visible between releases.
 
 6. Economic Structural Change: how AI is changing the structure of the economy, meaning aggregate flows and prices
    rather than the behavior of individuals or financial institutions.
