@@ -32,3 +32,8 @@ When the edition is written, commit `state/` and the new edition, then publish a
 ## Other prompts
 
 - `bootstrap/prompt.md`: run once to build the first current model and state table from the past editions.
+- `prompt_one_big.md`: a single, self-contained prompt for the comparison briefings other models write
+  (`editions/<model>_version/`). It has the same reader, dimensions, sourcing and writing rules as the phases but no
+  state files: run it in the same conversation as that model's earlier editions, which carry the mental model
+  forward. When `shared/reader_and_dimensions.md` or the writing rules in `D_writing/prompt.md` change, update it to
+  match.
