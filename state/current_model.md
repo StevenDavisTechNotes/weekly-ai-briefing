@@ -31,7 +31,7 @@ As of: 2026-11-14
 - Claim: AI makes producing candidate answers, code, proofs and findings cheap, so the binding constraint moves to
   verifying them: to expert reviewers, formal specifications and remediation capacity. Value and labor shift toward
   whoever can check work at the rate it is generated, and unverified output accumulates as a liability.
-- Dimensions: AI technology; enterprise AI adoption; societal adoption; institutional financial
+- Dimensions: AI technology; enterprise AI adoption; societal adaption; institutional financial
   services.
 - Introduced: 2026-09-27. Last revised: 2026-11-07.
 - Confidence: firm.
@@ -96,7 +96,7 @@ As of: 2026-11-14
   lands on the firm that deploys it and on the counterparty that admits it. Banks, retailers and platforms therefore
   respond by gating agents with identity, intent verification and caps, and insurers by exclusions, which slows open
   agentic commerce and makes agent identity infrastructure a control point.
-- Dimensions: enterprise AI adoption; institutional financial services; societal adoption.
+- Dimensions: enterprise AI adoption; institutional financial services; societal adaption.
 - Introduced: 2026-09-27. Last revised: 2026-10-24.
 - Confidence: firm.
 - Why we believe it: The 2026-09-27 edition reported the EU Digital Omnibus deferring Annex III high-risk obligations
@@ -218,7 +218,7 @@ As of: 2026-11-14
 - Claim: Local, state and national-security permission has become a binding constraint on the build-out, alongside
   capital and power. It works mainly by raising costs, delaying projects and relocating them rather than by vetoing
   them outright, so it shows up in spreads, terms and later-year cash flows of data-center assets.
-- Dimensions: societal adoption; economic structural change; institutional financial services.
+- Dimensions: societal adaption; economic structural change; institutional financial services.
 - Introduced: 2026-11-07. Last revised: 2026-11-14.
 - Confidence: provisional.
 - Why we believe it: Earlier editions tracked local opposition (the 2026-10-24 edition reported 39 ballot measures
@@ -237,7 +237,7 @@ As of: 2026-11-14
 - Claim: AI arrives in the economy first as investment demand and as productivity captured by capital, while the
   labor effect shows up first in fewer entry-level hires rather than in mass layoffs. This raises measured
   productivity and the capital share before it raises wages, and feeds the political backlash in M-11.
-- Dimensions: economic structural change; societal adoption.
+- Dimensions: economic structural change; societal adaption.
 - Introduced: 2026-11-07. Last revised: 2026-11-07.
 - Confidence: provisional.
 - Why we believe it: The 2026-10-10 edition reported Goldman Sachs estimating utilization-adjusted total factor

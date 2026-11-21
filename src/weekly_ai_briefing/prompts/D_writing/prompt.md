@@ -30,7 +30,7 @@ gets one or two sentences saying so, not a recap of its baseline.
   - Quantum Computing
   - Enterprise AI Adoption
   - Physical AI & Industrial Automation
-  - Societal Adoption
+  - Societal Adaption
   - Economic Structural Change
   - Institutional Financial Services
 - Strategic Mental Model Shifts
