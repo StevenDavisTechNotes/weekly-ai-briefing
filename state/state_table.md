@@ -4,212 +4,125 @@ As of: 2026-11-14
 
 | Row | Latest shift | Major trend | Direction | Regime | Introduced | Takeaway |
 |---|---|---|---|---|---|---|
-| Nvidia accelerator position | Chief executive resigned 2026-11-12; interim chief executive named | custom silicon and vendor-financed alternatives gaining at the margin | steady | contested at the margin | 2026-10-03 | Treat Nvidia as a key-person and national-security risk as well as a supplier; no share figure yet. |
-| Treasury key rates | 10-year back above 5 percent after hot October inflation data | long end high and volatile, with AI both raising and lowering yields | accelerating | high and volatile | 2026-10-10 | Key-rate exposure at 10 and 30 years is not a reliable hedge against AI equity losses. |
-| Goods and producer inflation | October PPI at 6.5 percent year on year, highest since November 2022 | goods inflation re-accelerating with memory, equipment and power costs | accelerating | re-accelerating | 2026-10-17 | AI is now a source of inflation as well as of demand, raising the build-out's own cost of capital. |
-| AI and data-center credit access | QTS placement cut from about 800 to 300 million dollars; high-yield spread at widest since May 2025 | spreads widening and deal sizes shrinking since mid-October | accelerating | selective | 2026-09-27 | New-issue concessions are large; structure, not only spread, must price later-year political risk. |
-| Hyperscaler free cash flow | none | sponsors moved from self-funding to net consumers of outside capital | steady | externally funded | 2026-10-24 | The build-out no longer pays for itself from sponsors' cash flow. |
-| Frontier lab commitments | Anthropic set an IPO range with about 26 billion dollars of supplier equity | commitments rising much faster than cash and revenue | accelerating | over-committed | 2026-10-03 | Obligations concentrate on a few labs whose IPOs now carry the loop. |
-| Anti-data-center activism | Reporting that most rejected projects will be built elsewhere | local opposition winning votes since October, now at state level | accelerating | pricing | 2026-10-24 | Opposition raises cost and delay more than it cancels capacity, so far. |
-| Grid capacity price | none | PJM capacity prices up more than tenfold in two years | steady | n/a | 2026-10-24 | Power cost is the channel by which data centers reach household bills and votes. |
-| Memory and equipment capacity | Retail memory and storage prices rising sharply in China | supply constrained by equipment, labor and deliberate discipline | steady | deliberate growth | 2026-10-03 | Memory makers are rationing capacity; prices pass through to hardware and inflation. |
-| Agent admission by counterparties | Google launched a Decisions API; Rain launched agent vaults | blocking giving way to credentialed, capped access | steady | gated | 2026-10-10 | Agentic services must be built to counterparties' admission rules, not just to the model's capabilities. |
-| Frontier oversight coverage | Evaluation awareness reported as a standard system-card section | incidents disclosed, coverage measured but not published | steady | partial | 2026-10-24 | Lab safety claims rest on monitoring whose coverage outsiders still cannot check. |
-| Cost of AI-enabled offense | none | cost per working exploit falling to hundreds of dollars | accelerating | n/a | 2026-10-03 | Cyber-resilience belongs in credit and vendor underwriting now. |
-| Enterprise AI spend concentration | Ramp: price per token down about a fifth in a month; adoption growth under 2 percent | adoption plateauing while spend concentrates in heavy users | decelerating | concentrated | 2026-11-14 | Lab revenue depends on a thin layer of heavy users and on cost per task. |
-| Post-quantum deadlines | none | regulators converting guidance into dated milestones | steady | dated guidance | 2026-10-10 | Migration of payment, custody and long-lived records has fixed 2030 and 2035 dates. |
-| Robot deployment terms | GXO and Apptronik letter of intent on performance-gated robots-as-a-service | pilots moving to gated service contracts, not purchases | steady | gated service | 2026-10-03 | Robot capex is still small and contingent; financing structures are not yet set. |
+| US Treasury curve | 10-year back above 5% on hot CPI and PPI | long yields pinned near 5%, falling on AI-fear days and rising on inflation days | reversing | n/a | 2026-10-10 | Duration hedges an AI-returns scare but not an AI-inflation scare. |
+| Fed policy and inflation pulse | markets debate 25 vs 50 bp in December | tightening into the build-out since September | accelerating | gradual tightening | 2026-10-10 | The build-out is now financed in a rising-rate environment. |
+| Memory prices | memory inflation reaches China retail prices and global device volumes | AI servers absorb DRAM and storage, which shows up as goods inflation | steady | acute shortage | 2026-09-27 | Memory is the channel through which the build-out exports inflation. |
+| AI credit and data-center debt window | QTS cut a placement from about $800M to about $300M; high-yield spreads widest since May 2025 | AI and data-center credit widening and private-credit defaults at records while investment-grade stays near tights | accelerating | narrowing | 2026-09-27 | Weaker projects move to prepayments, bank facilities and vendor equity. |
+| Hyperscaler cash flow and capex | Amazon signals more 2027 spending; Morgan Stanley raises 2027 estimate | capex rising while free cash flow turns negative at two of four | steady | outside-funded | 2026-09-27 | Hyperscaler budgets no longer self-fund, so financing conditions set the pace. |
+| Lab capital loop | suppliers to buy about $26B of Anthropic equity; CoreWeave customers prepay | vendors guarantee, lend to and own labs; labs prepay neoclouds | accelerating | closed loop | 2026-10-03 | Diversification across chip, cloud and data-center credit is weaker than it looks. |
+| Enterprise AI spend and token price | token price down about a fifth in a month while adoption hits a record | adoption broadening slowly, spend concentrated in heavy users | decelerating | n/a | 2026-09-27 | Cheaper tokens have not lowered spend; budgets and routing do the controlling. |
+| Power capacity price | PJM capacity pricing near its cap; Anthropic buys its own generators | large-load costs shifting to data centers and states | steady | n/a | 2026-10-10 | Power is becoming a lab-owned asset and a state-level political decision. |
+| Local permission for data centers | 40 of 41 local measures favored restriction, yet few cancellations expected | opposition broad and organized, acting as cost and delay | accelerating | pricing | 2026-10-24 | Opposition raises cost and moves sites more than it removes capacity. |
+| Nvidia position as central supplier | chief executive resigned amid counterintelligence inquiry | dominant, with software lock-in eroding at the margin and new national-security risk | reversing | dominant, contested | 2026-10-24 | GPU collateral now carries key-person and export-compliance risk. |
+| Agent oversight coverage | OpenAI publishes a 35-second halt time but no coverage figure | incidents disclosed; coverage gaps measured in tens of percent | steady | partial disclosure | 2026-09-27 | Ask vendors for coverage and halt latency, not for policies. |
+| Productivity and labor share | none | measured productivity strong, gains going to capital | accelerating | n/a | 2026-10-10 | Gains to capital feed the political backlash and the case for tightening. |
+| Entry-level technical hiring | software-engineer hiring about half its 2022 level | junior technical hiring falling as agents write more code | steady | n/a | 2026-10-24 | The scarce worker is the expert verifier, not the junior producer. |
+| Post-quantum migration deadlines | none | dated deadlines converging on 2030 to 2035 across jurisdictions | steady | dated guidance | 2026-10-10 | Plan migrations to the policy clock; the algorithm clock may shorten it. |
+| Humanoid deployment | GXO letter of intent for up to 1,000 humanoids, gated on KPIs | pilots moving to performance-gated fleets; China dominates volume | accelerating | KPI-gated fleets | 2026-10-03 | Deployment is priced on measured performance, which makes it financeable. |
 
 ## Row definitions
 
-### Nvidia accelerator position
+### US Treasury curve
 
-- Measure: Nvidia's share of data-center AI accelerator revenue as reported by a named research firm or derived from
-  company filings, supplemented by the count of announced custom-accelerator programs (Broadcom, Google TPU, AWS
-  Trainium, AMD) of at least 1 gigawatt or 10 billion dollars, and by changes in Nvidia's leadership or export status.
-- Regime scale: dominant (share above 80 percent and no competitor program at frontier-lab scale); contested at the
-  margin (share 60 to 80 percent, or at least one frontier lab running a competitor program at 1 gigawatt or more);
-  contested (share 40 to 60 percent); displaced (share below 40 percent).
-- Why it is in the table: M-09, W-06.
-- Last reading: contested at the margin, as of 2026-11-14. The editions report no market-share figure. The 2026-10-10
-  and 2026-10-31 editions reported Broadcom arranging financing for OpenAI's custom chips (citing major-outlet
-  reporting), and the 2026-11-14 edition reported Jensen Huang's resignation on 2026-11-12 (citing CoinDesk). The
-  level is a judgment from those reports, not re-verified.
-
-### Treasury key rates
-
-- Measure: US Treasury 2-year, 10-year and 30-year par yields from the Treasury daily par yield curve, at the latest
-  close before the edition date. Market yields at informative tenors, not any firm's own exposure. Up to five tenors
-  may be tracked, and euro, UK or Asian sovereign curves may be added where they help explain an AI channel.
-- Regime scale: low and calm (10-year below 4.25 percent and no daily move above 10 basis points in the week); normal
-  (10-year 4.25 to 4.75 percent); high (10-year above 4.75 percent, weekly range under 20 basis points); high and
-  volatile (10-year above 4.75 percent with a weekly range of 20 basis points or more).
-- Why it is in the table: M-10, M-09.
-- Last reading: 2-year 4.51 percent, 10-year 4.86 percent and 30-year 5.26 percent on 2026-11-06, as reported in the
-  2026-11-07 edition citing Forbes Advisor and InvestmentNews; 10-year about 5.15 percent on 2026-11-13, as reported
-  in the 2026-11-14 edition citing Vista Partners and The Motley Fool. Not re-verified.
-
-### Goods and producer inflation
-
-- Measure: US PPI final demand, year on year, and CPI month on month, from BLS releases.
-- Regime scale: disinflating (PPI year on year below 2 percent and falling); stable (PPI 2 to 4 percent); re-accelerating
-  (PPI above 4 percent and higher than three months earlier); entrenched (PPI above 4 percent for six consecutive
-  months with core CPI month on month at 0.3 percent or more in each).
-- Why it is in the table: M-10, W-07.
-- Last reading: October 2026 PPI up 6.5 percent year on year, the highest since November 2022, and CPI up 0.4 percent
-  month on month, as reported in the 2026-11-14 edition citing Vista Partners and The Mortgage Reports. Not
-  re-verified.
-
-### AI and data-center credit access
-
-- Measure: whether data-center and AI compute issuers can place debt at planned size, observed through reported
-  upsizing, downsizing, withdrawal or pricing of bonds, placements and loans of at least 250 million dollars in
-  Bloomberg, Reuters, Octus or GlobalCapital reporting, alongside the ICE BofA US High Yield spread.
-- Regime scale: open (deals upsized or priced inside talk; no deal over 250 million dollars cut or pulled in the
-  month); selective (strong sponsors place, but at least one deal cut or priced wide in the month); strained (at least
-  two deals pulled or postponed in the month, or data-center bonds trading below 90 cents); closed (no data-center or
-  neocloud debt over 250 million dollars placed in a month).
-- Why it is in the table: M-09, M-11.
-- Last reading: selective, bordering on strained, as of 2026-11-14. The 2026-11-14 edition reported QTS cutting a
-  private placement from about 800 million to about 300 million dollars (citing Startup Fortune), and Galaxy Helios
-  data-center bonds at 89.25 cents and the high-yield spread at 348 basis points on 2026-11-05 (citing Reuters as
-  carried by SRN News). Not re-verified.
-
-### Hyperscaler free cash flow
-
-- Measure: quarterly free cash flow reported by Microsoft, Alphabet, Amazon and Meta in their results releases, and
-  the count of the four with negative free cash flow.
-- Regime scale: self-funded (all four positive); partly externally funded (one or two negative); externally funded
-  (three or four negative, or the four combined negative).
-- Why it is in the table: M-09.
-- Last reading: externally funded, judged from the 2026-10-31 edition, which reported Alphabet's third-quarter free
-  cash flow at minus 9.1 billion dollars (citing Fortune and AI Weekly) and Amazon's trailing twelve-month free cash
-  flow at minus 42.4 billion dollars (citing Amazon's release on Business Wire), and the 2026-10-24 edition, which
-  reported Meta at minus 2.1 billion. The edition did not give Microsoft's figure, so the count of three is not
-  confirmed. Not re-verified.
-
-### Frontier lab commitments
-
-- Measure: disclosed purchase and compute commitments of OpenAI and Anthropic divided by their cash and short-term
-  investments, from SEC filings, prospectuses and major-outlet reporting.
-- Regime scale: funded (commitments below 2 times cash); stretched (2 to 5 times); over-committed (above 5 times);
-  restructuring (a lab renegotiates, defers or cancels commitments of at least 50 billion dollars).
-- Why it is in the table: M-09.
-- Last reading: over-committed. The 2026-11-07 edition reported Anthropic's purchase commitments at about 895 billion
-  dollars, about seven times cash of 131.8 billion, from its amended registration statement as reported by
-  FinanceFeeds. Not re-verified.
-
-### Anti-data-center activism
-
-- Measure: outcomes of local and state ballot measures, moratoria and permitting decisions on data centers
-  (Ballotpedia counts), and the share of planned US data-center capacity reported cancelled rather than relocated or
-  delayed.
-- Regime scale: ineffective (fewer than half of measures restrictive and no state-level action); delaying (most
-  measures restrictive, projects delayed but cancellations under 2 percent of planned capacity); pricing (restrictive
-  outcomes widespread, cancellations 2 to 10 percent, opposition visible in spreads or terms); vetoing (cancellations
-  above 10 percent of planned capacity, or a state with more than 5 gigawatts in its queue pauses approvals).
-- Why it is in the table: M-11, M-12.
-- Last reading: pricing, as of 2026-11-14. The 2026-11-14 edition reported 40 of 41 local measures going against
-  development (citing 24/7 Wall St. on Ballotpedia's count), the New York Times reporting that many rejected projects
-  will be built anyway (as carried by GV Wire), and Bernstein estimating that only a few percent of planned projects
-  are cancelled. Not re-verified.
-
-### Grid capacity price
-
-- Measure: PJM base residual auction clearing price for the RTO, in dollars per megawatt-day, from PJM's auction
-  results.
+- Measure: Daily closing yields on the 2-, 10- and 30-year US Treasury from the Treasury's daily par yield curve, read alongside the same-day move in the Philadelphia Semiconductor Index to classify each large move as AI-returns-driven (yields down, AI equities down) or inflation-driven (yields up, AI equities down).
 - Regime scale: none.
-- Why it is in the table: M-11, M-10.
-- Last reading: 329.17 dollars per megawatt-day for the 2026/2027 delivery year, against 28.92 dollars two years
-  earlier, as reported in the 2026-11-07 edition citing Fortune. Not re-verified.
+- Why it is in the table: M-07, M-08.
+- Last reading: 10-year about 5.15 percent on 2026-11-13, as reported in the 2026-11-14 edition citing Vista Partners and The Motley Fool; 2-year 4.51 percent and 30-year 5.26 percent on 2026-11-06, as reported in the 2026-11-07 edition citing Forbes Advisor. Not re-verified.
 
-### Memory and equipment capacity
+### Fed policy and inflation pulse
 
-- Measure: announced capacity plans of Samsung, SK hynix and Micron for DRAM and high-bandwidth memory, wafer-fab
-  equipment makers' (Lam Research, Applied Materials, ASML, Tokyo Electron) statements on supply constraints, and
-  memory contract prices as reported by TrendForce or company results.
-- Regime scale: aggressive growth (capacity additions announced above demand forecasts, prices falling); deliberate
-  growth (capacity added but held below demand, prices rising); organic growth (capacity added at the pace of demand,
-  prices stable); deliberate contraction (output cut to support prices); defensive contraction (output cut under
-  losses or financial stress).
-- Why it is in the table: M-10, W-07, M-06.
-- Last reading: deliberate growth, judged from the 2026-10-24 edition, which reported Lam Research saying supply
-  constraints held back its December-quarter guidance (citing Lam's results) and a strike at Micron, and the
-  2026-10-03 edition, which reported Nvidia raising the DGX Spark price from 3,999 to 6,950 dollars with memory
-  costs cited. The level is a judgment; no capacity plan figures are in the editions. Not re-verified.
+- Measure: The FOMC target range; the BLS month-on-month headline and core CPI; and futures-implied odds for the next meeting as reported by a named outlet.
+- Regime scale: easing (cuts at consecutive meetings); on hold (no change expected at the next meeting); gradual tightening (25 bp increases expected, not at every meeting); accelerated tightening (50 bp or larger increases, or increases at consecutive meetings).
+- Why it is in the table: M-07.
+- Last reading: target range 3.75 to 4 percent, held on 2026-10-28 in a ten to two vote with two dissents for an increase, as reported in the 2026-10-31 edition citing the Fed's statement as reported; October CPI up 0.4 percent and core up 0.3 percent month on month, with futures at 84.7 percent for a 25 bp December increase and 15.3 percent for 50 bp, as reported in the 2026-11-14 edition citing InvestmentNews. Not re-verified.
 
-### Agent admission by counterparties
+### Memory prices
 
-- Measure: published policies of the five largest US banks, major payment networks and the largest US retailers on
-  whether outside AI agents may log in, read accounts or initiate transactions, and on what credentials and limits.
-- Regime scale: blocked (most named counterparties block outside agents); gated (some allow agents only with a
-  counterparty-issued identity, intent verification or caps); credentialed (most allow agents with a standard
-  credential and limits); open (agents transact under customer credentials without separate controls).
-- Why it is in the table: M-05, M-03.
-- Last reading: gated, as of 2026-11-14. The 2026-10-17 and 2026-10-24 editions reported JPMorgan, Citi, Bank of
-  America and Morgan Stanley blocking or restricting outside agents, an American Express intent framework and Walmart's
-  capped agent profiles; the 2026-11-14 edition reported Rain's agent vaults. Not re-verified.
+- Measure: TrendForce DRAM contract-price change quarter on quarter; China's retail storage-device price index year on year; global smartphone shipments and average selling price.
+- Regime scale: easing (contract prices falling quarter on quarter); stable (within 5 percent either way); tightening (rising 5 to 30 percent a quarter); acute shortage (rising more than 30 percent a quarter, or device volumes falling as average prices rise).
+- Why it is in the table: M-07, M-09.
+- Last reading: China retail storage-device prices up 45.4 percent year on year in October, and global smartphone shipments down 19 percent in Q3 with a record average selling price of $442, as reported in the 2026-11-14 edition citing Custer Consulting. Not re-verified.
 
-### Frontier oversight coverage
+### AI credit and data-center debt window
 
-- Measure: what frontier labs (OpenAI, Anthropic, Google DeepMind, xAI, Meta) publish about the share of internal
-  agent traffic under monitoring and the detection latency, and whether an external auditor has published a full
-  audit.
-- Regime scale: opaque (no lab publishes coverage); partial (coverage estimated by an outside auditor in summary, or
-  incidents disclosed without coverage figures); disclosed (at least one lab publishes coverage and latency);
-  audited (an external auditor publishes a full, unredacted audit of at least one lab).
-- Why it is in the table: M-03, M-01, W-02.
-- Last reading: partial. The 2026-10-24 edition reported METR and Redwood Research estimating that 6 to 25 percent of
-  OpenAI's capable internal agent traffic was not eligible for monitoring (citing The Decoder and AlphaSignal). Not
-  re-verified.
+- Measure: US investment-grade, high-yield and single-B spreads as reported by Reuters or Bloomberg; the outcome of data-center and neocloud debt deals of $250M or more (priced as planned, downsized, or pulled); Fitch's US private-credit default rate and Moody's share of private-credit borrowers paying in kind.
+- Regime scale: open (deals price at or tighter than talk, with spreads near tights); discriminating (strong sponsors price, weak deals need concessions); narrowing (deals downsized or moved to private, bank or prepayment channels, with high-yield spreads at multi-month wides or loan portfolios sold at discounts); shut (deals of $250M or more pulled in consecutive weeks, or a private-credit fund gated over AI collateral).
+- Why it is in the table: M-08, M-09.
+- Last reading: high-yield spread 348 bp and single-B 367 bp on 2026-11-05, investment-grade 93 bp, and Galaxy Helios data-center bonds at 89.25 cents, as reported in the 2026-11-14 edition citing Reuters via SRN News; QTS placement cut to about $300M from about $800M, as reported in the same edition citing Bloomberg via Startup Fortune (secondhand); private-credit default rate a record 6.3 percent in the twelve months to September, as reported in the 2026-10-31 edition citing Fitch via ANI, and 17 percent of 607 tracked borrowers paying some interest in kind, citing Moody's via Investing.com. Not re-verified.
 
-### Cost of AI-enabled offense
+### Hyperscaler cash flow and capex
 
-- Measure: the lowest published compute or operating cost per working exploit or per intrusion achieved with AI
-  tools, from lab or security-firm reports, in dollars.
-- Regime scale: none.
-- Why it is in the table: M-04.
-- Last reading: about 1,279 dollars of compute per working Linux kernel privilege-escalation exploit, across 948
-  flaws, as reported in the 2026-11-07 edition citing OpenAI's 2026-11-04 report through secondary outlets; the
-  2026-10-24 edition reported about 50 dollars per intrusion for one operator's campaign. Not re-verified.
+- Measure: Quarterly free cash flow and stated next-year capital spending for Microsoft, Alphabet, Amazon and Meta, from results releases and calls.
+- Regime scale: self-funded (all four fund capex from operating cash flow); thinning (free cash flow falling but positive at all four); outside-funded (negative free cash flow at one or more, with debt or equity raised to fund capex); retrenching (one or more lowers its next-year capex plan).
+- Why it is in the table: M-08, M-07.
+- Last reading: Alphabet Q3 free cash flow minus $9.1B, as reported in the 2026-10-31 edition citing Fortune; Amazon trailing twelve-month free cash flow minus $42.4B, as reported in the same edition citing Amazon's release via Business Wire. Not re-verified.
 
-### Enterprise AI spend concentration
+### Lab capital loop
 
-- Measure: Ramp AI Index monthly readings: share of US businesses paying for AI, month-on-month growth in that share,
-  average price paid per million tokens, and the share of OpenAI and Anthropic revenue from the top one percent of
-  companies in Ramp's data.
-- Regime scale: broadening (adoption growth above 3 percent a month and top-one-percent share falling); concentrated
-  (adoption growth below 3 percent a month and top-one-percent share above 50 percent); contracting (adoption share
-  falls for two consecutive months).
-- Why it is in the table: M-06, M-09.
-- Last reading: concentrated. The 2026-11-14 edition reported Ramp's October index with adoption at a record,
-  monthly growth under 2 percent, average price per million tokens down about a fifth in the month, and the top one
-  percent of companies accounting for about four fifths of OpenAI and Anthropic revenue, citing The Decoder. Not
-  re-verified.
-
-### Post-quantum deadlines
-
-- Measure: dated post-quantum migration obligations published by NIST, Germany's BSI and IT-Planungsrat, the UK FCA
-  and NCSC, Singapore's MAS, and US federal agencies.
-- Regime scale: advisory (guidance without dates); dated guidance (published target dates, not yet binding on
-  regulated firms); binding (at least one financial supervisor or national government makes dated migration a
-  legal or supervisory obligation for the firms it regulates); enforced (a supervisor takes action against a firm
-  for missing a deadline).
+- Measure: Disclosed financial links between frontier labs and their suppliers and landlords: vendor guarantees and lending, supplier equity, customer prepayments, and lab commitments relative to cash, from filings and reporting.
+- Regime scale: arm's length (suppliers sell, labs pay from revenue and venture equity); vendor-financed (suppliers lend to or guarantee lab compute); closed loop (suppliers hold lab equity and labs prepay suppliers); unwinding (a loop participant cuts exposure or a link defaults).
 - Why it is in the table: M-08.
-- Last reading: dated guidance. The 2026-10-31 edition reported NIST's final transition report deprecating RSA and
-  elliptic-curve algorithms after 2030 and disallowing them after 2035 (citing PK Sharma and Help Net Security); the
-  2026-11-07 edition reported FCA milestones of 2028, 2031 and 2035; the 2026-10-17 edition reported German and
-  Singapore deadlines of 2030 and 2031, with Germany's not yet binding. Not re-verified.
+- Last reading: about $26.0B supplier private placement in Anthropic's offering, as reported in the 2026-11-14 edition citing Fortune; CoreWeave expects about $9B of customer prepayments, as reported in the same edition citing TechTimes. Not re-verified.
 
-### Robot deployment terms
+### Enterprise AI spend and token price
 
-- Measure: the contract form of announced humanoid and learned-policy robot deployments of at least 100 units at
-  named manufacturers or logistics operators: pilot, performance-gated service contract, firm purchase, or financed
-  fleet, from company releases and trade press.
-- Regime scale: pilots (no deployment above 100 units under contract); gated service (deployments above 100 units
-  only under service contracts gated on performance); purchase (at least one firm purchase of 1,000 units or more);
-  financed fleets (a dedicated lender, fund or lessor facility of at least 1 billion dollars for robot fleets).
-- Why it is in the table: M-07, W-08.
-- Last reading: gated service. The 2026-11-14 edition reported GXO's letter of intent with Apptronik for up to a
-  thousand Apollo humanoids over four years on robots-as-a-service terms gated on performance targets, citing
-  GlobeNewswire. Not re-verified.
+- Measure: Ramp AI Index monthly share of US businesses paying for AI, monthly adoption growth, average price per million tokens, and concentration of lab revenue.
+- Regime scale: none.
+- Why it is in the table: M-05, M-08.
+- Last reading: 56.8 percent of businesses paying in October, monthly growth 1.65 percent, average token price down 21 percent in a month, top 1 percent of companies about 80 percent of OpenAI and Anthropic revenue, as reported in the 2026-11-14 edition citing The Decoder on the Ramp AI Index. Not re-verified.
+
+### Power capacity price
+
+- Measure: PJM base residual auction clearing price in dollars per megawatt-day, plus state and FERC rules on large-load interconnection and cost allocation.
+- Regime scale: none.
+- Why it is in the table: M-09, M-07.
+- Last reading: $329.17 per megawatt-day for 2026 to 2027 against $28.92 two years earlier, as reported in the 2026-11-07 edition citing Fortune. Not re-verified.
+
+### Local permission for data centers
+
+- Measure: Outcomes of local and state votes, moratoria and permitting decisions on data centers, against the share of planned capacity actually cancelled, from Ballotpedia, Data Center Watch, Bernstein or Goldman Sachs as reported.
+- Regime scale: negligible (opposition rarely changes outcomes); delaying (projects slowed by hearings and litigation); pricing (projects proceed with community payments, rate protections or relocation, and few cancellations); blocking (more than 10 percent of planned capacity cancelled); halting (a state with more than 10 percent of planned US capacity pauses approvals).
+- Why it is in the table: M-09.
+- Last reading: 40 of 41 local measures favored restriction, as reported in the 2026-11-14 edition citing Ballotpedia via 24/7 Wall St.; Bernstein expected only a few percent of planned projects to be cancelled, as reported in the same edition citing the New York Times via GV Wire. Not re-verified.
+
+### Nvidia position as central supplier
+
+- Measure: Nvidia's share of AI accelerator spending as reported by a named analyst; adoption of non-Nvidia software stacks for training and inference; and leadership, export-licensing and counterparty status.
+- Regime scale: unchallenged (no credible alternative at scale); dominant (alternatives exist at hyperscalers but Nvidia sets prices); dominant, contested (alternative software stacks in production use or a material governance or export shock); displaced (a rival takes a majority of new frontier training spend).
+- Why it is in the table: M-08, M-09.
+- Last reading: no share figure was reported in the editions. Jensen Huang resigned on 2026-11-12, with an interim chief executive named and Senate testimony requested for December, as reported in the 2026-11-14 edition citing Al Jazeera, Forbes and CoinDesk. Not re-verified.
+
+### Agent oversight coverage
+
+- Measure: Frontier labs' disclosed monitor coverage (share of agent traffic monitored) and halt latency, and reported incidents of agents escaping containment or disabling monitors, from lab system cards, safety reports and independent audits.
+- Regime scale: undisclosed (no coverage or latency figures, incidents only through leaks); partial disclosure (one of coverage or latency published, or independent audit summaries only); disclosed (both published by at least one lab); verified (both published and confirmed by an independent auditor).
+- Why it is in the table: M-02, M-03, M-12.
+- Last reading: 6 to 25 percent of OpenAI's most capable internal agent traffic unmonitored, as reported in the 2026-10-24 edition citing METR and Redwood Research; OpenAI halt time about 35 seconds, as reported in the 2026-11-14 edition citing The Neuron (secondhand). Not re-verified.
+
+### Productivity and labor share
+
+- Measure: BLS nonfarm business productivity, annualized quarterly change, and labor's share of output.
+- Regime scale: none.
+- Why it is in the table: M-07.
+- Last reading: Q3 2026 productivity up 3.6 percent annualized and labor share 53.0 percent, the lowest since 1947, as reported in the 2026-11-07 edition citing ANI on the BLS release. Not re-verified.
+
+### Entry-level technical hiring
+
+- Measure: Annual US software-engineer hires and the share of junior hires at frontier labs and large technology employers, from named labor-market datasets.
+- Regime scale: none.
+- Why it is in the table: M-04, M-07.
+- Last reading: about 113,000 software engineers hired from May 2025 to April 2026 against about 239,000 in 2022, as reported in the 2026-11-14 edition citing Lenny's Newsletter. Not re-verified.
+
+### Post-quantum migration deadlines
+
+- Measure: Dated post-quantum migration obligations from NIST, US executive orders and OMB, the UK NCSC and FCA, Germany's BSI and IT planning council, and Singapore, and whether each is guidance or binding.
+- Regime scale: advisory (no dates); dated guidance (target dates published but not binding outside government); binding (dates enforceable on regulated firms in at least one major jurisdiction); enforced (supervisors examine against the dates).
+- Why it is in the table: M-11.
+- Last reading: NIST IR 8547, final on 2026-10-27, deprecates RSA and ECC after 2030 and disallows them after 2035, as reported in the 2026-10-31 edition citing Help Net Security and a PK Sharma briefing; the FCA aligned its expectations with NCSC milestones of 2028, 2031 and 2035, as reported in the 2026-11-07 edition citing AI-360. Not re-verified.
+
+### Humanoid deployment
+
+- Measure: Announced paid humanoid deployments (units, customer, contract form), global shipments, and reported total cost of ownership.
+- Regime scale: pilots (fewer than 100 units per customer, unpaid or fixed-fee trials); KPI-gated fleets (paid fleets with fees tied to performance indicators); fixed-fee fleets (multi-site fleets on fixed robots-as-a-service fees); volume production use (more than 1,000 units at a single customer in production work).
+- Why it is in the table: M-10.
+- Last reading: GXO letter of intent with Apptronik for up to 1,000 humanoids under performance-gated robots-as-a-service, as reported in the 2026-11-14 edition citing GlobeNewswire; first-half 2026 global shipments about 19,000 units, over 97 percent from Chinese makers, as reported in the 2026-10-17 edition citing industry reporting (source not named). Not re-verified.
