@@ -44,8 +44,9 @@ restated an earlier shift in new words. Read the sequence as a historian would, 
 ## How to build the state table
 
 - Choose 12 to 15 rows that are as independent of one another as possible and that the model's claims depend on.
-  Examples the reader suggested: Nvidia's share of the AI accelerator market; key rate duration exposure at two,
-  ten and thirty years; the effectiveness of anti-data-center activism. Use them if the editions support them, and
+  Examples the reader suggested: Nvidia's share of the AI accelerator market; the
+  sovereign yield curve at two to five informative tenors (such as the US Treasury 2-, 10- and 30-year yields, with
+  euro, UK or Asian sovereign curves where they help the exposition); the effectiveness of anti-data-center activism. Use them if the editions support them, and
   choose others where the editions point to a better variable.
 - For each row, write the measure, a regime scale with written criteria for each level where the row is
   qualitative, and the claims it informs. An example of a regime scale, for memory makers' capacity: aggressive

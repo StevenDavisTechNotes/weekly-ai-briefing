@@ -39,7 +39,8 @@ As of: 2026-11-14
 ### Treasury key rates
 
 - Measure: US Treasury 2-year, 10-year and 30-year par yields from the Treasury daily par yield curve, at the latest
-  close before the edition date.
+  close before the edition date. Market yields at informative tenors, not any firm's own exposure. Up to five tenors
+  may be tracked, and euro, UK or Asian sovereign curves may be added where they help explain an AI channel.
 - Regime scale: low and calm (10-year below 4.25 percent and no daily move above 10 basis points in the week); normal
   (10-year 4.25 to 4.75 percent); high (10-year above 4.75 percent, weekly range under 20 basis points); high and
   volatile (10-year above 4.75 percent with a weekly range of 20 basis points or more).
