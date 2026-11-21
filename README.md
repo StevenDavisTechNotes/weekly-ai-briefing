@@ -6,6 +6,12 @@ Read the briefings online: <https://stevendavistechnotes.github.io/weekly-ai-bri
 [repository](https://github.com/StevenDavisTechNotes/weekly-ai-briefing) holds the source and the
 [markdown editions](editions/markdown_format/)).
 
+## Generating an edition
+
+Each edition is produced in four phases (research, verification, model update, writing), each run in a fresh
+Claude conversation. See [src/weekly_ai_briefing/prompts/README.md](src/weekly_ai_briefing/prompts/README.md) for
+the weekly run, and [state/README.md](state/README.md) for the mental model and state table the phases maintain.
+
 ## Kokoro model files
 
 `email_briefing` voices each section locally with [kokoro-onnx](https://github.com/thewh1teagle/kokoro-onnx), so no
