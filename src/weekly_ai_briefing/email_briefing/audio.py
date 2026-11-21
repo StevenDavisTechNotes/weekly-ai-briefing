@@ -15,6 +15,8 @@ from weekly_ai_briefing.config import (
     VOICE,
     VOICES_PATH,
 )
+from weekly_ai_briefing.pronouncers import pronunciations, to_phonemes, usable_pronunciations
+
 from .speech import markdown_to_speech_text, split_chunks
 
 
@@ -27,14 +29,19 @@ def load_kokoro() -> Kokoro:
     return Kokoro(str(MODEL_PATH), str(VOICES_PATH))
 
 
-def synthesize(chunks: list[str]) -> tuple[np.ndarray, int]:
-    """Returns (mono float32 samples, sample rate) for all chunks, in order."""
+def synthesize(chunks: list[str], pronounced: dict[str, str]) -> tuple[np.ndarray, int]:
+    """Returns (mono float32 samples, sample rate) for all chunks, in order.
+
+    Each name in pronounced is spoken by its IPA instead of the engine's guess.
+    """
     kokoro = load_kokoro()
+    usable = usable_pronunciations(pronounced, kokoro.tokenizer.vocab)
     parts: list[np.ndarray] = []
     rate = 0
     for number, chunk in enumerate(chunks, start=1):
         print(f"  chunk {number}/{len(chunks)}")
-        samples, rate = kokoro.create(chunk, voice=VOICE, lang="en-us")
+        phonemes = to_phonemes(chunk, usable, lambda text: kokoro.tokenizer.phonemize(text, "en-us"))
+        samples, rate = kokoro.create(phonemes, voice=VOICE, lang="en-us", is_phonemes=True)
         parts += [samples, np.zeros(int(rate * CHUNK_PAUSE_SECONDS), dtype=np.float32)]
     return np.concatenate(parts), rate
 
@@ -58,10 +65,17 @@ def encode_mp3(samples: np.ndarray, rate: int, mp3_path: Path) -> None:
     )
 
 
-def generate_mp3(markdown: str, mp3_path: Path) -> None:
+def generate_mp3(markdown: str, mp3_path: Path, pronounced: dict[str, str] | None = None) -> None:
+    """Voices markdown into mp3_path.
+
+    pronounced maps names to IPA, usually from the whole edition, so that a name marked
+    in an earlier section is said the same way here; the markdown's own pronouncers are
+    added to it.
+    """
+    pronounced = {**pronunciations(markdown), **(pronounced or {})}
     speech = markdown_to_speech_text(markdown)
     chunks = split_chunks(speech, TTS_CHUNK_CHARS)
     print(f"Generating audio: {len(speech):,} chars in {len(chunks)} chunks...")
-    samples, rate = synthesize(chunks)
+    samples, rate = synthesize(chunks, pronounced)
     encode_mp3(samples, rate, mp3_path)
     print(f"Saved {mp3_path} ({mp3_path.stat().st_size / 1e6:.1f} MB)")

@@ -1,5 +1,7 @@
 import re
 
+from weekly_ai_briefing.pronouncers import drop_pronouncers
+
 # A pipe table: header row, delimiter row (|---|:--:|), then any rows with a pipe.
 MARKDOWN_TABLE = re.compile(
     r"^.*\|.*\n"
@@ -12,6 +14,7 @@ MARKDOWN_TABLE = re.compile(
 def markdown_to_speech_text(markdown: str) -> str:
     """Strips markdown syntax so the TTS engine doesn't read it aloud."""
     text = re.sub(r"`{3}.*?`{3}", "", markdown, flags=re.DOTALL)
+    text = drop_pronouncers(text)  # the audio says each name by its pronunciation instead
     text = MARKDOWN_TABLE.sub("", text)
     text = re.sub(r"!\[[^\]]*\]\([^)]*\)", "", text)  # images
     text = re.sub(r"\[([^\]]*)\]\([^)]*\)", r"\1", text)  # links -> label
