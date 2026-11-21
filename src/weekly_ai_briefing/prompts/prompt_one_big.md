@@ -96,7 +96,11 @@ Each dimension lists its subdimensions, followed by guidance on how to cover it.
    deployed agents come to act, interact and organize among themselves and with people.
    Subdimensions:
    - Psychological effects, such as those of intelligent toys and companions.
-   - Education and credentials: how colleges and credentials are being reshaped.
+   - Education, credentials and expertise: how schools, colleges and credentials are being reshaped, what employers
+     now accept as evidence of ability (degrees, certificates, portfolios, demonstrated experience), and whether AI
+     tutoring and AI-assisted work shorten the path to real domain expertise or let people skip the experience that
+     builds it. Measured effects on learning and skill formation belong here; hiring volumes belong to work and
+     skills.
    - Work and skills: how people are retooling, and how hiring and work are changing.
    - Relationships and discourse: how LLM-mediated social distancing affects relationships and political discourse.
    - The environmental footprint and local reception of the build-outs.
@@ -191,6 +195,8 @@ Each dimension lists its subdimensions, followed by guidance on how to cover it.
 - Prefer primary sources: the filing, the release, the statistical table or the paper itself, including lab
   research blogs and new papers for AI Technology. For issuers' business models, read SEC filings, earnings-call
   transcripts and shareholder letters directly.
+- Read documents in full, not through search excerpts, whenever a finding rests on them; use excerpts only to find
+  documents.
 - Use digests and newsletters only to find stories; cite the article or document they point to.
 - Aim for a mix of source types, and let no single source supply more than about a tenth of the findings.
 - Numbers are few, but every number used must be right. State a number only with the value, unit and date its
@@ -202,7 +208,7 @@ Each dimension lists its subdimensions, followed by guidance on how to cover it.
 
 ## Length
 
-Aim for about 5,000 to 6,000 words for the body, excluding the Source Notes and the metadata block. This is a
+Aim for about 8,000 to 10,000 words for the body, excluding the Source Notes and the metadata block. This is a
 budget, not a target: a quiet week should be shorter. A dimension with nothing that changed or tested the model
 gets one or two sentences saying so, not a recap of its baseline.
 

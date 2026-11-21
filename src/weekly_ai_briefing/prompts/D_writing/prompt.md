@@ -18,7 +18,7 @@ corrections applied. An unconfirmed fact may be mentioned only with its caveat, 
 
 ## Length
 
-Aim for about 5,000 to 6,000 words for the body, excluding the Source Notes and the metadata block. This is a
+Aim for about 8,000 to 10,000 words for the body, excluding the Source Notes and the metadata block. This is a
 budget, not a target: a quiet week should be shorter. A dimension with nothing that moved the model or the table
 gets one or two sentences saying so, not a recap of its baseline.
 

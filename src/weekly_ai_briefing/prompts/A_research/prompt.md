@@ -49,6 +49,10 @@ For every fact, classify the change it shows:
 
 - Prefer primary sources. Read the filing, the release, the statistical table or the paper itself when you can,
   including lab research blogs and new papers for the AI Technology dimension.
+- Read documents in full, not through search excerpts. Fetch and read the full text of every primary document a
+  fact rests on, and of any article whose figures you record; excerpts lose the context, caveats and exact figures
+  that the later phases need. Use excerpts only to find documents. When a document cannot be fetched, say so in
+  the fact's "Read" field.
 - Use digests and newsletters only to find stories; cite the article or document they point to.
 - For what AI is doing to issuers' business models, search the week's SEC filings, earnings-call transcripts and
   shareholder letters directly; these primary disclosures carry measured effects that press coverage often skips.
@@ -72,6 +76,7 @@ Edition: YYYY-MM-DD. Window: YYYY-MM-DD to YYYY-MM-DD.
 - Figures: each number with unit and date, or "none".
 - Source: outlet or author, title, date, and URL.
 - Source type: primary, wire or trade, analyst, or secondhand.
+- Read: full document, or excerpt only, with the reason the full document could not be read.
 - Bears on: model claim ids, state-table rows, watching items, or "new".
 - Change type: new trend, acceleration, deceleration, reversal, or level only.
 - Expected vs. happened: one sentence on what the model would have predicted and how this differs.
@@ -83,9 +88,11 @@ One line per claim and per row: the fact ids for and against, or "no material ev
 
 ## Research limits
 
-Sources that could not be read, single-source claims, disagreements between sources, and expected developments
-looked for and not found.
+Sources that could not be read, single-source claims, disagreements between sources, dimensions that stopped short
+of their floor, and expected developments looked for and not found.
 ```
 
-Number facts F-01, F-02 and so on in the order found. Aim for 40 to 80 facts; completeness on the model check
-matters more than volume. Do not write analysis or prose for the briefing in this phase.
+Number facts F-01, F-02 and so on in the order found. Aim for 75 to 100 facts, with at least 8 in each of the seven
+dimensions, so that the extra search goes to the thin dimensions rather than the busy ones. Do not reach a number
+with filler: a dimension that cannot reach its floor without routine deals, level-only updates or consensus rehash
+stops short, and the research limits say so. Completeness on the model check matters more than volume. Do not write analysis or prose for the briefing in this phase.
