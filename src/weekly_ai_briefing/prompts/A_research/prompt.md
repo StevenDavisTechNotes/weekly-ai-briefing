@@ -41,6 +41,8 @@ For every fact, classify the change it shows:
 
 - Prefer primary sources. Read the filing, the release, the statistical table or the paper itself when you can.
 - Use digests and newsletters only to find stories; cite the article or document they point to.
+- For what AI is doing to issuers' business models, search the week's SEC filings, earnings-call transcripts and
+  shareholder letters directly; these primary disclosures carry measured effects that press coverage often skips.
 - Aim for a mix of source types, and let no single source supply more than about a tenth of the facts.
 - Record a number only with its exact value, unit, date and the source that states it. Never compute a number
   and present it as reported; if you derive one, mark it "derived" and show the arithmetic.
