@@ -30,7 +30,7 @@ try {
     } "Getting the edition page URL"
 
     Write-Host "Waiting for GitHub Pages to publish $pageUrl (up to 10 minutes)..."
-    $deadline = (Get-Date).AddMinutes(2)
+    $deadline = (Get-Date).AddMinutes(10)
     $pageIsLive = $false
     while ((Get-Date) -lt $deadline) {
         try {
