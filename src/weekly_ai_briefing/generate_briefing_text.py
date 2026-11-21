@@ -58,9 +58,12 @@ def edition_path(date: str) -> Path:
     return MARKDOWN_FOLDER / f"{date}-ai-outlook-briefing.md"
 
 
-def other_model_briefing(date: str) -> Path:
-    """Another model's briefing for the same week, which phase A uses only as a coverage check."""
-    return EDITIONS_FOLDER / "gemini_version" / f"{date}-gemini.md"
+def other_model_briefings(date: str) -> list[Path]:
+    """Other models' briefings for the same week, editions/<model>_version/<date>-<model>.md.
+
+    Phase A uses them only as a coverage check.
+    """
+    return sorted(EDITIONS_FOLDER.glob(f"*_version/{date}-*.md"))
 
 
 @dataclass(frozen=True)
@@ -84,7 +87,7 @@ PHASES: dict[str, Phase] = {
         inputs=lambda date: [SHARED_PROMPT, STATE_README, CURRENT_MODEL, STATE_TABLE],
         outputs=lambda date: [run_folder(date) / "fact_sheet.md"],
         tools=RESEARCH_TOOLS,
-        optional_inputs=lambda date: [other_model_briefing(date)],
+        optional_inputs=other_model_briefings,
     ),
     "B": Phase(
         name="verification",

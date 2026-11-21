@@ -8,7 +8,9 @@ Read first:
 - `state/README.md`, for the file formats and source types
 - `state/current_model.md`
 - `state/state_table.md`
-- `editions/gemini_version/<date>-gemini.md`, if it exists: a briefing another model wrote for the same week
+- `editions/<model>_version/<date>-<model>.md` for each model that has one this week, such as
+  `editions/gemini_version/<date>-gemini.md` or `editions/muse_version/<date>-muse.md`: briefings other models wrote
+  for the same week. They are comparative and not authoritative.
 
 Write: `state/runs/<date>/fact_sheet.md`, where `<date>` is today's date (the publication date).
 
@@ -31,9 +33,10 @@ Research has two jobs, and both matter.
 
 Also check each item on the watching list, since a second week of evidence can promote it.
 
-If the other model's briefing for this week exists, use it only as a coverage check. List each development it
-reports that your search missed, then find the primary source for it and record it as a fact, or leave it out if no
-source confirms it. Never cite that briefing, and do not adopt its analysis.
+If other models' briefings for this week exist, use them only as a coverage check. List each development they
+report that your search missed, then find the primary source for it and record it as a fact, or leave it out if no
+source confirms it. Treat their figures, dates and characterizations as unverified leads, since they may be wrong.
+Never cite those briefings, and do not adopt their analysis.
 
 For every fact, classify the change it shows:
 

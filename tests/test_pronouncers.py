@@ -1,14 +1,13 @@
-from weekly_ai_briefing.convert_for_blogger import inline_html
+from weekly_ai_briefing.convert_for_blogger import inline_html, markdown_to_html
 from weekly_ai_briefing.email_briefing.speech import markdown_to_speech_text
 from weekly_ai_briefing.pronouncers import (
     possessive,
     pronunciations,
-    show_pronouncers,
     to_phonemes,
     usable_pronunciations,
 )
 
-TEXT = "Shares of {Rigetti|rih-JET-ee|ɹɪdʒˈɛti} rose, and {Ilya Sutskever|IL-yuh soots-KEV-er|/ˈɪljə sʊtskˈɛvɚ/} spoke."
+TEXT = "Shares of {Rigetti|ɹɪdʒˈɛti} rose, and {Ilya Sutskever|/ˈɪljə sʊtskˈɛvɚ/} spoke."
 
 
 def fake_phonemize(text: str) -> str:
@@ -21,12 +20,15 @@ def test_pronunciations_maps_names_to_ipa_without_slashes():
 
 
 def test_the_first_pronouncer_for_a_name_wins():
-    assert pronunciations("{A|a|æ} then {A|ay|eɪ}") == {"A": "æ"}
+    assert pronunciations("{A|æ} then {A|eɪ}") == {"A": "æ"}
 
 
-def test_readers_see_the_respelling():
-    assert show_pronouncers(TEXT).startswith("Shares of Rigetti (rih-JET-ee) rose, and Ilya Sutskever (IL-yuh")
-    assert inline_html("**{Rigetti|rih-JET-ee|ɹɪdʒˈɛti}**") == "<strong>Rigetti (rih-JET-ee)</strong>"
+def test_readers_see_the_bare_name():
+    assert inline_html("**{Rigetti|ɹɪdʒˈɛti}**") == "<strong>Rigetti</strong>"
+    assert markdown_to_html(f"- {TEXT}\n\n{TEXT}") == (
+        "<ul><li>Shares of Rigetti rose, and Ilya Sutskever spoke.</li></ul>\n"
+        "<p>Shares of Rigetti rose, and Ilya Sutskever spoke.</p>"
+    )
 
 
 def test_speech_text_keeps_only_the_name():

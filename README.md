@@ -26,8 +26,8 @@ curl -L -o models/voices-v1.0.bin https://github.com/thewh1teagle/kokoro-onnx/re
 
 The voice is set by `VOICE` in `src/weekly_ai_briefing/config.py`; any voice in `voices-v1.0.bin` works.
 
-Names the engine would mispronounce are written in the briefing as `{Name|respelling|IPA}`. The web page shows
-"Name (respelling)", and the audio speaks the IPA at every mention of that name in the edition. A pronouncer whose
+Names the engine would mispronounce are written in the briefing as `{Name|IPA}`. The web page and Blogger post show
+the bare name, and the audio speaks the IPA at every mention of that name in the edition. A pronouncer whose
 IPA holds a symbol the model doesn't know is skipped with a warning.
 
 Other text-to-speech backends (OpenVINO GenAI on the Arc GPU and NPU, Qwen3-TTS) were benchmarked and did not beat

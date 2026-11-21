@@ -93,3 +93,10 @@ def test_site_refuses_a_publication_date_that_differs_from_the_file_name(site):
     (site / "markdown" / f"{STEM}.md").write_text("## Orientation\n\nIntro.\n\n" + text, encoding="utf-8")
     with pytest.raises(ValueError, match="does not match the file name date"):
         publish.write_site(set())
+
+
+def test_page_shows_pronounced_names_bare():
+    sections = [Section("Orientation", "## Orientation\n\nShares of {Rigetti|ɹɪdʒˈɛti} rose.")]
+    page = publish.render_edition_page("2026-10-17", STEM, sections, has_audio=False)
+    assert "Shares of Rigetti rose." in page
+    assert "ɹɪdʒˈɛti" not in page

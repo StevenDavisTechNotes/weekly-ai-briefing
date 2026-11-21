@@ -1,14 +1,14 @@
-"""Pronouncers: names the briefing writes as {Name|respelling|IPA}.
+"""Pronouncers: names the briefing writes as {Name|IPA}.
 
-Readers see the name with its respelling, "Name (respelling)". The audio speaks the
-IPA in place of the speech engine's guess, at every mention of the name in the
-edition, not only the marked one.
+They exist only for the audio, which speaks the IPA in place of the speech engine's
+guess at every mention of the name in the edition, not only the marked one. Every
+other rendering shows the bare name.
 """
 
 import re
 from collections.abc import Callable, Container
 
-PRONOUNCER = re.compile(r"\{([^{}|\n]+)\|([^{}|\n]+)\|([^{}|\n]+)\}")
+PRONOUNCER = re.compile(r"\{([^{}|\n]+)\|([^{}|\n]+)\}")
 
 # Possessive endings after a name: "Rigetti's".
 POSSESSIVE = r"(?:['’]s\b)?"
@@ -21,13 +21,8 @@ def pronunciations(markdown: str) -> dict[str, str]:
     """Maps each name that has a pronouncer to its IPA; a name's first pronouncer wins."""
     found: dict[str, str] = {}
     for match in PRONOUNCER.finditer(markdown):
-        found.setdefault(match.group(1).strip(), match.group(3).strip().strip("/[]").strip())
+        found.setdefault(match.group(1).strip(), match.group(2).strip().strip("/[]").strip())
     return found
-
-
-def show_pronouncers(text: str) -> str:
-    """Rewrites each pronouncer for readers, as "Name (respelling)"."""
-    return PRONOUNCER.sub(lambda m: f"{m.group(1).strip()} ({m.group(2).strip()})", text)
 
 
 def drop_pronouncers(text: str) -> str:

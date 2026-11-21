@@ -92,10 +92,14 @@ def test_run_phase_saves_the_reply_when_files_are_missing(repo: Path, monkeypatc
     assert (repo / "state" / "runs" / DATE / "phase_D_reply.md").read_text(encoding="utf-8") == "no files here"
 
 
-def test_build_request_adds_the_other_model_briefing_only_when_present(repo: Path):
+def test_build_request_adds_other_model_briefings_only_when_present(repo: Path):
     (repo / "state" / "README.md").write_text("# readme\n", encoding="utf-8")
-    name = f"editions/gemini_version/{DATE}-gemini.md"
-    assert name not in g.build_request(g.PHASES["A"], DATE)
-    (repo / name).parent.mkdir(parents=True)
-    (repo / name).write_text("# Other\n", encoding="utf-8")
-    assert f"=== BEGIN {name} ===\n# Other\n=== END {name} ===" in g.build_request(g.PHASES["A"], DATE)
+    names = [f"editions/gemini_version/{DATE}-gemini.md", f"editions/muse_version/{DATE}-muse.md"]
+    assert "_version/" not in g.build_request(g.PHASES["A"], DATE)
+    for name in [*names, "editions/muse_version/2026-11-14-muse.md"]:
+        (repo / name).parent.mkdir(parents=True, exist_ok=True)
+        (repo / name).write_text("# Other\n", encoding="utf-8")
+    request = g.build_request(g.PHASES["A"], DATE)
+    for name in names:
+        assert f"=== BEGIN {name} ===\n# Other\n=== END {name} ===" in request
+    assert "2026-11-14-muse.md" not in request

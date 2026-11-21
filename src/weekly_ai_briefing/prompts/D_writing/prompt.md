@@ -75,15 +75,15 @@ to model claims by name, never by id.
   paper title and identifier as the definition text, with the arXiv link as the URL.
 - Pronouncers: The audio comes from a speech engine that guesses at unfamiliar names. At the first mention of a
   proper name it is likely to get wrong, such as a non-English personal or place name, or a company, product or
-  model name with an unusual spelling, write the name as `{Name|respelling|IPA}`, for example
-  `{Rigetti|rih-JET-ee|ɹɪdʒˈɛti}` or `{Subodh Kulkarni|soo-BOHD kool-KAR-nee|suːbˈoʊd kʊlkˈɑːɹni}`.
-  - Readers see the respelling: lowercase syllables joined by hyphens, with the stressed syllable in capitals.
+  model name with an unusual spelling, write the name as `{Name|IPA}`, for example `{Rigetti|ɹɪdʒˈɛti}` or
+  `{Subodh Kulkarni|suːbˈoʊd kʊlkˈɑːɹni}`.
+  - Pronouncers are for the audio only. The web page and email show the bare name.
   - The audio speaks the IPA at every mention of that exact name in the briefing, so mark only the first. If later
     mentions use a shorter form, such as a surname alone, give that form its own pronouncer at its first use.
   - Write the IPA in General American, in the style of espeak-ng: `ˈ` or `ˌ` immediately before the stressed
     vowel, `ɹ` for r, `ɡ` for g, `oʊ`, `eɪ` and `aɪ` for those vowels, `dʒ` and `tʃ`, and `ː` for long vowels.
     No slashes or brackets.
-  - Mark only the name; keep a possessive outside the braces, as in `{Rigetti|rih-JET-ee|ɹɪdʒˈɛti}'s`.
+  - Mark only the name; keep a possessive outside the braces, as in `{Rigetti|ɹɪdʒˈɛti}'s`.
   - Skip names a listener already knows how to say, such as Nvidia, Microsoft or Anthropic. Use pronouncers only in
     running text and bullets, never in headings, tables, footnote definitions or the metadata block.
 - Findings: For each finding with changes, give a summary followed by a First-Derivative Forward Extrapolation

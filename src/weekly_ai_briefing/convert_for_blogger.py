@@ -25,7 +25,7 @@ from weekly_ai_briefing.config import (
     STATEMENT_TITLE,
 )
 from weekly_ai_briefing.email_briefing.briefing import find_latest_briefing
-from weekly_ai_briefing.pronouncers import show_pronouncers
+from weekly_ai_briefing.pronouncers import drop_pronouncers
 
 BRIEFING_DATE = re.compile(r"(\d{4}-\d{2}-\d{2})")
 
@@ -49,8 +49,11 @@ def footnote_id(escaped_label: str) -> str:
 
 
 def inline_html(text: str) -> str:
-    """Escapes text and renders pronouncers, inline code, footnote references, links, bold and italics."""
-    text = show_pronouncers(html.escape(text, quote=False))
+    """Escapes text and renders inline code, footnote references, links, bold and italics.
+
+    Pronouncers are for the audio only, so readers see the bare name.
+    """
+    text = drop_pronouncers(html.escape(text, quote=False))
     text = re.sub(r"`([^`]+)`", r"<code>\1</code>", text)
     text = FOOTNOTE_REFERENCE.sub(
         lambda m: f'<sup><a href="#{footnote_id(m.group(1))}">[{m.group(1)}]</a></sup>',
