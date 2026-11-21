@@ -1,8 +1,7 @@
 # Briefing prompts
 
-Each week's briefing is produced in four phases, each in a fresh conversation in the Claude app or Claude Code.
-Files carry the work from one phase to the next; the mutable state lives in `state/` at the repository root (see
-`state/README.md`).
+Each week's briefing is produced in four phases, each in a fresh conversation. Files carry the work from one phase
+to the next; the mutable state lives in `state/` at the repository root (see `state/README.md`).
 
 | Phase | Prompt | Reads | Writes |
 |---|---|---|---|
@@ -15,18 +14,21 @@ Every phase also reads `shared/reader_and_dimensions.md`. `<date>` is the editio
 
 ## Weekly run
 
-1. Start a new conversation and run phase A. In Claude Code: `/briefing-A-research 2026-11-21`. In the Claude
-   app: attach the phase prompt and the files it lists, and give the date.
-2. Start a new conversation and run phase B (`/briefing-B-verification <date>`). Keep it separate from phase A so
-   the check is independent.
-3. Start a new conversation and run phase C (`/briefing-C-model-update <date>`).
-4. Optional review: read `state/runs/<date>/change_log.md` and edit the model, the table or the five-signal
-   ranking before writing.
-5. Start a new conversation and run phase D (`/briefing-D-writing <date>`).
-6. Commit `state/` and the new edition, then publish as before (`scripts/publish_text.ps1`).
+Run the phases in order, each in a new conversation, so that verification in particular is independent of the
+research it checks. Between C and D, optionally read `state/runs/<date>/change_log.md` and edit the model, the
+table or the five-signal ranking before the briefing is written.
+
+Any harness that can read and write the repository's files works. Give it the phase prompt and the date; the prompt
+lists the files to read and write. Two ready-made ways:
+
+- Claude Code: `/briefing-A-research <date>`, then `/briefing-B-verification <date>`, `/briefing-C-model-update
+  <date>` and `/briefing-D-writing <date>`, each in a new session (commands in `.claude/commands/`).
+- The Claude API, without an agent harness: `uv run python -m weekly_ai_briefing.generate_briefing_text` runs all
+  four phases for today's date, each as a separate request, and writes the output files. Pass phase letters and
+  `--date` to run part of it, for example `A B C` to stop before writing for review, then `D`.
+
+When the edition is written, commit `state/` and the new edition, then publish as before (`scripts/publish_text.ps1`).
 
 ## Other prompts
 
 - `bootstrap/prompt.md`: run once to build the first current model and state table from the past editions.
-- `prompt_one_big.md` and `prompt_context.md`: the earlier single-prompt process, used by
-  `generate_briefing_text.py`. Kept for reference until the phased process has run for a few weeks.

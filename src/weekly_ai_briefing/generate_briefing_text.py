@@ -1,54 +1,166 @@
 #! python3
-# usage: uv run python -m src.weekly_ai_briefing.generate_briefing_text
+"""Runs the four briefing phases (research, verification, model update, writing) through the Claude API.
 
+This is one way to run the phased process described in prompts/README.md; any harness that can read and write the
+repository's files works too. Each phase is a separate request with no shared conversation, matching the "fresh
+conversation" rule in the phase prompts. The files a phase reads are sent inline, and the phase returns the files it
+writes between BEGIN and END marker lines, which this script writes to disk.
+
+usage:
+    uv run python -m weekly_ai_briefing.generate_briefing_text                  # all phases, today's date
+    uv run python -m weekly_ai_briefing.generate_briefing_text A B C            # stop before writing, to review
+    uv run python -m weekly_ai_briefing.generate_briefing_text D --date 2026-11-21
+"""
+
+import argparse
 import datetime
+import re
 import time
+from collections.abc import Callable, Sequence
+from dataclasses import dataclass
 from pathlib import Path
 
 import httpx2
 from anthropic import Anthropic, APIConnectionError, APIStatusError
-from anthropic.types import Message, MessageParam, ThinkingConfigAdaptiveParam
+from anthropic.types import Message, MessageParam, ThinkingConfigAdaptiveParam, ToolUnionParam
 
+from weekly_ai_briefing.bottom_matter import format_bottom_matter, split_bottom_matter
 from weekly_ai_briefing.config import (
     EFFORT,
-    HISTORY_LOOKBACK,
     MARKDOWN_FOLDER,
     MAX_CONTINUATIONS,
     MAX_TOKENS,
     MODEL,
     PROMPT_FOLDER,
+    REPO_ROOT,
+    RESEARCH_TOOLS,
+    STATE_FOLDER,
     STREAM_RETRIES,
     STREAM_RETRY_BASE_SECONDS,
-    TOOLS,
     TRANSIENT_ERROR_TYPES,
+    VERIFICATION_TOOLS,
 )
-from weekly_ai_briefing.bottom_matter import format_bottom_matter, split_bottom_matter
+
+SHARED_PROMPT = PROMPT_FOLDER / "shared" / "reader_and_dimensions.md"
+STATE_README = STATE_FOLDER / "README.md"
+CURRENT_MODEL = STATE_FOLDER / "current_model.md"
+STATE_TABLE = STATE_FOLDER / "state_table.md"
+
+FILE_BLOCK = re.compile(r"^=== BEGIN (?P<path>\S+) ===\n(?P<body>.*?)^=== END (?P=path) ===$", re.MULTILINE | re.DOTALL)
 
 
-def load_recent_reports(
-        reports_dir: Path,
-        limit: int,
-        exclude_name: str,
-) -> list[str]:
-    """Loads the N most recent weekly reports from disk, skipping exclude_name.
+def run_folder(date: str) -> Path:
+    return STATE_FOLDER / "runs" / date
 
-    exclude_name is the file about to be written, so a same-day rerun does
-    not treat its own earlier draft as a previous week's report.
-    """
-    if not reports_dir.is_dir():
-        return []
 
-    files = sorted(  # Newest first
-        (f for f in reports_dir.glob("*.md") if f.name != exclude_name),
-        reverse=True,
+def edition_path(date: str) -> Path:
+    return MARKDOWN_FOLDER / f"{date}-ai-outlook-briefing.md"
+
+
+@dataclass(frozen=True)
+class Phase:
+    name: str
+    prompt: Path
+    inputs: Callable[[str], list[Path]]
+    outputs: Callable[[str], list[Path]]
+    tools: list[ToolUnionParam]
+
+
+PHASES: dict[str, Phase] = {
+    "A": Phase(
+        name="research",
+        prompt=PROMPT_FOLDER / "A_research" / "prompt.md",
+        inputs=lambda date: [SHARED_PROMPT, STATE_README, CURRENT_MODEL, STATE_TABLE],
+        outputs=lambda date: [run_folder(date) / "fact_sheet.md"],
+        tools=RESEARCH_TOOLS,
+    ),
+    "B": Phase(
+        name="verification",
+        prompt=PROMPT_FOLDER / "B_verification" / "prompt.md",
+        inputs=lambda date: [SHARED_PROMPT, STATE_README, CURRENT_MODEL, run_folder(date) / "fact_sheet.md"],
+        outputs=lambda date: [run_folder(date) / "verification.md"],
+        tools=VERIFICATION_TOOLS,
+    ),
+    "C": Phase(
+        name="model update",
+        prompt=PROMPT_FOLDER / "C_model_update" / "prompt.md",
+        inputs=lambda date: [
+            SHARED_PROMPT,
+            STATE_README,
+            CURRENT_MODEL,
+            STATE_TABLE,
+            run_folder(date) / "fact_sheet.md",
+            run_folder(date) / "verification.md",
+        ],
+        outputs=lambda date: [run_folder(date) / "change_log.md", CURRENT_MODEL, STATE_TABLE],
+        tools=[],
+    ),
+    "D": Phase(
+        name="writing",
+        prompt=PROMPT_FOLDER / "D_writing" / "prompt.md",
+        inputs=lambda date: [
+            SHARED_PROMPT,
+            CURRENT_MODEL,
+            STATE_TABLE,
+            run_folder(date) / "change_log.md",
+            run_folder(date) / "fact_sheet.md",
+            run_folder(date) / "verification.md",
+        ],
+        outputs=lambda date: [edition_path(date)],
+        tools=[],
+    ),
+}
+
+
+def relative(path: Path) -> str:
+    """The path as the prompts name it: relative to the repository root, with forward slashes."""
+    return path.resolve().relative_to(REPO_ROOT.resolve()).as_posix()
+
+
+def build_request(phase: Phase, date: str) -> str:
+    """The user message for one phase: the date, the output protocol, and every input file inline."""
+    missing = [relative(path) for path in phase.inputs(date) if not path.is_file()]
+    if missing:
+        raise SystemExit(f"Phase {phase.name} cannot start; missing input files: {', '.join(missing)}")
+    outputs = "\n".join(f"- {relative(path)}" for path in phase.outputs(date))
+    files = "\n\n".join(
+        f"=== BEGIN {relative(path)} ===\n{path.read_text(encoding='utf-8').rstrip()}\n=== END {relative(path)} ==="
+        for path in phase.inputs(date)
+    )
+    return (
+        f"Today's date is {date}, so <date> in the prompt is {date}.\n\n"
+        "You are running through the API without file access. The files the prompt tells you to read are included "
+        "below, each between a BEGIN and an END line naming its path. Return each file the prompt tells you to "
+        "write, complete, in the same form: a line `=== BEGIN <path> ===`, the file's content, and a line "
+        "`=== END <path> ===`. Write nothing outside those blocks. The files to return are:\n\n"
+        f"{outputs}\n\n{files}\n"
     )
 
-    return [
-        f"--- START OF {f.name} ---\n"
-        + f.read_text(encoding='utf-8')
-        + "--- END ---"
-        for f in files[:limit]
-    ]
+
+def parse_output_files(response: str, expected: Sequence[str]) -> dict[str, str]:
+    """Extracts the BEGIN/END file blocks from a phase's reply, insisting on exactly the expected paths."""
+    files = {match["path"]: match["body"].rstrip() + "\n" for match in FILE_BLOCK.finditer(response)}
+    missing = [path for path in expected if path not in files]
+    extra = [path for path in files if path not in expected]
+    if missing or extra:
+        problems = [f"missing {', '.join(missing)}"] if missing else []
+        problems += [f"unexpected {', '.join(extra)}"] if extra else []
+        raise ValueError(f"reply did not return the expected files: {'; '.join(problems)}")
+    return files
+
+
+def normalize_edition(text: str) -> str:
+    """Re-emits the edition's YAML bottom matter in canonical form, or warns and keeps the text as written."""
+    try:
+        bottom_matter, body = split_bottom_matter(text)
+    except ValueError as error:
+        bottom_matter, problem = None, str(error)
+    else:
+        problem = "the briefing does not end with a --- delimited YAML block"
+    if bottom_matter is None:
+        print(f"Warning: {problem}; saved as written, fix the bottom matter by hand before publishing")
+        return text
+    return f"{body}\n{format_bottom_matter(bottom_matter)}"
 
 
 def is_transient(error: Exception) -> bool:
@@ -70,6 +182,7 @@ def stream_message(
         client: Anthropic,
         system_prompt: str,
         messages: list[MessageParam],
+        tools: list[ToolUnionParam],
 ) -> Message:
     """Streams one request, retrying transient failures with backoff."""
     for attempt in range(STREAM_RETRIES + 1):
@@ -84,7 +197,7 @@ def stream_message(
                     type="adaptive",
                     display="omitted",
                 ),
-                tools=TOOLS,
+                tools=tools,
             ) as stream:
                 return stream.get_final_message()
         except (APIConnectionError, APIStatusError, httpx2.TransportError) as error:
@@ -100,6 +213,7 @@ def send(
         client: Anthropic,
         system_prompt: str,
         messages: list[MessageParam],
+        tools: list[ToolUnionParam],
 ) -> str:
     """Sends the conversation and returns the assistant's complete text reply.
 
@@ -110,7 +224,7 @@ def send(
     text_parts: list[str] = []
 
     for _ in range(MAX_CONTINUATIONS + 1):
-        response = stream_message(client, system_prompt, messages)
+        response = stream_message(client, system_prompt, messages, tools)
 
         text = "".join(
             b.text
@@ -145,61 +259,61 @@ def send(
         f"Response still incomplete after {MAX_CONTINUATIONS} continuations")
 
 
-def generate_weekly_report() -> None:
-    client = Anthropic()
-    today = datetime.date.today().isoformat()
-    output_path = MARKDOWN_FOLDER / f"{today}-ai-outlook-briefing.md"
-
-    system_prompt = (
-        PROMPT_FOLDER / "prompt_one_big.md").read_text(encoding="utf-8")
-    context_prompt = (
-        (PROMPT_FOLDER / "prompt_context.md")
-        .read_text(encoding="utf-8")
-        .replace(
-            "::past_reports_context::",
-            "\n\n".join(
-                load_recent_reports(
-                    reports_dir=MARKDOWN_FOLDER,
-                    limit=HISTORY_LOOKBACK,
-                    exclude_name=output_path.name,
-                )
-            )
-        )
+def run_phase(client: Anthropic, letter: str, date: str) -> None:
+    phase = PHASES[letter]
+    request = build_request(phase, date)
+    print(f"Phase {letter} ({phase.name})...")
+    reply = send(
+        client,
+        phase.prompt.read_text(encoding="utf-8"),
+        [{"role": "user", "content": request}],
+        phase.tools,
     )
 
-    # Single pass: the whole briefing is written in one response, so the
-    # 20,000-word target applies to the briefing as a whole.
-    messages: list[MessageParam] = [
-        {
-            "role": "user",
-            "content": f"Today's date is {today}.\n\n{context_prompt}",
-        }
-    ]
-
-    print("Generating briefing...")
-    briefing = send(client, system_prompt, messages)
-
+    run_folder(date).mkdir(parents=True, exist_ok=True)
+    expected = {relative(path): path for path in phase.outputs(date)}
     try:
-        bottom_matter, body = split_bottom_matter(briefing)
+        files = parse_output_files(reply, list(expected))
     except ValueError as error:
-        bottom_matter, problem = None, str(error)
-    else:
-        problem = "the briefing does not end with a --- delimited YAML block"
-    if bottom_matter is None:
-        print(f"Warning: {problem}; saved as written, fix the bottom matter by hand before publishing")
-        report = f"Coverage week ending on {today}\n\n{briefing}"
-    else:
-        report = f"Coverage week ending on {today}\n\n{body}\n{format_bottom_matter(bottom_matter)}"
+        raw = run_folder(date) / f"phase_{letter}_reply.md"
+        raw.write_text(reply, encoding="utf-8")
+        raise SystemExit(f"Phase {letter}: {error}. The full reply is saved in {raw}") from error
 
-    MARKDOWN_FOLDER.mkdir(parents=True, exist_ok=True)
-    output_path.write_text(report, encoding="utf-8")
-
-    print(f"Report successfully generated and saved to {output_path}")
+    for name, text in files.items():
+        path = expected[name]
+        if path == edition_path(date):
+            text = normalize_edition(text)
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(text, encoding="utf-8")
+        print(f"  wrote {name}")
 
 
-def main() -> None:
+def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
+    parser = argparse.ArgumentParser(description="Run briefing phases through the Claude API.")
+    parser.add_argument(
+        "phases",
+        nargs="*",
+        choices=list(PHASES),
+        default=list(PHASES),
+        help="phases to run, in order (default: A B C D)",
+    )
+    parser.add_argument(
+        "--date",
+        default=datetime.date.today().isoformat(),
+        type=lambda value: datetime.date.fromisoformat(value).isoformat(),
+        help="edition publication date, YYYY-MM-DD (default: today)",
+    )
+    args = parser.parse_args(argv)
+    args.phases = sorted(set(args.phases))
+    return args
+
+
+def main(argv: Sequence[str] | None = None) -> None:
+    args = parse_args(argv)
+    client = Anthropic()
     try:
-        generate_weekly_report()
+        for letter in args.phases:
+            run_phase(client, letter, args.date)
     except KeyboardInterrupt:
         print("Interrupted")
 

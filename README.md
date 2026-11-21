@@ -9,7 +9,7 @@ Read the briefings online: <https://stevendavistechnotes.github.io/weekly-ai-bri
 ## Generating an edition
 
 Each edition is produced in four phases (research, verification, model update, writing), each run in a fresh
-Claude conversation. See [src/weekly_ai_briefing/prompts/README.md](src/weekly_ai_briefing/prompts/README.md) for
+conversation, by any agent harness or by `generate_briefing_text.py` through the Claude API. See [src/weekly_ai_briefing/prompts/README.md](src/weekly_ai_briefing/prompts/README.md) for
 the weekly run, and [state/README.md](state/README.md) for the mental model and state table the phases maintain.
 
 ## Kokoro model files

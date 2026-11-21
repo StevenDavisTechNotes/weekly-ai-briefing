@@ -11,6 +11,8 @@ MP3_FOLDER = EDITIONS_FOLDER / "mp3_format"
 BLOGGER_FOLDER = EDITIONS_FOLDER / "blogger_format"
 HTML_FOLDER = EDITIONS_FOLDER / "html_format"
 PROMPT_FOLDER = Path(__file__).resolve().parent / "prompts"
+REPO_ROOT = Path(__file__).resolve().parents[2]  # commands run from here, so the relative folders resolve under it
+STATE_FOLDER = Path("state")  # the mutable briefing state: current model, state table, per-run files
 TEMPLATE_FOLDER = Path(__file__).resolve().parent / "html_templates"
 BRIEFING_PATTERN = r"(\d{4}-\d{2}-\d{2})-ai-outlook-briefing\.md"
 STATEMENT_OF_INTENT = "statement_of_intent.md"
@@ -20,18 +22,20 @@ EDITION_PREFIX = "ai-outlook-briefing-"  # an edition's mp3 folder and GitHub re
 MODEL = "claude-opus-5-5"
 EFFORT = "medium"
 MAX_TOKENS: int = 128000
-HISTORY_LOOKBACK: int = 3
 MAX_CONTINUATIONS: int = 10  # per request: pause_turn resumes + max_tokens continues
-# The whole briefing is one long streamed call, so a dropped connection or an
-# overloaded API would otherwise discard all the research done so far.
+# Each phase is one long streamed call, so a dropped connection or an
+# overloaded API would otherwise discard all the work done so far in it.
 STREAM_RETRIES: int = 4
 STREAM_RETRY_BASE_SECONDS: int = 30
 TRANSIENT_ERROR_TYPES = {"overloaded_error", "api_error", "rate_limit_error"}
 
-# The briefing is about the preceding week, so the model must be able to search.
-TOOLS: list[ToolUnionParam] = [
+# Research (phase A) searches the preceding week and reads what it finds; verification (phase B) re-reads each
+# cited source and may search for a second one. The model update and writing phases use no tools.
+RESEARCH_TOOLS: list[ToolUnionParam] = [
     {"type": "web_search_20260318", "name": "web_search"},
+    {"type": "web_fetch_20260209", "name": "web_fetch"},
 ]
+VERIFICATION_TOOLS: list[ToolUnionParam] = RESEARCH_TOOLS
 
 # --- Blogger export (convert_for_blogger.py) ---
 AUTHOR = "Steven Davis"
