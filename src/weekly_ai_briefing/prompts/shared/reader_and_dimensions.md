@@ -47,7 +47,8 @@ Each dimension lists its subdimensions, followed by guidance on how to cover it.
      routed by cost and difficulty, and the resulting share of requests versus share of spend.
    - Agent-driven demand: agents as customers and as a traffic source, such as agent-first channels, traffic from AI
      assistants, and merchants and platforms admitting or blocking agents, and what that does to the businesses on
-     the receiving end.
+     the receiving end. How agents themselves behave and adapt in these interactions belongs to agent ecosystems
+     under Human and Machine Agency.
    - Engineering with agents (measured output): measured effects of agent-written software, such as output per
      engineer, defect and cleanup rates, review burden, and the rate and cost at which AI finds exploitable flaws,
      reported as rates and costs, never as techniques.
@@ -66,7 +67,8 @@ Each dimension lists its subdimensions, followed by guidance on how to cover it.
 
    Guidance: do not cover attack methods or technical vulnerability detail.
 
-5. Societal Adaption: how people and institutions respond to the AI revolution, and how that response shapes it.
+5. Human and Machine Agency: how AI is reshaping people's motivations, relationships and institutions, and how
+   deployed agents come to act, interact and organize among themselves and with people.
    Subdimensions:
    - Psychological effects, such as those of intelligent toys and companions.
    - Education and credentials: how colleges and credentials are being reshaped.
@@ -78,6 +80,12 @@ Each dimension lists its subdimensions, followed by guidance on how to cover it.
      answers displacing publishers and search, synthetic content and deepfakes, machine-written submissions to
      consultations and comment processes, the political leanings of the assistants people consult, and the licensing
      and provenance arrangements that respond.
+   - Agent ecosystems: how deployed agents behave and adapt as they interact with each other and with people, such
+     as agent-to-agent protocols and negotiation, agent-first offerings that expect an agent on the other side,
+     agent-directed interfaces emerging alongside conventional REST and JSON APIs, families of agents spanning
+     embedded industrial, enterprise and cloud tiers, and the feedback between agents and between agents and users
+     that shapes their behavior. The economics of agent traffic and revenue belong to agent-driven demand under
+     Enterprise AI Adoption; this subdimension covers behavior and adaptation.
    - Healthcare: how AI is changing care delivery, diagnosis, clinical documentation, health administration and
      patients' use of AI for health advice, with the evidence on outcomes, safety and cost, and the regulatory
      response.
@@ -111,7 +119,7 @@ Each dimension lists its subdimensions, followed by guidance on how to cover it.
 
    Guidance: state the economic mechanism and the quality of the evidence, distinguishing official statistics from
    private estimates and measured effects from model-based attributions of how much of a movement is due to AI. Do
-   not restate what Societal Adaption covered; leave the consequences for credit, portfolios, and financial
+   not restate what Human and Machine Agency covered; leave the consequences for credit, portfolios, and financial
    institutions to Institutional Financial Services.
 
 7. Institutional Financial Services: how AI is changing institutional finance, with emphasis on fixed-income asset
@@ -124,7 +132,7 @@ Each dimension lists its subdimensions, followed by guidance on how to cover it.
    - The effect on operating models, expenses, and fees.
    - The credit and investment consequences of the other dimensions, such as rates and duration risk, power
      constraints on collateral and projects, industrial-automation capex, industrial cyber-resilience as a credit
-     and underwriting factor, post-quantum migration, and societal-adaption pressures such as labor disruption,
+     and underwriting factor, post-quantum migration, and human-agency pressures such as labor disruption,
      political backlash, and local opposition to build-outs.
    - What AI is doing to issuers' business models: across ordinary issuers, not only AI companies, how AI changes
      margins, headcount, revenue risk and competitive position, as disclosed in filings, earnings calls and
