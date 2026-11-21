@@ -8,6 +8,7 @@ Read first:
 - `state/README.md`, for the file formats and source types
 - `state/current_model.md`
 - `state/state_table.md`
+- `editions/gemini_version/<date>-gemini.md`, if it exists: a briefing another model wrote for the same week
 
 Write: `state/runs/<date>/fact_sheet.md`, where `<date>` is today's date (the publication date).
 
@@ -30,6 +31,10 @@ Research has two jobs, and both matter.
 
 Also check each item on the watching list, since a second week of evidence can promote it.
 
+If the other model's briefing for this week exists, use it only as a coverage check. List each development it
+reports that your search missed, then find the primary source for it and record it as a fact, or leave it out if no
+source confirms it. Never cite that briefing, and do not adopt its analysis.
+
 For every fact, classify the change it shows:
 
 - new trend: something the model does not yet describe.
@@ -39,7 +44,8 @@ For every fact, classify the change it shows:
 
 ## Sources
 
-- Prefer primary sources. Read the filing, the release, the statistical table or the paper itself when you can.
+- Prefer primary sources. Read the filing, the release, the statistical table or the paper itself when you can,
+  including lab research blogs and new papers for the AI Technology dimension.
 - Use digests and newsletters only to find stories; cite the article or document they point to.
 - For what AI is doing to issuers' business models, search the week's SEC filings, earnings-call transcripts and
   shareholder letters directly; these primary disclosures carry measured effects that press coverage often skips.

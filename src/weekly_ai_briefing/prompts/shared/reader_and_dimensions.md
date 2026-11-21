@@ -38,7 +38,9 @@ Each dimension lists its subdimensions, followed by guidance on how to cover it.
 3. Enterprise AI Adoption: how enterprises build, buy, run and govern AI.
    Subdimensions:
    - Cloud versus edge inference economics.
-   - Software architecture and application design for agentic services, including declarative UX and hydration.
+   - Software architecture and application design for agentic services, including declarative UX and hydration,
+     and the protocols and standards agents are built on, such as tool and agent-to-agent protocols and agent UI
+     specifications.
    - Validation of AI systems.
    - Agent identity and enterprise governance.
    - Deployer liability.
@@ -125,7 +127,8 @@ Each dimension lists its subdimensions, followed by guidance on how to cover it.
 7. Institutional Financial Services: how AI is changing institutional finance, with emphasis on fixed-income asset
    management.
    Subdimensions:
-   - AI as an issuer and credit exposure in bond and private-credit markets.
+   - AI as an issuer and credit exposure in bond and private-credit markets, including the share of AI-related
+     issuance in new supply and in benchmark indexes, and the duration it adds.
    - Financing structures and competitive dynamics among asset managers in the data-center and
      industrial-automation build-outs.
    - Newly emerging complementary or consequential investment themes and the capital they require.

@@ -90,3 +90,12 @@ def test_run_phase_saves_the_reply_when_files_are_missing(repo: Path, monkeypatc
     with pytest.raises(SystemExit, match="phase_D_reply.md"):
         g.run_phase(None, "D", DATE)  # ty: ignore[invalid-argument-type]
     assert (repo / "state" / "runs" / DATE / "phase_D_reply.md").read_text(encoding="utf-8") == "no files here"
+
+
+def test_build_request_adds_the_other_model_briefing_only_when_present(repo: Path):
+    (repo / "state" / "README.md").write_text("# readme\n", encoding="utf-8")
+    name = f"editions/gemini_version/{DATE}-gemini.md"
+    assert name not in g.build_request(g.PHASES["A"], DATE)
+    (repo / name).parent.mkdir(parents=True)
+    (repo / name).write_text("# Other\n", encoding="utf-8")
+    assert f"=== BEGIN {name} ===\n# Other\n=== END {name} ===" in g.build_request(g.PHASES["A"], DATE)

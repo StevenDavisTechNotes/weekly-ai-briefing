@@ -17,7 +17,7 @@ import datetime
 import re
 import time
 from collections.abc import Callable, Sequence
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from pathlib import Path
 
 import httpx2
@@ -26,6 +26,7 @@ from anthropic.types import Message, MessageParam, ThinkingConfigAdaptiveParam, 
 
 from weekly_ai_briefing.bottom_matter import format_bottom_matter, split_bottom_matter
 from weekly_ai_briefing.config import (
+    EDITIONS_FOLDER,
     EFFORT,
     MARKDOWN_FOLDER,
     MAX_CONTINUATIONS,
@@ -57,6 +58,11 @@ def edition_path(date: str) -> Path:
     return MARKDOWN_FOLDER / f"{date}-ai-outlook-briefing.md"
 
 
+def other_model_briefing(date: str) -> Path:
+    """Another model's briefing for the same week, which phase A uses only as a coverage check."""
+    return EDITIONS_FOLDER / "gemini_version" / f"{date}-gemini.md"
+
+
 @dataclass(frozen=True)
 class Phase:
     name: str
@@ -64,6 +70,11 @@ class Phase:
     inputs: Callable[[str], list[Path]]
     outputs: Callable[[str], list[Path]]
     tools: list[ToolUnionParam]
+    optional_inputs: Callable[[str], list[Path]] = field(default=lambda date: [])
+
+    def present_inputs(self, date: str) -> list[Path]:
+        """The required inputs, then whichever optional inputs exist."""
+        return self.inputs(date) + [path for path in self.optional_inputs(date) if path.is_file()]
 
 
 PHASES: dict[str, Phase] = {
@@ -73,6 +84,7 @@ PHASES: dict[str, Phase] = {
         inputs=lambda date: [SHARED_PROMPT, STATE_README, CURRENT_MODEL, STATE_TABLE],
         outputs=lambda date: [run_folder(date) / "fact_sheet.md"],
         tools=RESEARCH_TOOLS,
+        optional_inputs=lambda date: [other_model_briefing(date)],
     ),
     "B": Phase(
         name="verification",
@@ -125,7 +137,7 @@ def build_request(phase: Phase, date: str) -> str:
     outputs = "\n".join(f"- {relative(path)}" for path in phase.outputs(date))
     files = "\n\n".join(
         f"=== BEGIN {relative(path)} ===\n{path.read_text(encoding='utf-8').rstrip()}\n=== END {relative(path)} ==="
-        for path in phase.inputs(date)
+        for path in phase.present_inputs(date)
     )
     return (
         f"Today's date is {date}, so <date> in the prompt is {date}.\n\n"

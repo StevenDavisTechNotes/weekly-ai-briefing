@@ -55,6 +55,10 @@ restated an earlier shift in new words. Read the sequence as a historian would, 
   reading" must be stated as reported in a named edition, with the source that edition cited, and marked "not
   re-verified". Use fewer figures rather than uncertain ones.
 - Set "Introduced" to the edition in which the editions first tracked the topic.
+- Consider every dimension and subdimension in the shared reader file, including those added after the editions
+  were written (such as issuers' business models, agent ecosystems, trust and the information ecosystem, and
+  healthcare). Give one a row or a watching item only where the editions contain evidence for it; otherwise list it
+  in the notes as a gap for the first weekly run to fill.
 
 ## Bootstrap notes
 
