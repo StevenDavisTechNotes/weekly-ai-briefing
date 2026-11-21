@@ -26,7 +26,7 @@ gets one or two sentences saying so, not a recap of its baseline.
 
 - Orientation: The Five Signals That Matter This Week
 - Dimensions
-  - AI Technological Paradigm Shifts: Entropy and Anomalies
+  - AI Technology
   - Quantum Computing
   - Enterprise AI Adoption
   - Physical AI & Industrial Automation

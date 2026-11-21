@@ -10,7 +10,7 @@ As of: 2026-11-14
   awareness of being tested, so a single reported number says little about what a deployed system will do. The
   mechanism is that scaffolding, loop depth and the model's recognition of an evaluation can each move results by
   more than the gap between vendors.
-- Dimensions: AI technological paradigm shifts; enterprise AI adoption; institutional financial services.
+- Dimensions: AI technology; enterprise AI adoption; institutional financial services.
 - Introduced: 2026-10-10. Last revised: 2026-11-14.
 - Confidence: firm.
 - Why we believe it: The 2026-10-10 edition reported world-model and LLM judges rating most failures as successes,
@@ -31,7 +31,7 @@ As of: 2026-11-14
 - Claim: AI makes producing candidate answers, code, proofs and findings cheap, so the binding constraint moves to
   verifying them: to expert reviewers, formal specifications and remediation capacity. Value and labor shift toward
   whoever can check work at the rate it is generated, and unverified output accumulates as a liability.
-- Dimensions: AI technological paradigm shifts; enterprise AI adoption; societal adoption; institutional financial
+- Dimensions: AI technology; enterprise AI adoption; societal adoption; institutional financial
   services.
 - Introduced: 2026-09-27. Last revised: 2026-11-07.
 - Confidence: firm.
@@ -53,7 +53,7 @@ As of: 2026-11-14
   air gaps, scoped credentials, approval channels the agent cannot read, monitored traffic and capability withheld
   at release. Instructions, policies and contracts that the system or a vendor can ignore do not bound behavior.
   "Stochastic proposes, deterministic disposes" applies to labs and to deployers alike.
-- Dimensions: AI technological paradigm shifts; enterprise AI adoption; physical AI and industrial automation;
+- Dimensions: AI technology; enterprise AI adoption; physical AI and industrial automation;
   institutional financial services.
 - Introduced: 2026-09-27. Last revised: 2026-11-14.
 - Confidence: firm.
@@ -156,7 +156,7 @@ As of: 2026-11-14
   than announced qubit counts, while the date that matters, cryptographic migration, is set by regulators and pulled
   forward by AI-designed circuits rather than by hardware alone. The near-term exposure is post-quantum migration
   of payment, custody and long-lived records, not quantum computing revenue.
-- Dimensions: quantum computing; institutional financial services; AI technological paradigm shifts.
+- Dimensions: quantum computing; institutional financial services; AI technology.
 - Introduced: 2026-10-03. Last revised: 2026-10-31.
 - Confidence: firm.
 - Why we believe it: The 2026-10-03 edition reported that Infleqtion's 30 logical qubits were error-detected only
