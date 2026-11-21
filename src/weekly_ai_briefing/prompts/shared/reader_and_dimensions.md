@@ -73,7 +73,11 @@ Each dimension lists its subdimensions, followed by guidance on how to cover it.
    deployed agents come to act, interact and organize among themselves and with people.
    Subdimensions:
    - Psychological effects, such as those of intelligent toys and companions.
-   - Education and credentials: how colleges and credentials are being reshaped.
+   - Education, credentials and expertise: how schools, colleges and credentials are being reshaped, what employers
+     now accept as evidence of ability (degrees, certificates, portfolios, demonstrated experience), and whether AI
+     tutoring and AI-assisted work shorten the path to real domain expertise or let people skip the experience that
+     builds it. Measured effects on learning and skill formation belong here; hiring volumes belong to work and
+     skills.
    - Work and skills: how people are retooling, and how hiring and work are changing.
    - Relationships and discourse: how LLM-mediated social distancing affects relationships and political discourse.
    - The environmental footprint and local reception of the build-outs.
