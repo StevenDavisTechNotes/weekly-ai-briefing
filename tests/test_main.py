@@ -49,7 +49,7 @@ def run_env(tmp_path, monkeypatch):
     monkeypatch.setattr(cli, "MARKDOWN_FOLDER", history)
     monkeypatch.setattr(cli, "MP3_FOLDER", tmp_path / "staged")
     generated, emails = [], []
-    monkeypatch.setattr(cli, "generate_mp3", lambda md, path: generated.append(f"{path.parent.name}/{path.name}"))
+    monkeypatch.setattr(cli, "generate_mp3", lambda md, path, pronounced: generated.append(f"{path.parent.name}/{path.name}"))
     monkeypatch.setattr(cli, "send_email", lambda **kw: emails.append(kw))
     monkeypatch.setattr(cli, "page_is_live", lambda url: True)
     return generated, emails
@@ -81,7 +81,7 @@ def test_voice_text_excludes_bottom_matter(run_env, monkeypatch):
     briefing_path = cli.MARKDOWN_FOLDER / "2026-10-17-ai-outlook-briefing.md"
     briefing_path.write_text(BRIEFING + "\n" + bottom_matter, encoding="utf-8")
     spoken = []
-    monkeypatch.setattr(cli, "generate_mp3", lambda md, path: spoken.append(md))
+    monkeypatch.setattr(cli, "generate_mp3", lambda md, path, pronounced: spoken.append(md))
     cli.main(["--voice"])
     assert spoken == ["## Orientation\n\nIntro.\n\n"]
 

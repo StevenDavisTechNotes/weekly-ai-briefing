@@ -6,6 +6,12 @@ Read the briefings online: <https://stevendavistechnotes.github.io/weekly-ai-bri
 [repository](https://github.com/StevenDavisTechNotes/weekly-ai-briefing) holds the source and the
 [markdown editions](editions/markdown_format/)).
 
+## Generating an edition
+
+Each edition is produced in four phases (research, verification, model update, writing), each run in a fresh
+conversation, by any agent harness or by `generate_briefing_text.py` through the Claude API. See [src/weekly_ai_briefing/prompts/README.md](src/weekly_ai_briefing/prompts/README.md) for
+the weekly run, and [state/README.md](state/README.md) for the mental model and state table the phases maintain.
+
 ## Kokoro model files
 
 `email_briefing` voices each section locally with [kokoro-onnx](https://github.com/thewh1teagle/kokoro-onnx), so no
@@ -19,6 +25,10 @@ curl -L -o models/voices-v1.0.bin https://github.com/thewh1teagle/kokoro-onnx/re
 ```
 
 The voice is set by `VOICE` in `src/weekly_ai_briefing/config.py`; any voice in `voices-v1.0.bin` works.
+
+Names the engine would mispronounce are written in the briefing as `{Name|IPA}`. The web page and Blogger post show
+the bare name, and the audio speaks the IPA at every mention of that name in the edition. A pronouncer whose
+IPA holds a symbol the model doesn't know is skipped with a warning.
 
 Other text-to-speech backends (OpenVINO GenAI on the Arc GPU and NPU, Qwen3-TTS) were benchmarked and did not beat
 this CPU setup; see [documents/model_selection.md](documents/model_selection.md).

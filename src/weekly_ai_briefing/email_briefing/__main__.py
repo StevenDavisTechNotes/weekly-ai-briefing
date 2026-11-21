@@ -12,6 +12,7 @@ import urllib.request
 from weekly_ai_briefing.config import MARKDOWN_FOLDER, MP3_FOLDER
 from weekly_ai_briefing.bottom_matter import split_bottom_matter
 from weekly_ai_briefing.html_rendering import render_template
+from weekly_ai_briefing.pronouncers import pronunciations
 
 from .audio import generate_mp3
 from .briefing import (
@@ -93,6 +94,7 @@ def page_is_live(url: str) -> bool:
 def voice_sections(briefing_stem: str, date: str, sections: list[Section], selected: set[int]) -> None:
     edition_folder = MP3_FOLDER / edition_name(date)
     edition_folder.mkdir(parents=True, exist_ok=True)
+    pronounced = pronunciations("\n".join(section.markdown for section in sections))
     for number, section in enumerate(sections, start=1):
         if number not in selected:
             continue
@@ -100,7 +102,7 @@ def voice_sections(briefing_stem: str, date: str, sections: list[Section], selec
         if is_text_only(section):
             print("  Text-only section; nothing to generate")
             continue
-        generate_mp3(section.markdown, edition_folder / mp3_filename(briefing_stem, number))
+        generate_mp3(section.markdown, edition_folder / mp3_filename(briefing_stem, number), pronounced)
 
 
 def main(argv: list[str] | None = None) -> None:
