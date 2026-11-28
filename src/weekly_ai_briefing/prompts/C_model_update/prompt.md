@@ -67,7 +67,11 @@ change log readable on its own, since the reader may read it afterwards.
 4. For each table row, update latest shift, major trend, direction, regime and last reading from verified facts.
    Change a regime only when the row's written criteria for the new level are met. Add or remove rows only for
    the reasons in `state/README.md`.
-5. Rank this week's verified facts by surprise times consequence and pick the five that matter most for the
+5. Read the fact sheet's linked chains. A chain whose facts are verified may support a watching item or a claim
+   revision; it counts as independent support only where its facts come from independent sources. A reading of
+   an opaque market, such as private credit, may be inferred from verified market signals; mark it "inferred
+   from" in the row's last reading and name the signals.
+6. Rank this week's verified facts by surprise times consequence and pick the five that matter most for the
    Orientation. Prefer facts that moved the model or the table.
 
 ## Change log format

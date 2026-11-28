@@ -30,6 +30,8 @@ For every fact in the fact sheet:
 3. Check that the source type is right. A fact known only through a digest, a re-report or social media is
    secondhand, whatever outlet it names.
 4. Where a figure matters to the model, look for a second, independent source or the primary document.
+   Check that a fact's "Inference" line is marked as inferred and rests only on the fact's own figures; flag an
+   inference written as if it were reported.
 5. Give one verdict:
    - confirmed: the source supports the fact as written.
    - corrected: the source supports a corrected version; give the correction.

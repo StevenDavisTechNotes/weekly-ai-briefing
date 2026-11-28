@@ -151,3 +151,7 @@ Each dimension lists its subdimensions, followed by guidance on how to cover it.
 
    Guidance: take the macroeconomic mechanisms from Economic Structural Change as given and focus on what financial
    institutions and instruments do about them.
+   Private credit, including GPU-backed loans, data-center SPVs and neocloud facilities, is opaque by design: its
+   covenant breaches, waivers and marks are rarely disclosed. Do not treat silence as stability. Infer its state
+   from published market signals that price it, name the signals, and say plainly that the conclusion is an
+   inference rather than a disclosure.

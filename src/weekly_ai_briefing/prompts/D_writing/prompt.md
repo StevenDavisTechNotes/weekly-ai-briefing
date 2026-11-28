@@ -87,7 +87,8 @@ five signals.
   final source column or after the cell they support.
 - Source strength in the text: When a fact rests on a secondhand source, a single source, or a company's own
   claim, say so in words in the sentence, such as "according to the company" or "in a report that could not be
-  confirmed".
+  confirmed". When a point is inferred from market prices rather than disclosed, say so, such as "market prices
+  suggest", and name the signal.
 - Citations: Never put identifiers, arXiv numbers, URLs or other reference strings in the running text, because
   they do not work in audio playback. Name the source in words instead (for example "a paper by Bürger and
   colleagues") and mark the claim with a numbered footnote reference such as `[^1]` immediately after the sentence

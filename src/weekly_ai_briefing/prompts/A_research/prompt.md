@@ -42,6 +42,36 @@ Also check each item on the watching list, since a second week of evidence can p
 Look hardest at the entries in the test calendar of `current_model.md` that fall due within four weeks: open
 every source in their "check each week" lines, and record a reading or "no material evidence" for each.
 
+### Inferring what is not disclosed
+
+Some markets the model depends on are opaque by design, chiefly the private credit behind AI infrastructure:
+GPU-backed loans, data-center SPVs, neocloud facilities and the funds that hold them. Their covenant breaches,
+waivers and marks are rarely disclosed, so a week with no reports is not evidence that nothing happened. Each week,
+look for the published market signals that price them, and record each as an ordinary fact with its figures and
+source:
+
+- GPU rental-price indices and secondary prices for used accelerators, by generation.
+- Spreads, new-issue terms and rating actions on public data-center and GPU asset-backed securities and CMBS, and
+  rating-agency surveillance reports on them.
+- Business development company filings: non-accruals, amendments, marks and payment-in-kind income on loans to
+  AI infrastructure and data-center borrowers, and the BDCs' share prices against net asset value.
+- Public neocloud and data-center operator filings: covenant amendments or waivers in 8-Ks and 10-Qs, liquidity,
+  and the terms of new facilities.
+- Disclosures by listed alternative asset managers and banks on AI infrastructure lending, back leverage and
+  significant risk transfers.
+- Secondary-market prices for private-credit fund interests.
+
+When such a fact bears on the undisclosed market, fill its "Inference" field with what it suggests and why. An
+inference is never written as a reported fact, rests only on the figures the fact records, and names its signal.
+
+### Connecting across dimensions
+
+A development can be invisible within each dimension and plain across them: an export rule (Economic Structural
+Change) freezes financing for some data centers (Institutional Financial Services), which removes a resale market
+that a chip's collateral value assumed (Enterprise AI Adoption). After the facts are gathered, look for chains of
+facts from different dimensions that share one mechanism, actor or asset, and record each in the fact sheet's
+"Linked chains" section. Then search once more for the link a chain is missing, and add what you find as a fact.
+
 If other models' briefings for this week exist, use them only as a coverage check. List each development they
 report that your search missed, then find the primary source for it and record it as a fact, or leave it out if no
 source confirms it. Treat their figures, dates and characterizations as unverified leads, since they may be wrong.
@@ -113,10 +143,17 @@ Edition: YYYY-MM-DD. Window: YYYY-MM-DD to YYYY-MM-DD.
 - Change type: new trend, acceleration, deceleration, reversal, or level only.
 - Expected vs. happened: one sentence on what the model would have predicted and how this differs.
 - Consequence: one sentence on what it would change for the reader if it holds.
+- Inference: for a market signal read as evidence about an undisclosed market, one sentence on what it suggests
+  and why, marked "inferred"; otherwise "none".
 
 ## Model check
 
 One line per claim and per row: the fact ids for and against, or "no material evidence".
+
+## Linked chains
+
+- F-xx, F-yy, F-zz: the shared mechanism, actor or asset in one sentence, and the missing link that would confirm
+  the chain, or "none found".
 
 ## Research limits
 
@@ -147,6 +184,7 @@ of the seven dimensions, all running at once, and you as the lead.
 - The lead then merges the drafts into the one fact sheet: removes duplicate facts, keeping the one with the
   better source; renumbers them F-01, F-02 and so on; combines the model-check lines so that every claim, row and
   watching item has one line; and combines the research limits. The lead runs the coverage check against other
-  models' briefings itself, on the merged facts, and runs the change-type check on every merged fact.
+  models' briefings itself, on the merged facts, and runs the change-type check on every merged fact. The lead
+  also looks for linked chains across the workers' dimensions, since no single worker can see them.
 
 If you cannot hand work to parallel workers, do the research yourself, one dimension after another.
