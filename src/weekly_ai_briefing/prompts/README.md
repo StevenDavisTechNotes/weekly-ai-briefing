@@ -26,8 +26,18 @@ lists the files to read and write. Two ready-made ways:
 - The Claude API, without an agent harness: `uv run python -m weekly_ai_briefing.generate_briefing_text` runs all
   four phases for today's date, each as a separate request, and writes the output files. Pass phase letters and
   `--date` to run part of it, for example `D` alone to rewrite the briefing from existing phase outputs.
+  Phase A runs as seven dimension workers in parallel and then a lead that merges their drafts into the fact
+  sheet; the drafts are kept in `state/runs/<date>/research_drafts/`, so a rerun after a failed merge reuses them.
+  Pass `--single-research` to run phase A as one request instead.
+  Every page phase A fetches is copied to `source_document_cache/<date>/`, which git ignores. After each phase it
+  records minutes and tokens and rewrites `state/runs/<date>/metrics.md`; after phase D it adds the edition's new
+  names to `state/pronouncers.md`. `uv run python -m weekly_ai_briefing.run_metrics --history` lists past runs.
+  After phase D it checks the edition against the writing rules a script can check (parts, signals, footnotes,
+  URLs, metadata keys, length, figures written in digits) and prints anything to fix by hand.
 
-When the edition is written, commit `state/` and the new edition, then publish as before (`scripts/publish_text.ps1`).
+When the edition is written, commit `state/` and the new edition, then publish as before (`scripts/publish_text.ps1`). Publishing
+first runs the test suite and the edition rule check (`edition_checks --latest`) and stops if either fails; it
+ends by deleting all but the two newest date folders in `source_document_cache/`.
 
 ## Other prompts
 

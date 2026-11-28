@@ -18,7 +18,15 @@ For every fact in the fact sheet:
 
 1. Open the cited source and read it again, in full rather than through search excerpts. Do not judge from memory
    or from the fact sheet's wording.
+   If you can run local commands and a PDF, Word or other document will not read in full through web fetch,
+   download it into its own new folder and convert it locally, with `uv run markitdown <file>` or with pypdf (both are
+   in this repository's environment). Keep any script you write in a separate folder.
+   For an arXiv paper, read the full text at `arxiv.org/html/<id>` when it exists, otherwise the PDF, not just the
+   abstract page.
 2. Check that the source says what the fact says, including every figure, unit and date.
+   If it does not, and the fact's "Read" field names a cached copy in `source_document_cache/<date>/`, read that
+   copy too, and say in the verdict whether the page changed after research read it or research misread it.
+   Always judge from the live source first; the copy only explains a difference.
 3. Check that the source type is right. A fact known only through a digest, a re-report or social media is
    secondhand, whatever outlet it names.
 4. Where a figure matters to the model, look for a second, independent source or the primary document.

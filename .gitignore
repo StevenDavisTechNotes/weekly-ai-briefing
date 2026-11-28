@@ -222,6 +222,9 @@ __marimo__/
 # Generated Blogger import files
 editions/blogger_format/
 
+# Copies of the sources phase A read; kept briefly for verification, never committed
+source_document_cache/
+
 # Generated briefing audio; too large to commit
 editions/mp3_format/
 models/

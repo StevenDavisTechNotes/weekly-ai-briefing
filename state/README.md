@@ -9,8 +9,14 @@ it reads and writes. Git history of this folder is the history of the model.
 | `current_model.md` | bootstrap, then phase C each week | The mental model: a small set of claims, each with what would show it wrong, plus a watching list |
 | `state_table.md` | bootstrap, then phase C each week | About 12 to 15 state variables with direction and regime, and the definition of each |
 | `runs/<date>/fact_sheet.md` | phase A | The week's facts, one entry per fact, with source and source type |
+| `runs/<date>/research_drafts/D<n>.md` | phase A, API route only | Each dimension worker's draft, before the lead merges them |
 | `runs/<date>/verification.md` | phase B | A verdict on every fact, from re-reading its source |
 | `runs/<date>/change_log.md` | phase C | What changed in the model and table this week, and why |
+| `runs/<date>/metrics.md`, `runs/<date>/phase_usage.json` | `weekly_ai_briefing.run_metrics`, after each phase | Counts of facts, verdicts and source types, and minutes and tokens per phase |
+| `pronouncers.md` | `weekly_ai_briefing.pronouncer_lexicon`, after phase D | One IPA per name; phase D reads it so names sound the same every week |
+
+Phase A also keeps a copy of each source it reads in `source_document_cache/<date>/` at the repository root. That
+folder is not part of the state: git ignores it, and publishing deletes all but the two newest dates.
 
 `<date>` is the publication date of the edition, in YYYY-MM-DD form. The briefing itself, written by phase D,
 goes to `editions/markdown_format/<date>-ai-outlook-briefing.md` as before.
@@ -32,16 +38,27 @@ As of: YYYY-MM-DD
 - Confidence: firm or provisional.
 - Why we believe it: two to four sentences of evidence, with sources named in words and dates.
 - Would be wrong if: an observable outcome, stated to the specification standard below.
+- Check each week: the named pages, releases or series where a reading of that test would appear, so research can
+  open each one directly.
 
 ## Watching
 
 - W-01 Name. First seen YYYY-MM-DD. What surprised us, and what evidence would promote it to a claim or drop it.
+
+## Test calendar
+
+| Due | Item | What settles then |
+|---|---|---|
+| YYYY-MM-DD | M-xx or W-xx Name | the reading that settles its test, promotion or drop |
 
 ## Retired this quarter
 
 - Name. Retired YYYY-MM-DD. One sentence on why: refuted, absorbed into another claim, or churn that never
   changed how we reason.
 ```
+
+The test calendar lists every dated claim test and every watching item with a dated promotion or drop rule,
+soonest first, with the due date taken from the item's own text. A claim or item with no date is not listed.
 
 Keep at most 12 claims and at most 8 watching items. Claim ids are never reused. Clear "Retired this quarter" at
 each quarterly review.

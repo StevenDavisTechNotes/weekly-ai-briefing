@@ -17,6 +17,20 @@ Write:
 - `state/current_model.md`, revised in place
 - `state/state_table.md`, revised in place
 
+## Starting point
+
+This phase revises the model in place, so a second run must not apply this week's changes on top of the first.
+Before reading the model, look for `state/runs/<date>/current_model_before.md` and
+`state/runs/<date>/state_table_before.md`:
+
+- If both exist, this is a rerun. Read them as the model and the table to revise, in place of
+  `state/current_model.md` and `state/state_table.md`, and ignore what those two files now hold.
+- If neither exists, this is the first run. If you can write files, first copy `state/current_model.md` to
+  `state/runs/<date>/current_model_before.md` and `state/state_table.md` to
+  `state/runs/<date>/state_table_before.md`, unchanged, then revise from them.
+
+Either way, write the revised model and table to `state/current_model.md` and `state/state_table.md`.
+
 Use only facts whose verdict is confirmed or corrected, with corrections applied. Unconfirmed facts may inform the
 watching list but never a claim, a table reading or a figure.
 
@@ -42,6 +56,10 @@ change log readable on its own, since the reader may read it afterwards.
 
 ## Steps
 
+0. Read the test calendar in `current_model.md`. Settle every entry due on or before this edition's date: a claim
+   whose test was met is refuted (revise or retire it); a claim whose deadline passed with the test unmet is
+   strengthened, and gets a new test with a later date; a watching item at its deadline is promoted or dropped.
+   No entry may stay on the calendar past its date.
 1. For each claim, decide: holds, strengthened, weakened, revised, or retired. Retire a claim that was refuted, that
    another claim absorbed, or that turned out to be churn.
 2. For each watching item, decide: promote, keep, or drop. Drop items that saw no evidence for four weeks.
@@ -78,10 +96,16 @@ Edition: YYYY-MM-DD.
 
 - Row: the change and the fact ids behind it. Rows added or removed, with the reason.
 
+## Tests coming due
+
+Each calendar entry due within four weeks of this edition, with its date and whether this week's facts moved it.
+
 ## Continuing shifts
 
 The claims that continued or strengthened without revision, in one line each.
 ```
 
 Then write the revised `current_model.md` and `state_table.md`, setting "As of" to this edition's date and keeping
-the formats in `state/README.md`.
+the formats in `state/README.md`. Whenever you add a claim or change its "would be wrong if", update its "check
+each week" line to name where a reading of the new test would appear. Keep the test calendar in step with every
+change: add, re-date or remove entries, and keep it sorted soonest first.

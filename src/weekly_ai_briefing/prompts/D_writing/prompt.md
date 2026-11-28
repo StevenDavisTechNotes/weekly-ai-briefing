@@ -9,6 +9,9 @@ Read first:
 - `state/runs/<date>/change_log.md`
 - `state/runs/<date>/fact_sheet.md`
 - `state/runs/<date>/verification.md`
+- `state/pronouncers.md`, the pronouncer lexicon
+- From the previous edition, the latest file in `editions/markdown_format/` dated before `<date>`: only its
+  Orientation part and its closing metadata block. Do not read the rest of it or any older edition.
 
 Write: `editions/markdown_format/<date>-ai-outlook-briefing.md`.
 
@@ -21,6 +24,19 @@ corrections applied. An unconfirmed fact may be mentioned only with its caveat, 
 Aim for about 8,000 to 10,000 words for the body, excluding the Source Notes and the metadata block. This is a
 budget, not a target: a quiet week should be shorter. A dimension with nothing that moved the model or the table
 gets one or two sentences saying so, not a recap of its baseline.
+
+Some weeks are quiet: the weeks of US Thanksgiving and from Christmas to New Year, and other weeks with major
+market holidays or few scheduled releases. Expect fewer facts, and fewer words worth writing, in those weeks: a
+quiet week may come in well under the budget, and that is the right outcome. Do not stretch findings, repeat
+background or recap dimensions' baselines to reach a length.
+
+Count the words that will be heard: every part before the Source Notes, leaving out headings, markdown table rows,
+footnote definitions and the IPA half of each pronouncer.
+
+If you can run local commands, check the finished edition with
+`uv run python -m weekly_ai_briefing.edition_checks editions/markdown_format/<date>-ai-outlook-briefing.md` and fix
+everything it reports. It counts words this way and checks the parts, the five signals, footnotes, URLs, the
+metadata keys and figures written in digits. It cannot see figures written out in words, so check those yourself.
 
 ## Briefing structure
 
@@ -46,6 +62,12 @@ as seven separate parts. Use `###` or lower for everything inside a part; never 
 The reader listens over several hours, one part at a time. A brief reminder of a related story from an earlier
 part, or of the model claim a finding bears on, helps them keep the thread; one or two sentences is enough. Refer
 to model claims by name, never by id.
+
+The previous edition's Orientation and metadata are there only to keep this edition from repeating it. Do not
+retell a story it led with unless this week brought something new on it, and then lead with what is new and give
+at most one sentence of reminder. Do not reuse its headline, its signal framing or its distinctive phrasing. It is
+not a source: take no fact or figure from it, and do not let it change the model, the table or the ranking of the
+five signals.
 
 ## Core content and formatting rules
 
@@ -86,6 +108,10 @@ to model claims by name, never by id.
   - Mark only the name; keep a possessive outside the braces, as in `{Rigetti|ɹɪdʒˈɛti}'s`.
   - Skip names a listener already knows how to say, such as Nvidia, Microsoft or Anthropic. Use pronouncers only in
     running text and bullets, never in headings, tables, footnote definitions or the metadata block.
+  - Use the lexicon. For a name listed in `state/pronouncers.md`, write exactly its IPA there; write new IPA only
+    for a name the lexicon does not list. Do not edit the lexicon: after the edition is saved, a script adds its
+    new names (`uv run python -m weekly_ai_briefing.pronouncer_lexicon <edition>`). Run that if you can run
+    local commands.
 - Findings: For each finding with changes, give a summary followed by a First-Derivative Forward Extrapolation
   ("So-What?" analysis) as a separate paragraph, not a heading, that opens with a spoken cue such as
   "Extrapolating forward," so listeners hear where the forecast begins. Say which model claim or table row the

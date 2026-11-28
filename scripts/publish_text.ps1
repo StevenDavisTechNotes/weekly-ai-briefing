@@ -18,6 +18,10 @@ Push-Location (Split-Path -Parent $PSScriptRoot)
 try {
     $date = Get-Date -Format "yyyy-MM-dd"
 
+    # Stop before anything is generated or pushed if the code or the newest edition fails its checks.
+    Invoke-CheckedCommand { uv run pytest -q } "The test suite"
+    Invoke-CheckedCommand { uv run python -m weekly_ai_briefing.edition_checks --latest } "The edition rule check"
+
     Invoke-CheckedCommand { uv run python -m weekly_ai_briefing.email_briefing --voice } "Voice generation"
     Invoke-CheckedCommand { uv run python -m weekly_ai_briefing.convert_for_blogger } "Blogger conversion"
     Invoke-CheckedCommand { uv run python -m weekly_ai_briefing.publish } "Publishing"
@@ -52,6 +56,7 @@ try {
     }
 
     Invoke-CheckedCommand { uv run python -m weekly_ai_briefing.email_briefing --email } "Email delivery"
+    Invoke-CheckedCommand { uv run python -m weekly_ai_briefing.source_cache --prune } "Source cache cleanup"
 }
 finally {
     Pop-Location

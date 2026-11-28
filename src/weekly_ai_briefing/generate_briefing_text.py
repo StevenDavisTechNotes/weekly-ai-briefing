@@ -14,7 +14,11 @@ usage:
 import argparse
 import datetime
 import re
+import shutil
+import threading
 import time
+from collections import Counter
+from concurrent.futures import ThreadPoolExecutor
 from collections.abc import Callable, Sequence
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -25,6 +29,7 @@ from anthropic.types import Message, MessageParam, ThinkingConfigAdaptiveParam, 
 
 from weekly_ai_briefing.bottom_matter import format_bottom_matter, split_bottom_matter
 from weekly_ai_briefing.config import (
+    BRIEFING_PATTERN,
     EDITIONS_FOLDER,
     EFFORT,
     MARKDOWN_FOLDER,
@@ -32,6 +37,7 @@ from weekly_ai_briefing.config import (
     MAX_TOKENS,
     MODEL,
     PROMPT_FOLDER,
+    PRONOUNCER_LEXICON,
     REPO_ROOT,
     RESEARCH_TOOLS,
     STATE_FOLDER,
@@ -40,11 +46,19 @@ from weekly_ai_briefing.config import (
     TRANSIENT_ERROR_TYPES,
     VERIFICATION_TOOLS,
 )
+from weekly_ai_briefing.edition_checks import DIMENSIONS, check_edition, parts
+from weekly_ai_briefing.pronouncer_lexicon import mismatches, read_lexicon, update_lexicon
+from weekly_ai_briefing.run_metrics import record_usage, write_metrics
+from weekly_ai_briefing.source_cache import save_fetch_results
 
 SHARED_PROMPT = PROMPT_FOLDER / "shared" / "reader_and_dimensions.md"
 STATE_README = STATE_FOLDER / "README.md"
 CURRENT_MODEL = STATE_FOLDER / "current_model.md"
 STATE_TABLE = STATE_FOLDER / "state_table.md"
+
+# Tokens and requests across every call, including parallel research workers; run_phase records each phase's share.
+USAGE: Counter[str] = Counter()
+USAGE_LOCK = threading.Lock()
 
 FILE_BLOCK = re.compile(r"^=== BEGIN (?P<path>\S+) ===\n(?P<body>.*?)^=== END (?P=path) ===$", re.MULTILINE | re.DOTALL)
 
@@ -65,6 +79,54 @@ def other_model_briefings(date: str) -> list[Path]:
     return sorted(EDITIONS_FOLDER.glob(f"*_version/{date}-*.md"))
 
 
+def baseline_path(date: str, path: Path) -> Path:
+    return run_folder(date) / f"{path.stem}_before.md"
+
+
+def model_update_baseline(date: str, path: Path) -> Path:
+    """Phase C revises the model and table from copies saved on its first run, so a rerun starts from the same place.
+
+    The first run saves both copies together; after that they are never overwritten.
+    """
+    if path not in (CURRENT_MODEL, STATE_TABLE):
+        return path
+    if not all(baseline_path(date, source).is_file() for source in (CURRENT_MODEL, STATE_TABLE)):
+        for source in (CURRENT_MODEL, STATE_TABLE):
+            target = baseline_path(date, source)
+            target.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copyfile(source, target)
+    return baseline_path(date, path)
+
+
+def previous_edition(date: str) -> Path | None:
+    """The latest edition in editions/markdown_format/ dated before `date`, if any."""
+    earlier = sorted(
+        path for path in MARKDOWN_FOLDER.glob("*.md")
+        if (match := re.fullmatch(BRIEFING_PATTERN, path.name)) and match[1] < date
+    )
+    return earlier[-1] if earlier else None
+
+
+def orientation_and_metadata(markdown: str) -> str:
+    """An edition cut down to its Orientation part and its five-key metadata block."""
+    bottom_matter, body = split_bottom_matter(markdown)
+    orientation = next(
+        (f"## {title}\n{text.strip()}\n" for title, text in parts(body) if title.startswith("Orientation")), ""
+    )
+    if bottom_matter is None:
+        return orientation
+    return f"{orientation}\n{format_bottom_matter(bottom_matter._replace(indicators=()))}"
+
+
+def previous_edition_excerpt(date: str) -> list[tuple[str, str]]:
+    """Phase D reads only the previous edition's Orientation and metadata, so as not to repeat it."""
+    path = previous_edition(date)
+    if path is None:
+        return []
+    label = f"{relative(path)} (excerpt: the Orientation part and the metadata block only)"
+    return [(label, orientation_and_metadata(path.read_text(encoding="utf-8")))]
+
+
 @dataclass(frozen=True)
 class Phase:
     name: str
@@ -73,6 +135,9 @@ class Phase:
     outputs: Callable[[str], list[Path]]
     tools: list[ToolUnionParam]
     optional_inputs: Callable[[str], list[Path]] = field(default=lambda date: [])
+    excerpts: Callable[[str], list[tuple[str, str]]] = field(default=lambda date: [])  # (label, text) blocks
+    # The file whose content is sent under an input's path; phase C reads its saved starting point.
+    read_from: Callable[[str, Path], Path] = field(default=lambda date, path: path)
 
     def present_inputs(self, date: str) -> list[Path]:
         """The required inputs, then whichever optional inputs exist."""
@@ -108,6 +173,7 @@ PHASES: dict[str, Phase] = {
         ],
         outputs=lambda date: [run_folder(date) / "change_log.md", CURRENT_MODEL, STATE_TABLE],
         tools=[],
+        read_from=model_update_baseline,
     ),
     "D": Phase(
         name="writing",
@@ -122,6 +188,8 @@ PHASES: dict[str, Phase] = {
         ],
         outputs=lambda date: [edition_path(date)],
         tools=[],
+        optional_inputs=lambda date: [PRONOUNCER_LEXICON],
+        excerpts=previous_edition_excerpt,
     ),
 }
 
@@ -131,24 +199,79 @@ def relative(path: Path) -> str:
     return path.resolve().relative_to(REPO_ROOT.resolve()).as_posix()
 
 
-def build_request(phase: Phase, date: str) -> str:
-    """The user message for one phase: the date, the output protocol, and every input file inline."""
+def check_inputs(phase: Phase, date: str) -> None:
     missing = [relative(path) for path in phase.inputs(date) if not path.is_file()]
     if missing:
         raise SystemExit(f"Phase {phase.name} cannot start; missing input files: {', '.join(missing)}")
+
+
+def inline(blocks: Sequence[tuple[str, str]]) -> str:
+    """Labelled texts, each between a BEGIN and an END line naming it."""
+    return "\n\n".join(f"=== BEGIN {label} ===\n{text.rstrip()}\n=== END {label} ===" for label, text in blocks)
+
+
+def build_request(phase: Phase, date: str, extra_blocks: Sequence[tuple[str, str]] = (), preface: str = "") -> str:
+    """The user message for one phase: the date, the output protocol, and every input file inline."""
+    check_inputs(phase, date)
     outputs = "\n".join(f"- {relative(path)}" for path in phase.outputs(date))
-    files = "\n\n".join(
-        f"=== BEGIN {relative(path)} ===\n{path.read_text(encoding='utf-8').rstrip()}\n=== END {relative(path)} ==="
-        for path in phase.present_inputs(date)
-    )
+    blocks = [(relative(path), phase.read_from(date, path).read_text(encoding="utf-8"))
+              for path in phase.present_inputs(date)]
+    blocks += [*phase.excerpts(date), *extra_blocks]
     return (
-        f"Today's date is {date}, so <date> in the prompt is {date}.\n\n"
+        f"Today's date is {date}, so <date> in the prompt is {date}.\n\n{preface}"
         "You are running through the API without file access. The files the prompt tells you to read are included "
         "below, each between a BEGIN and an END line naming its path. Return each file the prompt tells you to "
         "write, complete, in the same form: a line `=== BEGIN <path> ===`, the file's content, and a line "
         "`=== END <path> ===`. Write nothing outside those blocks. The files to return are:\n\n"
-        f"{outputs}\n\n{files}\n"
+        f"{outputs}\n\n{inline(blocks)}\n"
     )
+
+
+def draft_path(date: str, number: int) -> Path:
+    return run_folder(date) / "research_drafts" / f"D{number}.md"
+
+
+def build_worker_request(date: str, number: int) -> str:
+    """Phase A's request to the research worker for one dimension, per "Splitting the work by dimension"."""
+    phase = PHASES["A"]
+    check_inputs(phase, date)
+    blocks = [(relative(path), path.read_text(encoding="utf-8")) for path in phase.inputs(date)]
+    return (
+        f"Today's date is {date}, so <date> in the prompt is {date}.\n\n"
+        f"You are the research worker for dimension {number}, {DIMENSIONS[number - 1]}, as the prompt's section "
+        '"Splitting the work by dimension" describes. You are running through the API without file access; the '
+        "files the prompt tells you to read are included below, each between a BEGIN and an END line naming its "
+        "path. Reply with your draft only: your facts, your model-check lines and your research limits, in the "
+        "prompt's formats. Write no BEGIN or END lines.\n\n"
+        f"{inline(blocks)}\n"
+    )
+
+
+LEAD_PREFACE = (
+    'You are the lead, as the prompt\'s section "Splitting the work by dimension" describes. The seven workers\' '
+    "drafts are included below with the input files, each labelled with its dimension. Merge them into the fact "
+    "sheet, run the coverage check and the change-type check, and search further only to fill a gap they leave.\n\n"
+)
+
+
+def research_drafts(client: Anthropic, date: str) -> list[tuple[str, str]]:
+    """Runs the seven dimension workers at once, keeping each draft on disk so that a rerun reuses it."""
+    prompt = PHASES["A"].prompt.read_text(encoding="utf-8")
+
+    def draft(number: int) -> tuple[str, str]:
+        path = draft_path(date, number)
+        if not path.is_file():
+            request: MessageParam = {"role": "user", "content": build_worker_request(date, number)}
+            text = send(client, prompt, [request], RESEARCH_TOOLS, cache_date=date)
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_text(text.rstrip() + "\n", encoding="utf-8")
+            print(f"  wrote {relative(path)}")
+        label = f"{relative(path)} (draft of the dimension {number} worker, {DIMENSIONS[number - 1]})"
+        return label, path.read_text(encoding="utf-8")
+
+    print(f"  researching the {len(DIMENSIONS)} dimensions in parallel...")
+    with ThreadPoolExecutor(max_workers=len(DIMENSIONS)) as pool:
+        return list(pool.map(draft, range(1, len(DIMENSIONS) + 1)))
 
 
 def parse_output_files(response: str, expected: Sequence[str]) -> dict[str, str]:
@@ -175,6 +298,19 @@ def normalize_edition(text: str) -> str:
         print(f"Warning: {problem}; saved as written, fix the bottom matter by hand before publishing")
         return text
     return f"{body}\n{format_bottom_matter(bottom_matter)}"
+
+
+def report_edition_problems(text: str) -> None:
+    """Prints what the mechanical rule checks found; the edition is saved either way, to be fixed by hand."""
+    problems = check_edition(text)
+    problems += [f"{name} is written {used!r} but the pronouncer lexicon has {listed!r}"
+                 for name, used, listed in mismatches(text, read_lexicon())]
+    if not problems:
+        print("  edition passed the rule checks")
+        return
+    print(f"  Warning: the edition failed {len(problems)} rule check(s); fix them by hand before publishing:")
+    for problem in problems:
+        print(f"    - {problem}")
 
 
 def is_transient(error: Exception) -> bool:
@@ -223,22 +359,36 @@ def stream_message(
     raise AssertionError("unreachable")
 
 
+def count_usage(response: Message) -> None:
+    usage = response.usage
+    tokens = sum(getattr(usage, name, 0) or 0 for name in (
+        "input_tokens", "output_tokens", "cache_creation_input_tokens", "cache_read_input_tokens"))
+    with USAGE_LOCK:
+        USAGE["tokens"] += tokens
+        USAGE["requests"] += 1
+
+
 def send(
         client: Anthropic,
         system_prompt: str,
         messages: list[MessageParam],
         tools: list[ToolUnionParam],
+        cache_date: str | None = None,
 ) -> str:
     """Sends the conversation and returns the assistant's complete text reply.
 
     Resumes server-side tool turns (`pause_turn`) and continues truncated
-    output (`max_tokens`). `messages` is not modified.
+    output (`max_tokens`). `messages` is not modified. With `cache_date`,
+    keeps a copy of every page fetched in source_document_cache/<date>/.
     """
     messages = messages.copy()
     text_parts: list[str] = []
 
     for _ in range(MAX_CONTINUATIONS + 1):
         response = stream_message(client, system_prompt, messages, tools)
+        count_usage(response)
+        if cache_date is not None:
+            save_fetch_results(cache_date, response.content)
 
         text = "".join(
             b.text
@@ -278,15 +428,22 @@ def run_phase(
         client: Anthropic,
         letter: str,
         date: str,
+        parallel_research: bool = True,
 ) -> None:
     phase = PHASES[letter]
-    request = build_request(phase, date)
     print(f"Phase {letter} ({phase.name})...")
+    started, before = time.monotonic(), USAGE.copy()
+    if letter == "A" and parallel_research:
+        check_inputs(phase, date)
+        request = build_request(phase, date, research_drafts(client, date), LEAD_PREFACE)
+    else:
+        request = build_request(phase, date)
     reply = send(
         client,
         phase.prompt.read_text(encoding="utf-8"),
         [{"role": "user", "content": request}],
         phase.tools,
+        cache_date=date if letter == "A" else None,  # only research's reads are kept
     )
 
     run_folder(date).mkdir(parents=True, exist_ok=True)
@@ -298,13 +455,20 @@ def run_phase(
         raw.write_text(reply, encoding="utf-8")
         raise SystemExit(f"Phase {letter}: {error}. The full reply is saved in {raw}") from error
 
+    used = USAGE - before
+    record_usage(date, letter, (time.monotonic() - started) / 60, used["tokens"], used["requests"])
     for name, text in files.items():
         path = expected[name]
         if path == edition_path(date):
             text = normalize_edition(text)
+            report_edition_problems(text)
         path.parent.mkdir(parents=True, exist_ok=True)
         path.write_text(text, encoding="utf-8")
         print(f"  wrote {name}")
+    if letter == "D":
+        added = update_lexicon(edition_path(date))
+        print(f"  added {len(added)} name(s) to {relative(PRONOUNCER_LEXICON)}")
+    print(f"  wrote {relative(write_metrics(date))}")
 
 
 def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
@@ -322,6 +486,11 @@ def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
         type=lambda value: datetime.date.fromisoformat(value).isoformat(),
         help="edition publication date, YYYY-MM-DD (default: today)",
     )
+    parser.add_argument(
+        "--single-research",
+        action="store_true",
+        help="run phase A as one request instead of seven parallel dimension workers and a merging lead",
+    )
     args = parser.parse_args(argv)
     args.phases = sorted(set(args.phases))
     return args
@@ -336,6 +505,7 @@ def main(argv: Sequence[str] | None = None) -> None:
                 client=client,
                 letter=letter,
                 date=args.date,
+                parallel_research=not args.single_research,
             )
     except KeyboardInterrupt:
         print("Interrupted")
