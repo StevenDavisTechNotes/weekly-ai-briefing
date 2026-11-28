@@ -12,7 +12,9 @@ it reads and writes. Git history of this folder is the history of the model.
 | `runs/<date>/research_drafts/D<n>.md` | phase A, API route only | Each dimension worker's draft, before the lead merges them |
 | `runs/<date>/verification.md` | phase B | A verdict on every fact, from re-reading its source |
 | `runs/<date>/change_log.md` | phase C | What changed in the model and table this week, and why |
+| `runs/<date>/current_model_before.md`, `runs/<date>/state_table_before.md` | phase C, on its first run | The model and table as they stood before this week's update; a rerun of phase C starts from them |
 | `runs/<date>/metrics.md`, `runs/<date>/phase_usage.json` | `weekly_ai_briefing.run_metrics`, after each phase | Counts of facts, verdicts and source types, and minutes and tokens per phase |
+| `background.md` | background seeding once, then phase C each week | The earlier stories the model rests on, so a new fact can be read as the next step of one |
 | `pronouncers.md` | `weekly_ai_briefing.pronouncer_lexicon`, after phase D | One IPA per name; phase D reads it so names sound the same every week |
 
 Phase A also keeps a copy of each source it reads in `source_document_cache/<date>/` at the repository root. That
@@ -86,6 +88,28 @@ As of: YYYY-MM-DD
 
 Keep 12 to 15 rows that are as independent of one another as possible. Remove a row when it becomes too correlated
 with another row or stops bearing on a briefing dimension, and record the removal in the change log.
+
+## `background.md` format
+
+```markdown
+# Background
+
+As of: YYYY-MM-DD
+
+## B-01 Short story name
+
+- Underlies: the claim ids, state-table rows and watching items that rest on it.
+- Milestones:
+  - YYYY-MM-DD: what happened, in one sentence. Source: outlet or author, title, date, URL.
+  (three to six milestones, oldest first)
+- Now: one or two sentences on where the story stands as of the "As of" date.
+- Ends when: the observable outcome that would close the story, to the specification standard below.
+```
+
+A story belongs here only while it is still running, a current claim, row or watching item rests on it, and it began
+before the research window. It goes back only as far as needed to explain a mechanism the model uses now. Keep at
+most 12 stories, about 150 words each besides the sources. Story ids are never reused. The file is background: a
+milestone is never cited as this week's evidence.
 
 ## Specification standard
 

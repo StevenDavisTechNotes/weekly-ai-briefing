@@ -167,7 +167,8 @@ def test_phase_c_saves_its_starting_point_and_reruns_from_it(repo: Path, monkeyp
     (repo / "state" / "README.md").write_text("# readme\n", encoding="utf-8")
     model, table = repo / "state" / "current_model.md", repo / "state" / "state_table.md"
     model.write_text("# Model before\n", encoding="utf-8")
-    outputs = [f"state/runs/{DATE}/change_log.md", "state/current_model.md", "state/state_table.md"]
+    outputs = [f"state/runs/{DATE}/change_log.md", "state/current_model.md", "state/state_table.md",
+               "state/background.md"]
     reply = "".join(f"=== BEGIN {name} ===\n# Revised {name}\n=== END {name} ===\n" for name in outputs)
     requests: list[str] = []
     monkeypatch.setattr(g, "send", lambda client, system, messages, tools, **_: requests.append(

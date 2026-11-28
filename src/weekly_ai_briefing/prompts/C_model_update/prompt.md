@@ -8,6 +8,7 @@ Read first:
 - `state/README.md`, for the file formats and the specification standard
 - `state/current_model.md`
 - `state/state_table.md`
+- `state/background.md`
 - `state/runs/<date>/fact_sheet.md`
 - `state/runs/<date>/verification.md`
 
@@ -16,20 +17,21 @@ Write:
 - `state/runs/<date>/change_log.md`
 - `state/current_model.md`, revised in place
 - `state/state_table.md`, revised in place
+- `state/background.md`, revised in place
 
 ## Starting point
 
 This phase revises the model in place, so a second run must not apply this week's changes on top of the first.
-Before reading the model, look for `state/runs/<date>/current_model_before.md` and
-`state/runs/<date>/state_table_before.md`:
+Before reading the model, look for `state/runs/<date>/current_model_before.md`,
+`state/runs/<date>/state_table_before.md` and `state/runs/<date>/background_before.md`:
 
-- If both exist, this is a rerun. Read them as the model and the table to revise, in place of
-  `state/current_model.md` and `state/state_table.md`, and ignore what those two files now hold.
-- If neither exists, this is the first run. If you can write files, first copy `state/current_model.md` to
-  `state/runs/<date>/current_model_before.md` and `state/state_table.md` to
-  `state/runs/<date>/state_table_before.md`, unchanged, then revise from them.
+- If they exist, this is a rerun. Read them in place of `state/current_model.md`, `state/state_table.md` and
+  `state/background.md`, and ignore what those files now hold.
+- If they do not, this is the first run. If you can write files, first copy each of the three state files to
+  its `_before.md` name in `state/runs/<date>/`, unchanged, then revise from the copies.
 
-Either way, write the revised model and table to `state/current_model.md` and `state/state_table.md`.
+Either way, write the revised files to `state/current_model.md`, `state/state_table.md` and
+`state/background.md`.
 
 Use only facts whose verdict is confirmed or corrected, with corrections applied. Unconfirmed facts may inform the
 watching list but never a claim, a table reading or a figure.
@@ -71,7 +73,11 @@ change log readable on its own, since the reader may read it afterwards.
    revision; it counts as independent support only where its facts come from independent sources. A reading of
    an opaque market, such as private credit, may be inferred from verified market signals; mark it "inferred
    from" in the row's last reading and name the signals.
-6. Rank this week's verified facts by surprise times consequence and pick the five that matter most for the
+6. Maintain `state/background.md` to its format and qualification rule in `state/README.md`. Add a story when a
+   verified fact turns out to be the next step of an earlier story the file lacks, with milestones from verified
+   facts or from sources you name; update a story's "Now" line when this week moved it; retire a story that
+   ended or that no claim, row or watching item rests on any longer. Record each change in the change log.
+7. Rank this week's verified facts by surprise times consequence and pick the five that matter most for the
    Orientation. Prefer facts that moved the model or the table.
 
 ## Change log format
@@ -103,6 +109,10 @@ Edition: YYYY-MM-DD.
 ## Tests coming due
 
 Each calendar entry due within four weeks of this edition, with its date and whether this week's facts moved it.
+
+## Background changes
+
+- B-xx Name: added, updated or retired, with the reason and fact ids, or "none".
 
 ## Continuing shifts
 

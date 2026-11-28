@@ -10,6 +10,7 @@ Read first:
 - `state/runs/<date>/fact_sheet.md`
 - `state/runs/<date>/verification.md`
 - `state/pronouncers.md`, the pronouncer lexicon
+- `state/background.md`, the earlier stories the model rests on
 - From the previous edition, the latest file in `editions/markdown_format/` dated before `<date>`: only its
   Orientation part and its closing metadata block. Do not read the rest of it or any older edition.
 
@@ -61,7 +62,9 @@ as seven separate parts. Use `###` or lower for everything inside a part; never 
 
 The reader listens over several hours, one part at a time. A brief reminder of a related story from an earlier
 part, or of the model claim a finding bears on, helps them keep the thread; one or two sentences is enough. Refer
-to model claims by name, never by id.
+to model claims by name, never by id. When a finding is the next step of a story in `state/background.md`, one
+sentence of that story's backstory helps a listener who did not follow it. That sentence is background: it
+carries no figure, and the finding itself still rests on this week's facts.
 
 The previous edition's Orientation and metadata are there only to keep this edition from repeating it. Do not
 retell a story it led with unless this week brought something new on it, and then lead with what is new and give

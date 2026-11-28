@@ -55,6 +55,7 @@ SHARED_PROMPT = PROMPT_FOLDER / "shared" / "reader_and_dimensions.md"
 STATE_README = STATE_FOLDER / "README.md"
 CURRENT_MODEL = STATE_FOLDER / "current_model.md"
 STATE_TABLE = STATE_FOLDER / "state_table.md"
+BACKGROUND = STATE_FOLDER / "background.md"
 
 # Tokens and requests across every call, including parallel research workers; run_phase records each phase's share.
 USAGE: Counter[str] = Counter()
@@ -88,14 +89,16 @@ def model_update_baseline(date: str, path: Path) -> Path:
 
     The first run saves both copies together; after that they are never overwritten.
     """
-    if path not in (CURRENT_MODEL, STATE_TABLE):
+    sources = [source for source in (CURRENT_MODEL, STATE_TABLE, BACKGROUND) if source.is_file()]
+    if path not in sources:
         return path
     if not all(baseline_path(date, source).is_file() for source in (CURRENT_MODEL, STATE_TABLE)):
-        for source in (CURRENT_MODEL, STATE_TABLE):
+        for source in sources:
             target = baseline_path(date, source)
             target.parent.mkdir(parents=True, exist_ok=True)
             shutil.copyfile(source, target)
-    return baseline_path(date, path)
+    baseline = baseline_path(date, path)
+    return baseline if baseline.is_file() else path
 
 
 def previous_edition(date: str) -> Path | None:
@@ -151,7 +154,7 @@ PHASES: dict[str, Phase] = {
         inputs=lambda date: [SHARED_PROMPT, STATE_README, CURRENT_MODEL, STATE_TABLE],
         outputs=lambda date: [run_folder(date) / "fact_sheet.md"],
         tools=RESEARCH_TOOLS,
-        optional_inputs=other_model_briefings,
+        optional_inputs=lambda date: [BACKGROUND, *other_model_briefings(date)],
     ),
     "B": Phase(
         name="verification",
@@ -171,8 +174,9 @@ PHASES: dict[str, Phase] = {
             run_folder(date) / "fact_sheet.md",
             run_folder(date) / "verification.md",
         ],
-        outputs=lambda date: [run_folder(date) / "change_log.md", CURRENT_MODEL, STATE_TABLE],
+        outputs=lambda date: [run_folder(date) / "change_log.md", CURRENT_MODEL, STATE_TABLE, BACKGROUND],
         tools=[],
+        optional_inputs=lambda date: [BACKGROUND],
         read_from=model_update_baseline,
     ),
     "D": Phase(
@@ -188,7 +192,7 @@ PHASES: dict[str, Phase] = {
         ],
         outputs=lambda date: [edition_path(date)],
         tools=[],
-        optional_inputs=lambda date: [PRONOUNCER_LEXICON],
+        optional_inputs=lambda date: [PRONOUNCER_LEXICON, BACKGROUND],
         excerpts=previous_edition_excerpt,
     ),
 }

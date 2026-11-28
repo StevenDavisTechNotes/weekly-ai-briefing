@@ -8,6 +8,7 @@ Read first:
 - `state/README.md`, for the file formats and source types
 - `state/current_model.md`
 - `state/state_table.md`
+- `state/background.md`, if it exists: the earlier stories the model rests on
 - `editions/<model>_version/<date>-<model>.md` for each model that has one this week, such as
   `editions/gemini_version/<date>-gemini.md` or `editions/muse_version/<date>-muse.md`: briefings other models wrote
   for the same week. They are comparative and not authoritative.
@@ -38,6 +39,10 @@ Research has two jobs, and both matter.
    surprises.
 
 Also check each item on the watching list, since a second week of evidence can promote it.
+
+Read each story in `state/background.md` as a lead: when a development this week is the next step of one, say so
+in the fact's "Bears on" field with the story's id, such as B-01. When a fact connects to an earlier story that
+the file does not hold, say so in the research limits, so that phase C can consider adding it.
 
 Look hardest at the entries in the test calendar of `current_model.md` that fall due within four weeks: open
 every source in their "check each week" lines, and record a reading or "no material evidence" for each.

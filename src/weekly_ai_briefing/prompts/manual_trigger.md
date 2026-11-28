@@ -19,7 +19,7 @@ reading every file it lists, with `<date>` set to the edition date.
 | --- | --- | --- |
 | A, research | `src/weekly_ai_briefing/prompts/A_research/prompt.md` | `state/runs/<date>/fact_sheet.md` |
 | B, verification | `src/weekly_ai_briefing/prompts/B_verification/prompt.md` | `state/runs/<date>/verification.md` |
-| C, model update | `src/weekly_ai_briefing/prompts/C_model_update/prompt.md` | `state/runs/<date>/change_log.md`, revised `state/current_model.md` and `state/state_table.md`, and on its first run the `_before.md` copies of both in `state/runs/<date>/` |
+| C, model update | `src/weekly_ai_briefing/prompts/C_model_update/prompt.md` | `state/runs/<date>/change_log.md`, revised `state/current_model.md`, `state/state_table.md` and `state/background.md`, and on its first run the `_before.md` copies of all three in `state/runs/<date>/` |
 | D, writing | `src/weekly_ai_briefing/prompts/D_writing/prompt.md` | `editions/markdown_format/<date>-ai-outlook-briefing.md`; then `state/pronouncers.md` gains its new names by script |
 
 Every phase also reads `src/weekly_ai_briefing/prompts/shared/reader_and_dimensions.md`. Each phase's prompt says
