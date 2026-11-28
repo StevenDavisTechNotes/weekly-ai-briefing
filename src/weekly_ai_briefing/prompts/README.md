@@ -15,8 +15,8 @@ Every phase also reads `shared/reader_and_dimensions.md`. `<date>` is the editio
 ## Weekly run
 
 Run the phases in order, each in a new conversation, so that verification in particular is independent of the
-research it checks. Between C and D, optionally read `state/runs/<date>/change_log.md` and edit the model, the
-table or the five-signal ranking before the briefing is written.
+research it checks. The phases run end to end with no pause for review. The change log, fact sheet and verification
+file stay in `state/runs/<date>/` for the reader to inspect afterwards.
 
 Any harness that can read and write the repository's files works. Give it the phase prompt and the date; the prompt
 lists the files to read and write. Two ready-made ways:
@@ -25,7 +25,7 @@ lists the files to read and write. Two ready-made ways:
   <date>` and `/briefing-D-writing <date>`, each in a new session (commands in `.claude/commands/`).
 - The Claude API, without an agent harness: `uv run python -m weekly_ai_briefing.generate_briefing_text` runs all
   four phases for today's date, each as a separate request, and writes the output files. Pass phase letters and
-  `--date` to run part of it, for example `A B C` to stop before writing for review, then `D`.
+  `--date` to run part of it, for example `D` alone to rewrite the briefing from existing phase outputs.
 
 When the edition is written, commit `state/` and the new edition, then publish as before (`scripts/publish_text.ps1`).
 

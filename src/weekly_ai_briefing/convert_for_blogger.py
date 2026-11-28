@@ -1,5 +1,7 @@
 #! python3
-# usage: uv run python -m weekly_ai_briefing.convert_for_blogger [editions/markdown_format/YYYY-MM-DD-ai-outlook-briefing.md]
+# usage:
+#   uv run python -m weekly_ai_briefing.convert_for_blogger
+#       [editions/markdown_format/YYYY-MM-DD-ai-outlook-briefing.md]
 # (with no argument, the latest briefing in editions/markdown_format is converted)
 #
 # Writes editions/blogger_format/<same stem>.xml: a Blogger import file (an Atom feed holding

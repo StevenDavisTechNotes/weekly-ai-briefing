@@ -8,7 +8,6 @@ writes between BEGIN and END marker lines, which this script writes to disk.
 
 usage:
     uv run python -m weekly_ai_briefing.generate_briefing_text                  # all phases, today's date
-    uv run python -m weekly_ai_briefing.generate_briefing_text A B C            # stop before writing, to review
     uv run python -m weekly_ai_briefing.generate_briefing_text D --date 2026-11-21
 """
 
@@ -274,7 +273,12 @@ def send(
         f"Response still incomplete after {MAX_CONTINUATIONS} continuations")
 
 
-def run_phase(client: Anthropic, letter: str, date: str) -> None:
+def run_phase(
+        *,
+        client: Anthropic,
+        letter: str,
+        date: str,
+) -> None:
     phase = PHASES[letter]
     request = build_request(phase, date)
     print(f"Phase {letter} ({phase.name})...")
@@ -328,7 +332,11 @@ def main(argv: Sequence[str] | None = None) -> None:
     client = Anthropic()
     try:
         for letter in args.phases:
-            run_phase(client, letter, args.date)
+            run_phase(
+                client=client,
+                letter=letter,
+                date=args.date,
+            )
     except KeyboardInterrupt:
         print("Interrupted")
 

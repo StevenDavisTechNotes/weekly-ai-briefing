@@ -20,8 +20,8 @@ Write:
 Use only facts whose verdict is confirmed or corrected, with corrections applied. Unconfirmed facts may inform the
 watching list but never a claim, a table reading or a figure.
 
-The reader may review the change log and the revised files before phase D, so make the change log readable on its
-own.
+Do not stop for the reader's review or approval after this phase; phase D follows without a pause. Still make the
+change log readable on its own, since the reader may read it afterwards.
 
 ## Principles
 
